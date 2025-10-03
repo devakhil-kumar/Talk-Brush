@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,16 @@ import {
   StyleSheet,
   ImageBackground,
   Dimensions,
+  Animated,
+  Keyboard,
+  Easing,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import { BlurView } from '@react-native-community/blur'; // or 'expo-blur' for Expo
+import { BlurView } from '@react-native-community/blur'; 
 import RnTextInput from '../../component/RnTextInput';
 import CheckBox from '../../component/Checkbox';
-const { height, width } = Dimensions.get('window');
+
+const { height } = Dimensions.get('window');
 
 const LoginScreen = () => {
   const [tab, setTab] = useState('Login');
@@ -19,126 +24,180 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [remember, setRemember] = useState(true);
-  const [agree, setAgree] = useState(true);
+  const [remember, setRemember] = useState(false);
+  const [agree, setAgree] = useState(false);
+
+  const cardPosition = useRef(new Animated.Value(0)).current;
+  const headerOpacity = useRef(new Animated.Value(1)).current;
+
+  const handleKeyboardShow = (e) => {
+    const keyboardHeight = e.endCoordinates.height;
+
+    Animated.parallel([
+      Animated.timing(cardPosition, {
+        toValue: -keyboardHeight / 1.5,
+        duration: 300,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(headerOpacity, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const handleKeyboardHide = () => {
+    Animated.parallel([
+      Animated.timing(cardPosition, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(headerOpacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
+    const hideSub = Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   return (
-    <ImageBackground
-      source={require('../../assets/image/loginScreen.png')}
-      style={styles.background}
-    >
-      <View style={styles.overlay}>
-        <View style={{ flex: 0.6, justifyContent: 'flex-end'}}>
-          <Text style={styles.logoHighlight}>TalkBrush</Text>
-          <Text style={styles.subtitle}>
-            Paint your voice {'\n'}with the right {'\n'}accent
-          </Text>
-        </View>
+    // <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <ImageBackground
+        source={require('../../assets/image/loginScreen.png')}
+        style={styles.background}
+      >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
-        <View style={styles.cardContainer}>
-          <BlurView
-            style={styles.blurView}
-            blurType="dark" 
-            blurAmount={7}
-            reducedTransparencyFallbackColor="rgba(89, 77, 91, 0.1)"
-          />
-          <View style={styles.card}>
-            <View style={styles.header}>
-              <View style={[styles.tabRow, { paddingTop: tab === 'Signup' ? height * 0 : height * 0.03 }]}>
-                <TouchableOpacity onPress={() => setTab('Login')}>
-                  <Text
-                    style={
-                      tab === 'Login' ? styles.activeTab : styles.inactiveTab
-                    }
-                  >
-                    Login
-                  </Text>
-                </TouchableOpacity>
-                <View style={styles.line} />
-                <TouchableOpacity onPress={() => setTab('Signup')}>
-                  <Text
-                    style={
-                      tab === 'Signup' ? styles.activeTab : styles.inactiveTab
-                    }
-                  >
-                    Signup
-                  </Text>
-                </TouchableOpacity>
+        <View style={styles.overlay}>
+          {/* Header */}
+          <Animated.View style={{ flex: 0.6, justifyContent: 'flex-end', opacity: headerOpacity }}>
+            <Text style={styles.logoHighlight}>TalkBrush</Text>
+            <Text style={styles.subtitle}>
+              Paint your voice {'\n'}with the right {'\n'}accent
+            </Text>
+          </Animated.View>
+
+          {/* Card */}
+          <Animated.View style={[styles.cardContainer, { transform: [{ translateY: cardPosition }] }]}>
+            <BlurView
+              style={styles.blurView}
+              blurType="dark" 
+              blurAmount={8}
+              reducedTransparencyFallbackColor="rgba(89, 77, 91, 0.9)"
+            />
+            <View style={styles.card}>
+              <View style={styles.header}>
+                <View style={[styles.tabRow, { paddingTop: tab === 'Signup' ? height * 0 : height * 0.03 }]}>
+                  <TouchableOpacity onPress={() => setTab('Login')}>
+                    <Text
+                      style={
+                        tab === 'Login' ? styles.activeTab : styles.inactiveTab
+                      }
+                    >
+                      Login
+                    </Text>
+                  </TouchableOpacity>
+                  <View style={styles.line} />
+                  <TouchableOpacity onPress={() => setTab('Signup')}>
+                    <Text
+                      style={
+                        tab === 'Signup' ? styles.activeTab : styles.inactiveTab
+                      }
+                    >
+                      Signup
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={styles.infoText}>
+                  Register Now to Personalize the {'\n'}English accent you listen to
+                </Text>
+
+                <Text style={styles.txt}>Or</Text>
               </View>
 
-              <Text style={styles.infoText}>
-                Register Now to Personalize the {'\n'}English accent you listen to
-              </Text>
-
-              <Text style={styles.txt}>Or</Text>
-            </View>
-
-            <View style={[styles.box, { marginTop: tab === 'Signup' ? height * 0 : height * 0.05 }]}>
-              {tab === 'Signup' && (
+              <View style={[styles.box, { marginTop: tab === 'Signup' ? height * 0 : height * 0.05 }]}>
+                {tab === 'Signup' && (
+                  <RnTextInput
+                    placeholder="Username"
+                    value={username}
+                    onChangeText={setUsername}
+                  />
+                )}
                 <RnTextInput
-                  placeholder="Username"
-                  value={username}
-                  onChangeText={setUsername}
+                  placeholder="Email Address"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
                 />
-              )}
-              <RnTextInput
-                placeholder="Email Address"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-              />
 
-              <RnTextInput
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-
-              {tab === 'Signup' && (
                 <RnTextInput
-                  placeholder="Confirm Password"
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
+                  placeholder="Password"
+                  value={password}
+                  onChangeText={setPassword}
                   secureTextEntry
                 />
+
+                {tab === 'Signup' && (
+                  <RnTextInput
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                    secureTextEntry
+                  />
+                )}
+              </View>
+
+              {tab === 'Login' && (
+                <CheckBox
+                  checked={remember}
+                  onPress={() => setRemember(!remember)}
+                  label="Remember Me"
+                />
               )}
-            </View>
-            {tab === 'Login' && (
-              <CheckBox
-                checked={remember}
-                onPress={() => setRemember(!remember)}
-                label="Remember Me"
-              />
-            )}
-            {tab === 'Signup' && (
-              <CheckBox
-                checked={agree}
-                onPress={() => setAgree(!agree)}
-                label={
-                  <Text style={{ fontSize: 12, color: '#6C63FF', marginLeft: 8 }}>
-                    I agree to the{' '}
-                    <Text style={{ color: '#fff', fontWeight: 'bold' }}>
-                      privacy policy
-                    </Text>{' '}
-                    &
-                    <Text style={{ color: '#fff', fontWeight: 'bold' }}>
-                      {' '}
-                      Terms and conditions
+              {tab === 'Signup' && (
+                <CheckBox
+                  checked={agree}
+                  onPress={() => setAgree(!agree)}
+                  label={
+                    <Text style={{ fontSize: 12, color: '#6C63FF', marginLeft: 8 }}>
+                      I agree to the{' '}
+                      <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                        privacy policy
+                      </Text>{' '}
+                      & 
+                      <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                        {' '}Terms and conditions
+                      </Text>
                     </Text>
-                  </Text>
-                }
-              />
-            )}
-            <TouchableOpacity style={styles.loginBtn}>
-              <Text style={styles.loginText}>
-                {tab === 'Login' ? 'LOGIN' : 'SIGNUP'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+                  }
+                />
+              )}
+
+              <TouchableOpacity style={styles.loginBtn}>
+                <Text style={styles.loginText}>
+                  {tab === 'Login' ? 'LOGIN' : 'SIGNUP'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
         </View>
-      </View>
-    </ImageBackground>
+    </TouchableWithoutFeedback>
+      </ImageBackground>
   );
 };
 
@@ -153,7 +212,7 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     padding: 16
   },
   header: { gap: 0 },
@@ -165,7 +224,7 @@ const styles = StyleSheet.create({
     lineHeight: 45
   },
   subtitle: {
-    fontSize: 36,
+    fontSize: 34,
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
@@ -173,13 +232,13 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     height: height / 1.8,
-    marginTop: 10,
+    marginTop: 20,
     width: '80%',
     alignSelf: 'center',
-    borderRadius: 20,
+    borderRadius: 30,
     overflow: 'hidden', 
-    borderWidth: 4,
-    borderColor: 'rgba(47, 47, 50, 0.2)',
+    borderWidth: 3,
+    borderColor: "rgba(102, 88, 79, 0.3)",
   },
   blurView: {
     position: 'absolute',
@@ -190,8 +249,8 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    // backgroundColor: 'rgba(89, 77, 91, 0.3)',
-    borderRadius: 20,
+    backgroundColor:"rgba(102, 88, 79, 0.1)",
+    borderRadius: 30,
     padding: 16,
   },
   tabRow: {
@@ -224,29 +283,6 @@ const styles = StyleSheet.create({
     marginTop: 8
   },
   box: { marginTop: height * 0.04 },
-  inputContainer: {
-    borderWidth: 1,
-    borderColor: '#7063F1',
-    borderRadius: 10,
-    paddingHorizontal: width * 0.04,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    color: '#fff',
-    borderRadius: 8,
-    marginVertical: 8,
-  },
-  rememberRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 8,
-  },
-  rememberText: {
-    color: '#fff',
-    marginLeft: 5,
-  },
   loginBtn: {
     backgroundColor: '#7063F1',
     borderRadius: 8,

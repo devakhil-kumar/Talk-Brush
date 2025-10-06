@@ -1,41 +1,66 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
-  Dimensions,
   Animated,
   Keyboard,
   Easing,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import { BlurView } from '@react-native-community/blur'; 
+import { BlurView } from '@react-native-community/blur';
 import RnTextInput from '../../component/RnTextInput';
 import CheckBox from '../../component/Checkbox';
+import CommonBtn from '../../component/CommonBtn';
+import GlobalStyles from '../../styles/GlobalStyles';
+import { moderateScale } from 'react-native-size-matters';
+import Images from '../../contexts/ImagePath'
+import Fonts from '../../styles/GlobalFonts';
 
-const { height } = Dimensions.get('window');
 
 const LoginScreen = () => {
   const [tab, setTab] = useState('Login');
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   const cardPosition = useRef(new Animated.Value(0)).current;
   const headerOpacity = useRef(new Animated.Value(1)).current;
+  const cardScale = useRef(new Animated.Value(1)).current;
 
-  const handleKeyboardShow = (e) => {
+
+  const handleKeyboardShow = useCallback((e) => {
+    setKeyboardVisible(true);
     const keyboardHeight = e.endCoordinates.height;
-
+    const screenHeight = GlobalStyles.windowHeight;
+    let minTranslation, maxTranslation;
+    if (screenHeight <= 650) {
+      minTranslation = screenHeight * 0.10;
+      maxTranslation = screenHeight * 0.30;
+    } else if (screenHeight <= 750) {
+      minTranslation = screenHeight * 0.12;
+      maxTranslation = screenHeight * 0.35;
+    } else if (screenHeight <= 850) {
+      minTranslation = screenHeight * 0.24;
+      maxTranslation = screenHeight * 0.38;
+    } else {
+      minTranslation = screenHeight * 0.24;
+      maxTranslation = screenHeight * 0.42;
+    }
+    let translation = keyboardHeight / 2.2;
+    translation = Math.max(minTranslation, Math.min(translation, maxTranslation));
+    console.log(-translation, 'translation')
     Animated.parallel([
       Animated.timing(cardPosition, {
-        toValue: -keyboardHeight / 1.5,
+        toValue: -translation,
         duration: 300,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
@@ -45,10 +70,16 @@ const LoginScreen = () => {
         duration: 200,
         useNativeDriver: true,
       }),
+      Animated.timing(cardScale, {
+        toValue: 0.95,
+        duration: 300,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
     ]).start();
-  };
-
-  const handleKeyboardHide = () => {
+  }, [cardPosition, headerOpacity, cardScale]);
+  const handleKeyboardHide = useCallback(() => {
+    setKeyboardVisible(false);
     Animated.parallel([
       Animated.timing(cardPosition, {
         toValue: 0,
@@ -61,143 +92,170 @@ const LoginScreen = () => {
         duration: 200,
         useNativeDriver: true,
       }),
+      Animated.timing(cardScale, {
+        toValue: 1,
+        duration: 300,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
     ]).start();
-  };
+  }, [cardPosition, headerOpacity, cardScale]);
+
+
+  const handleLoginTab = useCallback(() => {
+    setTab('Login');
+    setEmail('');
+    setPassword('');
+    setUsername('');
+    setConfirmPassword('');
+  }, []);
+
+  const handleSignupTab = useCallback(() => {
+    setTab('Signup');
+    setEmail('');
+    setPassword('');
+    setUsername('');
+    setConfirmPassword('');
+  }, []);
+
+  const handleRememberToggle = useCallback(() => {
+    setRemember(prev => !prev);
+  }, []);
+
+  const handleAgreeToggle = useCallback(() => {
+    setAgree(prev => !prev);
+  }, []);
+
+  const handleDismissKeyboard = useCallback(() => {
+    Keyboard.dismiss();
+  }, []);
 
   useEffect(() => {
     const showSub = Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
     const hideSub = Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
-
     return () => {
       showSub.remove();
       hideSub.remove();
     };
-  }, []);
+  }, [handleKeyboardShow, handleKeyboardHide]);
+
+  const isSignup = tab === 'Signup';
+  const tabRowStyle = isSignup ? styles.tabRowSignup : styles.tabRowLogin;
+  const boxStyle = isSignup ? styles.boxSignup : styles.boxLogin;
 
   return (
-    // <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <ImageBackground
-        source={require('../../assets/image/loginScreen.png')}
-        style={styles.background}
+    <ImageBackground
+      source={Images.loginImage}
+      style={styles.background}
+    >
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
+        behavior={Platform.OS === 'ios' ? 0 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <TouchableWithoutFeedback onPress={handleDismissKeyboard} accessible={false}>
+          <View style={styles.overlay}>
+            <Animated.View style={[styles.headerContainer, { opacity: headerOpacity }]}>
+              <Text style={styles.logoHighlight}>TalkBrush</Text>
+              <Text style={styles.subtitle}>
+                Paint your voice {'\n'}with the right {'\n'}accent
+              </Text>
+            </Animated.View>
 
-        <View style={styles.overlay}>
-          {/* Header */}
-          <Animated.View style={{ flex: 0.6, justifyContent: 'flex-end', opacity: headerOpacity }}>
-            <Text style={styles.logoHighlight}>TalkBrush</Text>
-            <Text style={styles.subtitle}>
-              Paint your voice {'\n'}with the right {'\n'}accent
-            </Text>
-          </Animated.View>
+            <Animated.View style={[styles.cardContainer, { transform: [{ translateY: cardPosition }] }]}>
+              <BlurView
+                style={styles.blurView}
+                blurType="dark"
+                blurAmount={8}
+                reducedTransparencyFallbackColor="rgba(89, 77, 91, 0.9)"
+              />
+              <View style={styles.card}>
+                <View style={styles.header}>
+                  <View style={tabRowStyle}>
+                    <TouchableOpacity onPress={handleLoginTab}>
+                      <Text style={tab === 'Login' ? styles.activeTab : styles.inactiveTab}>
+                        Login
+                      </Text>
+                    </TouchableOpacity>
+                    <View style={styles.line} />
+                    <TouchableOpacity onPress={handleSignupTab}>
+                      <Text style={tab === 'Signup' ? styles.activeTab : styles.inactiveTab}>
+                        Signup
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
 
-          {/* Card */}
-          <Animated.View style={[styles.cardContainer, { transform: [{ translateY: cardPosition }] }]}>
-            <BlurView
-              style={styles.blurView}
-              blurType="dark" 
-              blurAmount={8}
-              reducedTransparencyFallbackColor="rgba(89, 77, 91, 0.9)"
-            />
-            <View style={styles.card}>
-              <View style={styles.header}>
-                <View style={[styles.tabRow, { paddingTop: tab === 'Signup' ? height * 0 : height * 0.03 }]}>
-                  <TouchableOpacity onPress={() => setTab('Login')}>
-                    <Text
-                      style={
-                        tab === 'Login' ? styles.activeTab : styles.inactiveTab
-                      }
-                    >
-                      Login
-                    </Text>
-                  </TouchableOpacity>
-                  <View style={styles.line} />
-                  <TouchableOpacity onPress={() => setTab('Signup')}>
-                    <Text
-                      style={
-                        tab === 'Signup' ? styles.activeTab : styles.inactiveTab
-                      }
-                    >
-                      Signup
-                    </Text>
-                  </TouchableOpacity>
+                  <Text style={styles.infoText}>
+                    Register Now to Personalize the {'\n'}English accent you listen to
+                  </Text>
+
+                  <Text style={styles.txt}>Or</Text>
                 </View>
 
-                <Text style={styles.infoText}>
-                  Register Now to Personalize the {'\n'}English accent you listen to
-                </Text>
-
-                <Text style={styles.txt}>Or</Text>
-              </View>
-
-              <View style={[styles.box, { marginTop: tab === 'Signup' ? height * 0 : height * 0.05 }]}>
-                {tab === 'Signup' && (
+                <View style={boxStyle}>
+                  {isSignup && (
+                    <RnTextInput
+                      placeholder="Username"
+                      value={username}
+                      onChangeText={setUsername}
+                      iconName="person-outline"
+                      style={styles.firstInput}
+                    />
+                  )}
                   <RnTextInput
-                    placeholder="Username"
-                    value={username}
-                    onChangeText={setUsername}
+                    placeholder="Email Address"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    iconName="mail"
                   />
-                )}
-                <RnTextInput
-                  placeholder="Email Address"
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                />
 
-                <RnTextInput
-                  placeholder="Password"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry
-                />
-
-                {tab === 'Signup' && (
                   <RnTextInput
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
                     secureTextEntry
                   />
+
+                  {isSignup && (
+                    <RnTextInput
+                      placeholder="Confirm Password"
+                      value={confirmPassword}
+                      onChangeText={setConfirmPassword}
+                      secureTextEntry
+                    />
+                  )}
+                </View>
+
+                {tab === 'Login' && (
+                  <CheckBox
+                    checked={remember}
+                    onPress={handleRememberToggle}
+                    label="Remember Me"
+                  />
                 )}
-              </View>
-
-              {tab === 'Login' && (
-                <CheckBox
-                  checked={remember}
-                  onPress={() => setRemember(!remember)}
-                  label="Remember Me"
-                />
-              )}
-              {tab === 'Signup' && (
-                <CheckBox
-                  checked={agree}
-                  onPress={() => setAgree(!agree)}
-                  label={
-                    <Text style={{ fontSize: 12, color: '#6C63FF', marginLeft: 8 }}>
-                      I agree to the{' '}
-                      <Text style={{ color: '#fff', fontWeight: 'bold' }}>
-                        privacy policy
-                      </Text>{' '}
-                      & 
-                      <Text style={{ color: '#fff', fontWeight: 'bold' }}>
-                        {' '}Terms and conditions
+                {isSignup && (
+                  <CheckBox
+                    checked={agree}
+                    onPress={handleAgreeToggle}
+                    label={
+                      <Text style={styles.agreementText}>
+                        I agree to the{' '}
+                        <Text style={styles.agreementBold}>privacy policy</Text> &
+                        <Text style={styles.agreementBold}> Terms and conditions</Text>
                       </Text>
-                    </Text>
-                  }
-                />
-              )}
+                    }
+                  />
+                )}
+                <CommonBtn title={tab === 'Login' ? 'LOGIN' : 'Sign Up'} />
+              </View>
+            </Animated.View>
+          </View>
+        </TouchableWithoutFeedback>
 
-              <TouchableOpacity style={styles.loginBtn}>
-                <Text style={styles.loginText}>
-                  {tab === 'Login' ? 'LOGIN' : 'SIGNUP'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-        </View>
-    </TouchableWithoutFeedback>
-      </ImageBackground>
+      </KeyboardAvoidingView>
+
+    </ImageBackground>
   );
 };
 
@@ -209,36 +267,48 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
   },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   overlay: {
     flex: 1,
     justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    padding: 16
+    padding: GlobalStyles.padding.medium,
   },
-  header: { gap: 0 },
+  headerContainer: {
+    height: GlobalStyles.windowHeight / 3.5,
+    justifyContent: 'flex-end',
+  },
+  header: {
+    gap: 0,
+  },
   logoHighlight: {
-    fontSize: 42,
-    fontWeight: 'bold',
+    fontSize: moderateScale(42),
+    fontFamily: Fonts.OffsideRegular,
     textAlign: 'center',
     color: '#7063F1',
-    lineHeight: 45
+    lineHeight: 50,
   },
   subtitle: {
-    fontSize: 34,
-    fontWeight: 'bold',
+    fontSize: moderateScale(32),
+    fontFamily: Fonts.PoppinsBold,
     color: '#fff',
     textAlign: 'center',
-    lineHeight: 39
+    lineHeight: 38,
   },
   cardContainer: {
-    height: height / 1.8,
-    marginTop: 20,
-    width: '80%',
+    flexShrink: 1,
+    minHeight: GlobalStyles.windowHeight * 0.58,
+    maxHeight: 500,
+    marginTop: GlobalStyles.margin.medium * 2,
+    width: GlobalStyles.windowWidth / 1.4,
     alignSelf: 'center',
-    borderRadius: 30,
-    overflow: 'hidden', 
+    borderRadius: GlobalStyles.borderRadius.large,
+    overflow: 'hidden',
     borderWidth: 3,
-    borderColor: "rgba(102, 88, 79, 0.3)",
+    borderColor: 'rgba(102, 88, 79, 0.3)',
+    marginBottom: 15
   },
   blurView: {
     position: 'absolute',
@@ -249,50 +319,70 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    backgroundColor:"rgba(102, 88, 79, 0.1)",
-    borderRadius: 30,
-    padding: 16,
+    backgroundColor: 'rgba(102, 88, 79, 0.1)',
+    borderRadius: GlobalStyles.borderRadius.large,
+    padding: GlobalStyles.padding.small * 1.5,
   },
-  tabRow: {
+  tabRowLogin: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
+    paddingTop: GlobalStyles.windowHeight * 0.03,
+  },
+  tabRowSignup: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+    paddingTop: 0,
   },
   activeTab: {
     color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 23,
+    fontSize: moderateScale(23),
+    fontFamily: Fonts.PoppinsBold,
   },
   inactiveTab: {
     color: '#7063F1',
-    fontSize: 23,
+    fontSize: moderateScale(23),
+    fontFamily: Fonts.PoppinsRegular,
   },
-  line: { height: height * 0.06, width: 2, backgroundColor: 'grey' },
+  line: {
+    height: GlobalStyles.windowHeight * 0.06,
+    width: 2,
+    backgroundColor: 'grey',
+  },
   infoText: {
     color: '#ccc',
-    fontSize: 12,
+    fontSize: moderateScale(12),
+    fontFamily: Fonts.PoppinsRegular,
     textAlign: 'center',
-    marginTop: 12,
+    marginTop: GlobalStyles.margin.medium,
   },
   txt: {
     color: '#ccc',
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: moderateScale(14),
+    fontFamily: Fonts.PoppinsRegular,
     textAlign: 'center',
-    marginTop: 8
+    marginTop: GlobalStyles.margin.small / 2.2,
   },
-  box: { marginTop: height * 0.04 },
-  loginBtn: {
-    backgroundColor: '#7063F1',
-    borderRadius: 8,
-    paddingVertical: 10,
-    alignItems: 'center',
-    marginTop: 6,
+  boxLogin: {
+    marginTop: GlobalStyles.windowHeight * 0.03,
   },
-  loginText: {
+  boxSignup: {
+    marginTop: 0,
+  },
+  agreementText: {
+    fontSize: moderateScale(9),
+    color: '#6C63FF',
+    marginLeft: GlobalStyles.margin.small,
+    fontFamily: Fonts.PoppinsRegular
+  },
+  agreementBold: {
     color: '#fff',
-    fontSize: 12,
-    fontWeight: '700',
+    fontFamily: Fonts.PoppinsSemiBold
   },
+  firstInput: {
+    marginTop: 0
+  }
 });

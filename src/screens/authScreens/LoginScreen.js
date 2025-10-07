@@ -23,6 +23,7 @@ import Fonts from '../../styles/GlobalFonts';
 
 
 const LoginScreen = () => {
+
   const [tab, setTab] = useState('Login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +31,6 @@ const LoginScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [agree, setAgree] = useState(false);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   const cardPosition = useRef(new Animated.Value(0)).current;
   const headerOpacity = useRef(new Animated.Value(1)).current;
@@ -38,7 +38,6 @@ const LoginScreen = () => {
 
 
   const handleKeyboardShow = useCallback((e) => {
-    setKeyboardVisible(true);
     const keyboardHeight = e.endCoordinates.height;
     const screenHeight = GlobalStyles.windowHeight;
     let minTranslation, maxTranslation;
@@ -79,7 +78,6 @@ const LoginScreen = () => {
     ]).start();
   }, [cardPosition, headerOpacity, cardScale]);
   const handleKeyboardHide = useCallback(() => {
-    setKeyboardVisible(false);
     Animated.parallel([
       Animated.timing(cardPosition, {
         toValue: 0,
@@ -252,9 +250,7 @@ const LoginScreen = () => {
             </Animated.View>
           </View>
         </TouchableWithoutFeedback>
-
       </KeyboardAvoidingView>
-
     </ImageBackground>
   );
 };

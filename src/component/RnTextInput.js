@@ -47,7 +47,7 @@ const RnTextInput = ({
       )}
 
       {isPasswordField && (
-        <TouchableOpacity onPress={handleTogglePassword}>
+        <TouchableOpacity  onPress={handleTogglePassword}>
           <Ionicons
             name={showPassword ? 'lock-open' : 'lock-closed'}
             size={18}
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     paddingBottom:6
   },
   icon: {
+    padding:5
     // marginLeft: 10,
   },
 });

@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
         borderRadius: GlobalStyles.borderRadius.small,
         height:GlobalStyles.windowHeight/20,
         justifyContent:'center', 
-        alignItems:'center'
+        alignItems:'center',
+        elevation:5
     },
     loginText: {
         color: '#fff',

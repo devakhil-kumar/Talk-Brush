@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical:GlobalStyles.margin.small,
+    marginTop:GlobalStyles.margin.small,
   },
   outerCircle: {
     width: 20,

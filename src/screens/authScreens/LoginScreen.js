@@ -11,6 +11,8 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
+  Image,
+  ScrollView,
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import RnTextInput from '../../component/RnTextInput';
@@ -20,6 +22,9 @@ import GlobalStyles from '../../styles/GlobalStyles';
 import { moderateScale } from 'react-native-size-matters';
 import Images from '../../contexts/ImagePath'
 import Fonts from '../../styles/GlobalFonts';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ImagePath from '../../contexts/ImagePath';
+import { validateForm } from '../authScreens/components/AuthValidator';
 
 
 const LoginScreen = () => {
@@ -28,9 +33,13 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
 
   const cardPosition = useRef(new Animated.Value(0)).current;
   const headerOpacity = useRef(new Animated.Value(1)).current;
@@ -56,7 +65,6 @@ const LoginScreen = () => {
     }
     let translation = keyboardHeight / 2.2;
     translation = Math.max(minTranslation, Math.min(translation, maxTranslation));
-    console.log(-translation, 'translation')
     Animated.parallel([
       Animated.timing(cardPosition, {
         toValue: -translation,
@@ -99,21 +107,52 @@ const LoginScreen = () => {
     ]).start();
   }, [cardPosition, headerOpacity, cardScale]);
 
+  useEffect(() => {
+    const showSub = Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
+    const hideSub = Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, [handleKeyboardShow, handleKeyboardHide]);
+
+  useEffect(() => {
+    if (isSubmitted) {
+      const errors = validateForm({
+        isSignup,
+        username,
+        email,
+        password,
+        confirmPassword,
+        phoneNumber,
+        agree,
+      });
+      setValidationErrors(errors);
+    }
+  }, [username, email, password, confirmPassword, phoneNumber, agree]);
 
   const handleLoginTab = useCallback(() => {
     setTab('Login');
+    setIsSubmitted(false);
     setEmail('');
     setPassword('');
+    setPhoneNumber('')
     setUsername('');
+    setRemember('')
     setConfirmPassword('');
+    setValidationErrors({});
   }, []);
 
   const handleSignupTab = useCallback(() => {
     setTab('Signup');
+    setIsSubmitted(false);
     setEmail('');
+    setPhoneNumber('')
     setPassword('');
     setUsername('');
+    setAgree('')
     setConfirmPassword('');
+    setValidationErrors({});
   }, []);
 
   const handleRememberToggle = useCallback(() => {
@@ -128,129 +167,201 @@ const LoginScreen = () => {
     Keyboard.dismiss();
   }, []);
 
-  useEffect(() => {
-    const showSub = Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
-    const hideSub = Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
-    return () => {
-      showSub.remove();
-      hideSub.remove();
-    };
-  }, [handleKeyboardShow, handleKeyboardHide]);
+  const handleSubmitLogin = () => {
+    setIsSubmitted(true);
+    const errors = validateForm({ isSignup: false, email, password });
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+  };
+
+  const hasErrors = Object.keys(validationErrors).length > 0;
+
+  const handleSubmitSignUp = () => {
+    setIsSubmitted(true);
+    const errors = validateForm({
+      isSignup: true,
+      username,
+      email,
+      password,
+      confirmPassword,
+      phoneNumber,
+      agree
+    });
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+    setValidationErrors({});
+  };
 
   const isSignup = tab === 'Signup';
   const tabRowStyle = isSignup ? styles.tabRowSignup : styles.tabRowLogin;
   const boxStyle = isSignup ? styles.boxSignup : styles.boxLogin;
+  const gapMaintain = !isSignup && styles.marginInput
 
   return (
     <ImageBackground
       source={Images.loginImage}
       style={styles.background}
     >
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoidingView}
-        behavior={Platform.OS === 'ios' ? 0 : 0}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-      >
-        <TouchableWithoutFeedback onPress={handleDismissKeyboard} accessible={false}>
-          <View style={styles.overlay}>
-            <Animated.View style={[styles.headerContainer, { opacity: headerOpacity }]}>
-              <Text style={styles.logoHighlight}>TalkBrush</Text>
-              <Text style={styles.subtitle}>
-                Paint your voice {'\n'}with the right {'\n'}accent
-              </Text>
-            </Animated.View>
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          style={styles.keyboardAvoidingView}
+          behavior={Platform.OS === 'ios' ? 0 : 0}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+        >
+          <TouchableWithoutFeedback onPress={handleDismissKeyboard} accessible={false}>
+            <View style={styles.overlay}>
+              <Animated.View style={[styles.headerContainer, { opacity: headerOpacity }]}>
+                <Image source={ImagePath.talkLogo} style={styles.logoHighlight} />
+                <Text style={styles.subtitle}>
+                  To make an accent suitable for {'\n'} an audience or purpose
+                </Text>
+              </Animated.View>
 
-            <Animated.View style={[styles.cardContainer, { transform: [{ translateY: cardPosition }] }]}>
-              <BlurView
-                style={styles.blurView}
-                blurType="dark"
-                blurAmount={8}
-                reducedTransparencyFallbackColor="rgba(89, 77, 91, 0.9)"
-              />
-              <View style={styles.card}>
-                <View style={styles.header}>
-                  <View style={tabRowStyle}>
-                    <TouchableOpacity onPress={handleLoginTab}>
-                      <Text style={tab === 'Login' ? styles.activeTab : styles.inactiveTab}>
-                        Login
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={styles.line} />
-                    <TouchableOpacity onPress={handleSignupTab}>
-                      <Text style={tab === 'Signup' ? styles.activeTab : styles.inactiveTab}>
-                        Signup
-                      </Text>
-                    </TouchableOpacity>
+              <Animated.View style={[styles.cardContainer, { transform: [{ translateY: cardPosition }] }]}>
+                <BlurView
+                  style={styles.blurView}
+                  blurType="dark"
+                  blurAmount={8}
+                  reducedTransparencyFallbackColor="rgba(89, 77, 91, 0.9)"
+                />
+                <View style={styles.card}>
+                  <View style={styles.header}>
+                    <View style={tabRowStyle}>
+                      <TouchableOpacity onPress={handleLoginTab}>
+                        <Text style={tab === 'Login' ? styles.activeTab : styles.inactiveTab}>
+                          Login
+                        </Text>
+                      </TouchableOpacity>
+                      <View style={styles.line} />
+                      <TouchableOpacity onPress={handleSignupTab}>
+                        <Text style={tab === 'Signup' ? styles.activeTab : styles.inactiveTab}>
+                          Signup
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <Text style={styles.infoText}>
+                      Register Now to Personalize the {'\n'}English accent you listen to
+                    </Text>
                   </View>
+                  <ScrollView showsVerticalScrollIndicator={false}   >
+                    <View style={boxStyle}>
+                      {isSignup && (
+                        <>
+                          <RnTextInput
+                            placeholder="Username"
+                            value={username}
+                            onChangeText={setUsername}
+                            iconName="person-outline"
+                            style={[
+                              styles.firstInput,
+                              validationErrors.username && styles.errorInput
+                            ]}
+                          />
+                        </>
+                      )}
+                      <>
+                        <RnTextInput
+                          placeholder="Email Address"
+                          value={email}
+                          onChangeText={setEmail}
+                          keyboardType="email-address"
+                          iconName="mail"
+                          style={[
+                            validationErrors.email && styles.errorInput
+                          ]}
+                        />
+                      </>
 
-                  <Text style={styles.infoText}>
-                    Register Now to Personalize the {'\n'}English accent you listen to
-                  </Text>
+                      {isSignup && (
+                        <>
+                          <RnTextInput
+                            placeholder="Phone Number"
+                            value={phoneNumber}
+                            onChangeText={setPhoneNumber}
+                            iconName="phone-portrait"
+                            style={[
+                              validationErrors.phoneNumber && styles.errorInput,
+                            ]}
+                          />
+                        </>
+                      )}
+                      <>
+                        <RnTextInput
+                          placeholder="Password"
+                          value={password}
+                          onChangeText={setPassword}
+                          secureTextEntry
+                          style={[
+                            gapMaintain,
+                            validationErrors.password && styles.errorInput,
+                          ]}
+                        />
+                        {validationErrors.password && (
+                          <Text style={styles.errorText}>{validationErrors.password}</Text>
+                        )}
+                      </>
 
-                  <Text style={styles.txt}>Or</Text>
+                      {isSignup && (
+                        <>
+                          <RnTextInput
+                            placeholder="Confirm Password"
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                            secureTextEntry
+                            style={[
+                              validationErrors.confirmPassword && styles.errorInput,
+                            ]}
+                          />
+                          {validationErrors.confirmPassword && (
+                            <Text style={styles.errorText}>{validationErrors.confirmPassword}</Text>
+                          )}
+                        </>
+                      )}
+                    </View>
+
+                    {tab === 'Login' && (
+                      <>
+                        <CheckBox
+                          checked={remember}
+                          onPress={handleRememberToggle}
+                          label="Remember Me"
+                        />
+                        {isSubmitted && validationErrors.agree && (
+                          <Text style={[styles.errorText, { marginTop: 0 }]}>{validationErrors.agree}</Text>
+                        )}
+                      </>
+                    )}
+                    {isSignup && (
+                      <>
+                        <CheckBox
+                          checked={agree}
+                          onPress={handleAgreeToggle}
+                          label={
+                            <Text style={styles.agreementText}>
+                              I agree to the{' '}
+                              <Text style={styles.agreementBold}>privacy policy</Text> &
+                              <Text style={styles.agreementBold}> Terms and conditions</Text>
+                            </Text>
+                          }
+                        />
+                        {isSubmitted && validationErrors.agree && (
+                          <Text style={[styles.errorText, { marginTop: 0 }]}>{validationErrors.agree}</Text>
+                        )}
+                      </>
+                    )}
+                    <CommonBtn title={tab === 'Login' ? 'LOGIN' : 'Sign Up'} onPress={tab === 'Login' ? handleSubmitLogin : handleSubmitSignUp} />
+                  </ScrollView>
                 </View>
-
-                <View style={boxStyle}>
-                  {isSignup && (
-                    <RnTextInput
-                      placeholder="Username"
-                      value={username}
-                      onChangeText={setUsername}
-                      iconName="person-outline"
-                      style={styles.firstInput}
-                    />
-                  )}
-                  <RnTextInput
-                    placeholder="Email Address"
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    iconName="mail"
-                  />
-
-                  <RnTextInput
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                  />
-
-                  {isSignup && (
-                    <RnTextInput
-                      placeholder="Confirm Password"
-                      value={confirmPassword}
-                      onChangeText={setConfirmPassword}
-                      secureTextEntry
-                    />
-                  )}
-                </View>
-
-                {tab === 'Login' && (
-                  <CheckBox
-                    checked={remember}
-                    onPress={handleRememberToggle}
-                    label="Remember Me"
-                  />
-                )}
-                {isSignup && (
-                  <CheckBox
-                    checked={agree}
-                    onPress={handleAgreeToggle}
-                    label={
-                      <Text style={styles.agreementText}>
-                        I agree to the{' '}
-                        <Text style={styles.agreementBold}>privacy policy</Text> &
-                        <Text style={styles.agreementBold}> Terms and conditions</Text>
-                      </Text>
-                    }
-                  />
-                )}
-                <CommonBtn title={tab === 'Login' ? 'LOGIN' : 'Sign Up'} />
-              </View>
-            </Animated.View>
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+              </Animated.View>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -280,22 +391,21 @@ const styles = StyleSheet.create({
     gap: 0,
   },
   logoHighlight: {
-    fontSize: moderateScale(42),
-    fontFamily: Fonts.OffsideRegular,
-    textAlign: 'center',
-    color: '#7063F1',
-    lineHeight: 50,
+    width: GlobalStyles.windowWidth / 1.8,
+    height: GlobalStyles.windowHeight / 5.8,
+    alignSelf: 'center'
   },
   subtitle: {
-    fontSize: moderateScale(32),
-    fontFamily: Fonts.PoppinsBold,
+    fontSize: moderateScale(15),
+    fontFamily: Fonts.PoppinsRegular,
     color: '#fff',
     textAlign: 'center',
-    lineHeight: 38,
+    lineHeight: 14,
+    marginTop: GlobalStyles.margin.medium * 1.5
   },
   cardContainer: {
     flexShrink: 1,
-    minHeight: GlobalStyles.windowHeight * 0.58,
+    minHeight: GlobalStyles.windowHeight * 0.62,
     maxHeight: 500,
     marginTop: GlobalStyles.margin.medium * 2,
     width: GlobalStyles.windowWidth / 1.4,
@@ -317,7 +427,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(102, 88, 79, 0.1)',
     borderRadius: GlobalStyles.borderRadius.large,
-    padding: GlobalStyles.padding.small * 1.5,
+    padding: GlobalStyles.padding.small * 1.3,
   },
   tabRowLogin: {
     flexDirection: 'row',
@@ -363,7 +473,7 @@ const styles = StyleSheet.create({
     marginTop: GlobalStyles.margin.small / 2.2,
   },
   boxLogin: {
-    marginTop: GlobalStyles.windowHeight * 0.03,
+    marginTop: GlobalStyles.windowHeight * 0.07,
   },
   boxSignup: {
     marginTop: 0,
@@ -379,6 +489,19 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.PoppinsSemiBold
   },
   firstInput: {
-    marginTop: 0
-  }
+    marginTop: 5
+  },
+  marginInput: {
+    marginTop: GlobalStyles.margin.medium * 2
+  },
+  errorInput: {
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 8,
+    marginTop: 4,
+    marginLeft: 5,
+  },
 });

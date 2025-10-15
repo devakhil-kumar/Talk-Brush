@@ -1,5 +1,7 @@
 export const lightTheme = {
   mode: 'light',
+  primary:'#FAB713',
+  inputBackgroundColor: 'rgba(250, 183, 19, 0.2)',
   background: '#FFFFFF',   
   cardBackground: '#F5F5F5',   
   text: '#121212',           
@@ -13,6 +15,8 @@ export const lightTheme = {
 
 export const darkTheme = {
   mode: 'dark',
+  secondary:"#7063F1",
+  inputBackgroundColor:'rgba(112, 99, 241, 0.2)',
   background: '#121212',
   cardBackground: '#1E1E1E',
   text: '#FFFFFF',

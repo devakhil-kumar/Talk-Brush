@@ -5,9 +5,9 @@ import { moderateScale } from "react-native-size-matters";
 import Fonts from "../styles/GlobalFonts";
 
 
-const CommonBtn = ({ title }) => {
+const CommonBtn = ({ title, onPress }) => {
     return (
-        <TouchableOpacity style={styles.loginBtn}>
+        <TouchableOpacity style={styles.loginBtn} onPress={onPress}>
             <Text style={styles.loginText}>
                 {title}
             </Text>
@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
         height:GlobalStyles.windowHeight/20,
         justifyContent:'center', 
         alignItems:'center',
-        elevation:5
+        elevation:5,
+        marginTop:5
     },
     loginText: {
         color: '#fff',

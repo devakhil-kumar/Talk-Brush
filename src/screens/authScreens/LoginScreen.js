@@ -13,8 +13,10 @@ import {
   Platform,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
+import { useDispatch } from 'react-redux';
 import RnTextInput from '../../component/RnTextInput';
 import CheckBox from '../../component/Checkbox';
 import CommonBtn from '../../component/CommonBtn';
@@ -25,6 +27,7 @@ import Fonts from '../../styles/GlobalFonts';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImagePath from '../../contexts/ImagePath';
 import { validateForm } from '../authScreens/components/AuthValidator';
+import { loginUser, registerUser } from '../../app/features/authSlice';
 
 
 const LoginScreen = () => {
@@ -39,6 +42,7 @@ const LoginScreen = () => {
   const [agree, setAgree] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const dispatch = useDispatch();
 
 
   const cardPosition = useRef(new Animated.Value(0)).current;
@@ -167,18 +171,27 @@ const LoginScreen = () => {
     Keyboard.dismiss();
   }, []);
 
-  const handleSubmitLogin = () => {
-    setIsSubmitted(true);
+  const handleSubmitLogin = async () => {
+    console.log("cnhsdkcbdfgcvhfdb")
     const errors = validateForm({ isSignup: false, email, password });
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      return;
+    }
+    const userData = {
+      email,
+      password,
+    }
+    try {
+      const response = await dispatch(loginUser(userData));
+      console.log('login successful:', response);
+    } catch (error) {
+      console.log('login failed:', error);
     }
   };
 
   const hasErrors = Object.keys(validationErrors).length > 0;
 
-  const handleSubmitSignUp = () => {
+  const handleSubmitSignUp = async () => {
     setIsSubmitted(true);
     const errors = validateForm({
       isSignup: true,
@@ -191,9 +204,75 @@ const LoginScreen = () => {
     });
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      return;
+      // return;
     }
     setValidationErrors({});
+    const userData = {
+      fullName: username,
+      email,
+      password,
+      phoneNumber,
+      type: "3",
+    }
+    console.log(userData, 'userData++++++++')
+    try {
+      const response = await dispatch(registerUser(userData)).unwrap();
+      Alert.alert(
+        'Signup Failed',
+        response.message || 'An error occurred during signup. Please try again.',
+        [
+          {
+            text: 'OK',
+           onPress: () => {
+            setTab('Login');
+            setUsername('');
+            setEmail('');
+            setPhoneNumber('');
+            setPassword('');
+            setConfirmPassword('');
+            setAgree(false);
+            setValidationErrors({});
+            setIsSubmitted(false);
+          },
+          }
+        ]
+      );
+    } catch (error) {
+      console.log('Signup failed:', error);
+      if (typeof error === 'string') {
+        errorMessage = error;
+      }
+
+      if (errorMessage.toLowerCase().includes('email already')) {
+        Alert.alert(
+          'Email Already Exists',
+          'This email is already registered. Please use a different email or try logging in.',
+          [
+            {
+              text: 'Try Another Email',
+              onPress: () => console.log('User will enter different email')
+            },
+            {
+              text: 'Go to Login',
+              onPress: () => {
+                // navigation.navigate('Login');
+              }
+            }
+          ]
+        );
+      } else {
+        Alert.alert(
+          'Signup Failed',
+          errorMessage,
+          [
+            {
+              text: 'OK',
+              onPress: () => console.log('Alert closed')
+            }
+          ]
+        );
+      }
+    }
   };
 
   const isSignup = tab === 'Signup';
@@ -331,9 +410,9 @@ const LoginScreen = () => {
                           onPress={handleRememberToggle}
                           label="Remember Me"
                         />
-                        {isSubmitted && validationErrors.agree && (
+                        {/* {isSubmitted && validationErrors.agree && (
                           <Text style={[styles.errorText, { marginTop: 0 }]}>{validationErrors.agree}</Text>
-                        )}
+                        )} */}
                       </>
                     )}
                     {isSignup && (

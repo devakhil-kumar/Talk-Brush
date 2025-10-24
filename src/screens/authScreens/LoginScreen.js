@@ -14,6 +14,7 @@ import {
   Image,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import { useDispatch } from 'react-redux';
@@ -28,6 +29,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ImagePath from '../../contexts/ImagePath';
 import { validateForm } from '../authScreens/components/AuthValidator';
 import { loginUser, registerUser } from '../../app/features/authSlice';
+import { showMessage } from '../../app/features/messageSlice';
 
 
 const LoginScreen = () => {
@@ -42,6 +44,7 @@ const LoginScreen = () => {
   const [agree, setAgree] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
 
@@ -111,6 +114,7 @@ const LoginScreen = () => {
     ]).start();
   }, [cardPosition, headerOpacity, cardScale]);
 
+
   useEffect(() => {
     const showSub = Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
     const hideSub = Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
@@ -171,8 +175,10 @@ const LoginScreen = () => {
     Keyboard.dismiss();
   }, []);
 
+  const hasErrors = Object.keys(validationErrors).length > 0;
+
   const handleSubmitLogin = async () => {
-    console.log("cnhsdkcbdfgcvhfdb")
+    setIsLoading(true)
     const errors = validateForm({ isSignup: false, email, password });
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -183,16 +189,18 @@ const LoginScreen = () => {
     }
     try {
       const response = await dispatch(loginUser(userData));
-      console.log('login successful:', response);
     } catch (error) {
       console.log('login failed:', error);
+    } finally {
+      setIsLoading(false)
     }
   };
 
-  const hasErrors = Object.keys(validationErrors).length > 0;
 
   const handleSubmitSignUp = async () => {
+
     setIsSubmitted(true);
+    setIsLoading(true);
     const errors = validateForm({
       isSignup: true,
       username,
@@ -200,11 +208,12 @@ const LoginScreen = () => {
       password,
       confirmPassword,
       phoneNumber,
-      agree
+      agree,
     });
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      // return;
+      setIsLoading(false);
+      return;
     }
     setValidationErrors({});
     const userData = {
@@ -212,67 +221,47 @@ const LoginScreen = () => {
       email,
       password,
       phoneNumber,
-      type: "3",
-    }
-    console.log(userData, 'userData++++++++')
+      type: '3',
+    };
     try {
       const response = await dispatch(registerUser(userData)).unwrap();
-      Alert.alert(
-        'Signup Failed',
-        response.message || 'An error occurred during signup. Please try again.',
-        [
-          {
-            text: 'OK',
-           onPress: () => {
-            setTab('Login');
-            setUsername('');
-            setEmail('');
-            setPhoneNumber('');
-            setPassword('');
-            setConfirmPassword('');
-            setAgree(false);
-            setValidationErrors({});
-            setIsSubmitted(false);
-          },
-          }
-        ]
+      dispatch(
+        showMessage({
+          type: 'success',
+          text: response.message || 'Signup successful!',
+        })
       );
-    } catch (error) {
-      console.log('Signup failed:', error);
-      if (typeof error === 'string') {
-        errorMessage = error;
-      }
+      setTab('Login');
+      setUsername('');
+      setEmail('');
+      setPhoneNumber('');
+      setPassword('');
+      setConfirmPassword('');
+      setAgree(false);
+      setValidationErrors({});
+      setIsSubmitted(false);
 
+    } catch (error) {
+      let errorMessage = typeof error === 'string' ? error : error.message || 'Signup failed!';
       if (errorMessage.toLowerCase().includes('email already')) {
-        Alert.alert(
-          'Email Already Exists',
-          'This email is already registered. Please use a different email or try logging in.',
-          [
-            {
-              text: 'Try Another Email',
-              onPress: () => console.log('User will enter different email')
-            },
-            {
-              text: 'Go to Login',
-              onPress: () => {
-                // navigation.navigate('Login');
-              }
-            }
-          ]
+        dispatch(
+          showMessage({
+            type: 'error',
+            text: 'This email is already registered. Please use a different email or try logging in.',
+          })
         );
       } else {
-        Alert.alert(
-          'Signup Failed',
-          errorMessage,
-          [
-            {
-              text: 'OK',
-              onPress: () => console.log('Alert closed')
-            }
-          ]
+        dispatch(
+          showMessage({
+            type: 'error',
+            text: errorMessage,
+          })
         );
       }
+    } finally {
+      setIsLoading(false);
     }
+
   };
 
   const isSignup = tab === 'Signup';
@@ -440,6 +429,11 @@ const LoginScreen = () => {
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
+        {isLoading && (
+          <View style={styles.loaderOverlay}>
+            <ActivityIndicator size="large" color="#fff" />
+          </View>
+        )}
       </SafeAreaView>
     </ImageBackground>
   );
@@ -582,5 +576,16 @@ const styles = StyleSheet.create({
     fontSize: 8,
     marginTop: 4,
     marginLeft: 5,
+  },
+  loaderOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 999,
   },
 });

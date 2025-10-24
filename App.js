@@ -3,14 +3,34 @@ import React from 'react';
 import { ThemeProvider } from './src/contexts/ThemeProvider';
 import RootNavigator from './src/navigation/RootNavigator';
 import store from './src/app/store'
-import { Provider } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import CustomMessage from './src/component/CustomMessage';
+import { hideMessage } from './src/app/features/messageSlice';
+
+
+const GlobalMessageWrapper = () => {
+  const { visible, text, type } = useSelector(state => state.message);
+  const dispatch = useDispatch();
+
+  return (
+    <>
+      <RootNavigator />
+      <CustomMessage
+        visible={visible}
+        text={text}
+        type={type}
+        onHide={() => dispatch(hideMessage())}
+      />
+    </>
+  );
+};
 
 const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
         <ThemeProvider>
-          <RootNavigator/>
+          <GlobalMessageWrapper />
         </ThemeProvider>
       </NavigationContainer>
     </Provider>

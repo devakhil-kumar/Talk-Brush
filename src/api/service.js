@@ -21,6 +21,7 @@ export const signupService = async userData => {
 export const loginService = async userData => {
     try {
         const response = await loginAPI(userData);
+        console.log(response.data, 'response+++++++')
         return response.data;
     } catch (error) {
         console.log(error);

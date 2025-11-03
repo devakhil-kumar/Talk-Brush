@@ -1,0 +1,23 @@
+
+export default {
+    loginImage: require('../assets/image/loginScreen.png'),
+    talkLogo: require('../assets/image/talkLogo.png'),
+    dashBoardInActive: require('../assets/image/Dassboardlight.png'),
+    dashBoardActive: require('../assets/image/DassboardDark.png'),
+    userInActive: require('../assets/image/GroupLight.png'),
+    userActive: require('../assets/image/GroupDark.png'),
+    convoInActive: require('../assets/image/ UnionLight.png'),
+    convoActive: require('../assets/image/UnionDark.png'),
+    analyticsInActive: require('../assets/image/Analyticslight.png'),
+    analyticsActive: require('../assets/image/AnalyticsDark.png'),
+    settingActive: require('../assets/image/settingdark.png'),
+    settingInActive: require('../assets/image/settinglight.png'),
+    profileInActive: require('../assets/image/Profilelight.png'),
+    profileActive: require('../assets/image/Profiledark.png'),
+    dammyProfile: require('../assets/image/dammyProdile.png'),
+    eventIcon: require('../assets/image/eventIcon.png'),
+    eventLight:require('../assets/image/eventlight.png'),
+    Home: require('../assets/image/Home.png'),
+    edit : require('../assets/image/edit.png'),
+    logout:require('../assets/image/Logout.png')
+};

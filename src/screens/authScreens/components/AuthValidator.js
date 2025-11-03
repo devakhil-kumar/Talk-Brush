@@ -1,0 +1,40 @@
+export const validateForm = ({ isSignup, username, email, password, confirmPassword, phoneNumber,agree}) => {
+  const errors = {};
+
+  if (isSignup && (!username || username.trim().length < 3)) {
+    errors.username = 'FullName must be at least 3 characters long';
+  }
+
+  if (!email) {
+    errors.email = 'Email is required';
+  } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+    errors.email = 'Enter a valid email address';
+  }
+
+  if (phoneNumber && !/^[0-9]{10}$/.test(phoneNumber)) {
+    errors.phoneNumber = 'phonenumber atleadt 10 digit'
+  }
+
+  if (!password) {
+    errors.password = 'Password is required';
+  } else if (
+    !/(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password) ||
+    password.length < 6
+  ) {
+    errors.password ='Password must have at least 1 number, 1 special character, and be at least 6 characters long';
+  }
+
+if (isSignup) {
+  if (!confirmPassword) {
+    errors.confirmPassword = 'Confirm password is required';
+  } else if (password !== confirmPassword) {
+    errors.confirmPassword = 'Passwords do not match';
+  }
+}
+
+   if (isSignup && !agree) {
+    errors.agree = 'Please accept the Terms&Conditions and Privacy Policy.';
+  }
+
+  return errors;
+};

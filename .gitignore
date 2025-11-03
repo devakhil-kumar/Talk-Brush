@@ -1,41 +1,23 @@
-# Node
+# dependencies
 node_modules/
+npm-debug.log
+yarn-error.log
 
-# React Native
-ios/Pods/
+# macOS
+.DS_Store
+
+# Xcode
 ios/build/
+ios/Pods/
+*.xcworkspace
+
+# Android
 android/.gradle/
 android/app/build/
+android/local.properties
 
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Env files
-.env
-.env.*.local
-
-# IDE files
-.idea/
+# vscode
 .vscode/
 
-# Fastlane
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots/**/*.png
-fastlane/test_output
-
-# Misc
-*.keystore
-.expo/
-.expo-shared/
-*.iml
-dist/
-build/
-*.hprof
-*.pack
+# env
+.env

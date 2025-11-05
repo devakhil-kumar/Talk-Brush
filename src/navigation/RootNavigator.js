@@ -24,16 +24,14 @@ const RootNavigator = () => {
         );
     }
 
-    console.log(isLoggedIn, token)
+    console.log(isLoggedIn, token, userRole, 'userRole')
 
     if (isLoggedIn && token) {
         if (userRole === "2") {
             return <AdminNavigator />;
         } else if (userRole === "3") {
             return <HomeNavigator />;
-        } else if (userRole === "1") {
-            showMessage('Please Login on Web')
-        }
+        } 
     }
 
     return <AuthNavigator />

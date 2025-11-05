@@ -1,4 +1,4 @@
-import { deleteUserAPI, editProfileAPI, getEventAPI, getProfileAPI, getUsersAPI, loginAPI, signupAPI } from '../apis/api';
+import { addEventAPI, deleteEventAPI, deleteUserAPI, editProfileAPI, editUserAPI, getEventAPI, getProfileAPI, getUsersAPI, loginAPI, signupAPI, updateEventAPI } from '../apis/api';
 
 export const signupService = async userData => {
     try {
@@ -82,3 +82,49 @@ export const editProfileService = async (formdata) => {
         );
     }
 }
+
+export const addEventService = async (evendata) => {
+    try {
+        const response = await addEventAPI(evendata);
+        return response.data;
+    } catch (error) {
+        throw new error(
+            error?.response?.data?.message || "Failed to Add the Event"
+        )
+
+    }
+}
+
+export const updateEventService = async (eventId, evendata) => {
+    try {
+        const response = await updateEventAPI(eventId, evendata);
+        return response.data;
+    } catch (error) {
+        throw new Error(
+            error?.response?.data?.message || "Failed to Update the Event"
+        );
+    }
+};
+
+export const deleteEventService = async (eventId) => {
+    try {
+        const response = await deleteEventAPI(eventId);
+        console.log(response.data, 'response------')
+        return response.data
+    } catch (error) {
+        throw new error(
+            error?.response?.data?.message || "Failed to delete the Event"
+        )
+    }
+}
+
+export const editUserService = async (eventId, evendata) => {
+    try {
+        const response = await editUserAPI(eventId, evendata);
+        return response.data;
+    } catch (error) {
+        throw new Error(
+            error?.response?.data?.message || "Failed to Update the Event"
+        );
+    }
+};

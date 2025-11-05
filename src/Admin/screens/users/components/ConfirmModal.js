@@ -2,9 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 import Feather from "@react-native-vector-icons/feather";
 import GlobalStyles from '../../../../styles/GlobalStyles';
+import { useTheme } from '../../../../contexts/ThemeProvider';
+import { moderateScale } from 'react-native-size-matters';
+import Fonts from '../../../../styles/GlobalFonts';
 
 
 const ConfirmModal = ({ visible, onCancel, onConfirm }) => {
+  const { theme } = useTheme();
+  const styles = style(theme);
+
   return (
     <Modal
       visible={visible}
@@ -15,7 +21,7 @@ const ConfirmModal = ({ visible, onCancel, onConfirm }) => {
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
           <TouchableOpacity style={styles.closeIcon} onPress={onCancel}>
-            <Feather name="x" size={20} color="#555" />
+            <Feather name="x" size={20} color={theme.subText} />
           </TouchableOpacity>
 
           <Text style={styles.title}>Are you sure you want to delete?</Text>
@@ -36,7 +42,7 @@ const ConfirmModal = ({ visible, onCancel, onConfirm }) => {
 
 export default ConfirmModal;
 
-const styles = StyleSheet.create({
+const style = (theme) => StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -45,7 +51,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '85%',
-    backgroundColor: '#fff',
+    backgroundColor: theme.background,
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',
@@ -57,18 +63,10 @@ const styles = StyleSheet.create({
     right: 12,
   },
   title: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000',
-    marginTop: 8,
+    fontSize: moderateScale(15),
+    fontFamily: Fonts.InterSemiBold,
+    marginTop: GlobalStyles.margin.small,
     textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 13,
-    color: '#555',
-    textAlign: 'center',
-    marginTop: 6,
-    marginBottom: 20,
   },
   buttonRow: {
     flexDirection: 'row',
@@ -79,26 +77,28 @@ const styles = StyleSheet.create({
   cancelButton: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: theme.border,
     borderRadius: 8,
     paddingVertical: 10,
-    marginRight: 8,
+    marginRight: GlobalStyles.margin.small,
     alignItems: 'center',
   },
   confirmButton: {
     flex: 1,
-    backgroundColor: '#3340C4',
+    backgroundColor:theme.secandprimary,
     borderRadius: 8,
     paddingVertical: 10,
     marginLeft: 8,
     alignItems: 'center',
   },
   cancelText: {
-    color: '#333',
-    fontWeight: '500',
+    fontSize:moderateScale(14),
+    color:theme.subText,
+    fontFamily:Fonts.InterMedium
   },
   confirmText: {
-    color: '#fff',
-    fontWeight: '500',
+    color:theme.background,
+    fontFamily:Fonts.InterSemiBold,
+    fontSize:moderateScale(13)
   },
 });

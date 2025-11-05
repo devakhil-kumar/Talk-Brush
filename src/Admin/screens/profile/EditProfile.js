@@ -21,6 +21,8 @@ import ImagePath from '../../../contexts/ImagePath';
 import GlobalStyles from '../../../styles/GlobalStyles';
 import Fonts from '../../../styles/GlobalFonts';
 import { showMessage } from '../../../app/features/messageSlice';
+import { useTheme } from '../../../contexts/ThemeProvider';
+import { moderateScale } from 'react-native-size-matters';
 
 const EditProfile = () => {
     const navigation = useNavigation();
@@ -28,12 +30,12 @@ const EditProfile = () => {
     const { user } = route.params;
     const dispatch = useDispatch();
     const { updateLoading, updateError, updateSuccess } = useSelector((state) => state.profile);
-    console.log(updateSuccess, updateError, 'update++++++++++')
-
     const [name, setName] = useState(user?.fullName || '');
     const [email, setEmail] = useState(user?.email || '');
     const [phone, setPhone] = useState(user?.phoneNumber || '');
     const [password] = useState('*********');
+    const { theme } = useTheme();
+    const styles = style(theme);
 
     useEffect(() => {
         if (updateSuccess) {
@@ -48,41 +50,30 @@ const EditProfile = () => {
     }, [updateSuccess, updateError]);
 
     const handleUpdate = async () => {
-        console.log("handleUpdate called"); 
-
         if (!name || !email || !phone) {
-            console.log("Validation failed: Some fields are empty");
             dispatch(showMessage({ type: 'error', text: 'Please fill all required fields' }));
             return;
         }
-
         const payload = {
             fullName: name,
             email: email,
             phoneNumber: phone
         };
-        console.log("Payload to dispatch:", payload);
-
         try {
             const resultAction = await dispatch(updateProfile(payload));
-            console.log("Result from dispatch:", resultAction);
-
             if (updateProfile.fulfilled.match(resultAction)) {
-                console.log("Profile update successful:", resultAction.payload);
                 dispatch(showMessage({
                     type: 'success',
                     text: resultAction.payload.message || 'Profile updated successfully!'
                 }));
-                navigation.goBack();
+                navigation.navigate('ManageProfile');
             } else {
-                console.log("Profile update failed:", resultAction.payload);
                 dispatch(showMessage({
                     type: 'error',
                     text: resultAction.payload || 'Something went wrong'
                 }));
             }
         } catch (error) {
-            console.log("Unexpected error in handleUpdate:", error);
             dispatch(showMessage({
                 type: 'error',
                 text: error.message || 'An unexpected error occurred'
@@ -165,22 +156,23 @@ const EditProfile = () => {
 
 export default EditProfile;
 
-const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 25 },
+const style = (theme) => StyleSheet.create({
+    container: { flex: 1, backgroundColor: theme.background, paddingHorizontal: 25 },
     header: { fontSize: 20, marginBottom: 10, marginTop: GlobalStyles.margin.large * 2, fontFamily: Fonts.PoppinsMedium },
-    label: { fontSize: 14, color: '#555', marginBottom: 6, marginTop: 10 },
+    label: { fontSize: 14, color: theme.subText, marginBottom: 6, marginTop: 10, fontFamily: Fonts.InterRegular },
     input: {
         backgroundColor: '#F9F9F9',
         borderRadius: 8,
         padding: 12,
-        fontSize: 14,
+        fontSize: moderateScale(14),
         borderWidth: 1,
-        borderColor: '#E8E8E8',
+        borderColor: theme.border,
+        fontFamily: Fonts.InterRegular
     },
     buttonRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 30 },
-    cancel: { fontSize: 16, color: '#999' },
+    cancel: { fontSize: 16, color: '#999', fontFamily: Fonts.InterMedium },
     updateButton: {
-        backgroundColor: '#3340C4',
+        backgroundColor: theme.secandprimary,
         paddingVertical: 10,
         paddingHorizontal: 28,
         borderRadius: 10,
@@ -189,22 +181,26 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 28,
         borderRadius: 10,
-        backgroundColor: '#E0E0E0',
+        backgroundColor: theme.border,
     },
-    updateText: { color: '#fff', fontSize: 16, fontWeight: '500' },
+    updateText: { color: theme.background, fontSize: moderateScale(15), fontFamily: Fonts.InterMedium },
     headermain: {
         height: 56,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#fff',
+        backgroundColor: theme.background,
         paddingHorizontal: 16,
         elevation: 4,
-        shadowColor: '#000',
+        shadowColor: theme.text,
         shadowOpacity: 0.1,
         shadowRadius: 3,
     },
-    headerTitle: { fontSize: 16, fontWeight: '500', color: '#000' },
+    headerTitle: {
+        fontSize: moderateScale(16),
+        fontFamily: Fonts.InterSemiBold,
+        color: theme.text,
+    },
     avatarContainer: {
         width: 90,
         height: 90,
@@ -222,6 +218,6 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         padding: 4,
         borderWidth: 1,
-        borderColor: 'white',
+        borderColor: theme.background,
     },
 });

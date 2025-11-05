@@ -130,7 +130,7 @@ const LoginScreen = () => {
       });
       setValidationErrors(errors);
     }
-  }, [email, password, agree, isSubmitted]);
+  }, [email, password, agree]);
 
   const handleGoSignup = () => {
     navigation.replace('Signup')
@@ -153,15 +153,15 @@ const LoginScreen = () => {
     setIsSubmitted(true);
     setIsLoading(true);
     try {
-      const errors = validateForm({ email, password, isSignup: false }) || {};
+      const errors = validateForm({ email, password, isLogin: true }) || {};
       if (Object.keys(errors).length > 0) {
         setValidationErrors(errors);
         setIsLoading(false);
         return;
       }
+      setValidationErrors({});
       const userData = { email, password };
       const response = await dispatch(loginUser(userData)).unwrap();
-      console.log(response, 'response+++++')
     } catch (error) {
       const errorMessage = typeof error === "string"
         ? error
@@ -242,6 +242,9 @@ const LoginScreen = () => {
                         validationErrors.email && styles.errorInput
                       ]}
                     />
+                    {validationErrors.email && (
+                      <Text style={styles.errorText}>{validationErrors.email}</Text>
+                    )}
                     <RnTextInput
                       placeholder="Password"
                       value={password}

@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import GlobalStyles from '../../../../styles/GlobalStyles';
 import { moderateScale } from 'react-native-size-matters';
 import { useTheme } from '../../../../contexts/ThemeProvider';
 import Fonts from '../../../../styles/GlobalFonts';
+import Feather from '@react-native-vector-icons/feather';
+import { AntDesign } from '@react-native-vector-icons/ant-design';
 
-const WebinarCard = ({ item }) => {
+const WebinarCard = ({ item, onEditPress, onDeletePress, index}) => {
   const { theme } = useTheme();
-  const styles = createStyles(theme);
+  const styles = createStyles(theme, index);
 
   const renderPictures = () => {
     if (!item.pictures || item.pictures.length === 0) return null;
@@ -26,7 +28,6 @@ const WebinarCard = ({ item }) => {
             <Image source={{ uri: picture }} style={styles.picture} />
           </View>
         ))}
-
         {remaining > 0 && (
           <View style={[styles.pictureWrapper, styles.pictureCount, styles.pictureOverlap]}>
             <Text style={styles.pictureCountText}>+{remaining}</Text>
@@ -43,10 +44,23 @@ const WebinarCard = ({ item }) => {
         <View style={styles.header}>
           <Text style={styles.time}>{item.time}</Text>
           {renderPictures()}
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => onEditPress(item)}
+            >
+              <Feather name="edit" size={14} color={theme.subText} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => onDeletePress(item)}
+            >
+              <Feather name="trash-2" size={14} color={theme.error} />
+            </TouchableOpacity>
+          </View>
         </View>
-
         <Text style={styles.title}>{item.fullName}</Text>
-        <Text style={styles.description} numberOfLines={2}>
+        <Text style={styles.description} numberOfLines={5}>
           {item.description}
         </Text>
       </View>
@@ -56,7 +70,7 @@ const WebinarCard = ({ item }) => {
 
 export default WebinarCard;
 
-const createStyles = (theme) =>
+const createStyles = (theme, index) =>
   StyleSheet.create({
     card: {
       backgroundColor: theme.cardBackground,
@@ -75,7 +89,7 @@ const createStyles = (theme) =>
     },
     sideBar: {
       width: 16,
-      backgroundColor: theme.secandprimary,
+      backgroundColor: index % 2 === 0 ? theme.secandprimary : theme.primary,
       borderTopLeftRadius: 15,
       borderBottomLeftRadius: 15,
     },
@@ -97,6 +111,7 @@ const createStyles = (theme) =>
     picturesContainer: {
       flexDirection: 'row',
       alignItems: 'center',
+      marginRight: GlobalStyles.margin.small * 4
     },
     pictureWrapper: {
       width: 28,
@@ -132,7 +147,16 @@ const createStyles = (theme) =>
     description: {
       fontSize: moderateScale(14),
       color: theme.subText,
-      fontFamily:Fonts.InterRegular,
+      fontFamily: Fonts.InterRegular,
       lineHeight: 20,
+    },
+    editButton: {
+      // position: 'absolute',
+      // top: 8,
+      // right: 8,
+      // backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      // borderRadius: 20,
+      padding: 5,
+      // zIndex: 1,
     },
   });

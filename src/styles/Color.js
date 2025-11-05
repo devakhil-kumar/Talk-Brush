@@ -9,7 +9,8 @@ export const lightTheme = {
   subText: '#555555',     
   border: '#E0E0E0',         
   error: '#B00020',           
-  placeholder: '#999999',      
+  placeholder: '#999999',  
+  white:'#ffff'    
 };
 
 export const darkTheme = {
@@ -25,4 +26,5 @@ export const darkTheme = {
   secondary: '#03DAC6',
   error: '#CF6679',
   placeholder: '#AAAAAA',
+   white:'#ffff'   
 };

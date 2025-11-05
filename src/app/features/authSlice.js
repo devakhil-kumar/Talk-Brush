@@ -7,7 +7,7 @@ export const registerUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await signupService(userData);
-      saveUserData(response)
+      // saveUserData(response)
       return response;
     } catch (error) {
       return rejectWithValue(error.message)
@@ -20,13 +20,19 @@ export const loginUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await loginService(userData);
-      saveUserData(response)
-      return response;
+      const userType = response?.user?.type;
+      if (userType === "2" || userType === "3") {
+        saveUserData(response);
+        return response;
+      }
+      return rejectWithValue("Invalid credentials");
     } catch (error) {
       return rejectWithValue(error)
     }
   }
 )
+
+
 export const loadInitialState = createAsyncThunk(
   'auth/loadInitialState',
   async () => {

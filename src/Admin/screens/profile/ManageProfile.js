@@ -7,6 +7,9 @@ import { useNavigation } from "@react-navigation/native";
 import ImagePath from "../../../contexts/ImagePath";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../../../app/features/profileSlice";
+import { useTheme } from "../../../contexts/ThemeProvider";
+import { moderateScale } from "react-native-size-matters";
+import Fonts from "../../../styles/GlobalFonts";
 
 
 const ManageProfile = () => {
@@ -14,6 +17,8 @@ const ManageProfile = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const { user, loading } = useSelector(state => state.profile);
+    const { theme } = useTheme();
+    const style = styles(theme)
 
     useEffect(() => {
         dispatch(fetchProfile())
@@ -58,23 +63,23 @@ const ManageProfile = () => {
 
 export default ManageProfile;
 
-const style = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     header: {
         height: 56,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#fff',
+        backgroundColor: theme.background,
         paddingHorizontal: 16,
         elevation: 4,
-        shadowColor: '#000',
+        shadowColor: theme.text,
         shadowOpacity: 0.1,
         shadowRadius: 3,
     },
     headerTitle: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: '#000',
+        fontSize: moderateScale(16),
+        fontFamily: Fonts.InterSemiBold,
+        color: theme.text,
     },
     avatarContainer: {
         width: 90,
@@ -93,17 +98,16 @@ const style = StyleSheet.create({
         borderRadius: 12,
         padding: 4,
         borderWidth: 1,
-        borderColor: 'white'
+        borderColor: theme.background
     },
     name: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#000',
+        fontSize: moderateScale(18),
+        fontFamily: Fonts.InterSemiBold,
         marginTop: 12,
     },
     info: {
-        fontSize: 13,
-        color: '#555',
+        fontSize: moderateScale(13),
+        color: theme.subText,
         marginTop: 4,
         textAlign: 'center',
     },
@@ -113,14 +117,14 @@ const style = StyleSheet.create({
         paddingHorizontal: 22,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: '#5570F1',
+        borderColor: theme.secandprimary,
     },
     editButtonText: {
-        color: '#5570F1',
+        color: theme.secandprimary,
         fontWeight: '500',
         fontSize: 14,
     },
-     loaderContainer: {
+    loaderContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',

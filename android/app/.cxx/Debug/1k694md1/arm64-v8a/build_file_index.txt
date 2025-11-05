@@ -1,9 +1,13 @@
+/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/CMakeLists.txt
 /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt
 /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/CMakeLists.txt
+/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/CMakeLists.txt
+/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/CMakeLists.txt
 /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/feather/android/build/generated/source/codegen/jni/CMakeLists.txt
 /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/fontawesome/android/build/generated/source/codegen/jni/CMakeLists.txt
 /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ionicons/android/build/generated/source/codegen/jni/CMakeLists.txt
 /Users/imac/Desktop/Talk-Brush/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt
+/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt
 /Users/imac/Desktop/Talk-Brush/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/CMakeLists.txt
 /Users/imac/Desktop/Talk-Brush/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt
 /Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt

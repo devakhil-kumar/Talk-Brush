@@ -14,7 +14,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     try {
-      const { token } = await getUserData();  
+      const { token } = await getUserData();
 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -47,6 +47,10 @@ export const deleteUserAPI = (id) => {
   });
 };
 
+export const editUserAPI = (eventId, eventdata) => {
+  return axiosInstance.put(`${API_ROUTES.USER_EDIT}${eventId}`, eventdata)
+}
+
 export const getEventAPI = (page = 1) => {
   return axiosInstance.get(`${API_ROUTES.EVENT_LIST}&page=${page}&limit=20`);
 };
@@ -57,4 +61,16 @@ export const getProfileAPI = () => {
 
 export const editProfileAPI = (formdata) => {
   return axiosInstance.put(`${API_ROUTES.EDIT_PROFILE}`, formdata)
+}
+
+export const addEventAPI = (eventdata) => {
+  return axiosInstance.post(`${API_ROUTES.ADD_EVENT}`, eventdata)
+}
+
+export const updateEventAPI = (eventId, eventdata) => {
+  return axiosInstance.put(`${API_ROUTES.UPDATE_EVENT}${eventId}`, eventdata);
+};
+
+export const deleteEventAPI = (eventId) => {
+  return axiosInstance.delete(`${API_ROUTES.DELETE_EVENT}${eventId}`);
 }

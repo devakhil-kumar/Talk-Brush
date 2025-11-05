@@ -14,6 +14,7 @@ const Tab = createBottomTabNavigator();
 const AdminBottomTabs = () => {
   return (
     <Tab.Navigator
+      initialRouteName="Users" 
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -26,6 +27,7 @@ const AdminBottomTabs = () => {
           fontSize: 12,
           color: '#fff',
         },
+        
       }}
     >
       <Tab.Screen

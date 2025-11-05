@@ -12,6 +12,31 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/x86_64/CMakeFiles/cmake.verify_globs")
 endif()
 
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/RNImageResizerSpec-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/x86_64/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/react/renderer/components/RNImageResizerSpec/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/react/renderer/components/RNImageResizerSpec/ComponentDescriptors.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/react/renderer/components/RNImageResizerSpec/EventEmitters.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/react/renderer/components/RNImageResizerSpec/Props.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/react/renderer/components/RNImageResizerSpec/RNImageResizerSpecJSI-generated.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/react/renderer/components/RNImageResizerSpec/ShadowNodes.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/react/renderer/components/RNImageResizerSpec/States.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/x86_64/CMakeFiles/cmake.verify_globs")
+endif()
+
 # react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/*.cpp")
 set(OLD_GLOB
@@ -56,6 +81,56 @@ set(OLD_GLOB
   "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/ShadowNodes.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/States.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/rnblurviewJSI-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/x86_64/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/RNDateTimePickerCGen-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/x86_64/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen/ComponentDescriptors.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen/EventEmitters.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen/Props.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen/RNDateTimePickerCGenJSI-generated.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen/ShadowNodes.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen/States.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/x86_64/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/VectorIconsAntDesign-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/x86_64/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsAntDesign/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsAntDesign/ComponentDescriptors.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsAntDesign/EventEmitters.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsAntDesign/Props.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsAntDesign/ShadowNodes.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsAntDesign/States.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsAntDesign/VectorIconsAntDesignJSI-generated.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
@@ -156,6 +231,31 @@ set(OLD_GLOB
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/react/renderer/components/rngesturehandler_codegen/ShadowNodes.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/react/renderer/components/rngesturehandler_codegen/States.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/react/renderer/components/rngesturehandler_codegen/rngesturehandler_codegenJSI-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/x86_64/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/RNImagePickerSpec-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/x86_64/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/react/renderer/components/RNImagePickerSpec/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/react/renderer/components/RNImagePickerSpec/ComponentDescriptors.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/react/renderer/components/RNImagePickerSpec/EventEmitters.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/react/renderer/components/RNImagePickerSpec/Props.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/react/renderer/components/RNImagePickerSpec/RNImagePickerSpecJSI-generated.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/react/renderer/components/RNImagePickerSpec/ShadowNodes.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/react/renderer/components/RNImagePickerSpec/States.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")

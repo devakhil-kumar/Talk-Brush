@@ -8,11 +8,13 @@
     "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/feather/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/fontawesome/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ionicons/android/build/generated/source/codegen/jni/CMakeLists.txt",
+    "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
+    "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt"
   ],
@@ -58,9 +60,20 @@
       "runtimeFiles": [
         "/Users/imac/Desktop/Talk-Brush/android/app/build/intermediates/cxx/Debug/1k694md1/obj/x86/libreact_codegen_safeareacontext.so",
         "/Users/imac/Desktop/Talk-Brush/android/app/build/intermediates/cxx/Debug/1k694md1/obj/x86/libreact_codegen_rnscreens.so",
+        "/Users/imac/Desktop/Talk-Brush/android/app/build/intermediates/cxx/Debug/1k694md1/obj/x86/libreact_codegen_rnsvg.so",
         "/Users/imac/.gradle/caches/8.14.3/transforms/48f32c88ab848eeaa4d6425b771aa34b/transformed/fbjni-0.7.0/prefab/modules/fbjni/libs/android.x86/libfbjni.so",
         "/Users/imac/.gradle/caches/8.14.3/transforms/5e3de19cdc6bd36e24739a92b8cabbb2/transformed/react-android-0.81.4-debug/prefab/modules/jsi/libs/android.x86/libjsi.so",
         "/Users/imac/.gradle/caches/8.14.3/transforms/5e3de19cdc6bd36e24739a92b8cabbb2/transformed/react-android-0.81.4-debug/prefab/modules/reactnative/libs/android.x86/libreactnative.so"
+      ]
+    },
+    "react_codegen_rnsvg::@4f40eb209d0c0b4a3b65": {
+      "artifactName": "react_codegen_rnsvg",
+      "abi": "x86",
+      "output": "/Users/imac/Desktop/Talk-Brush/android/app/build/intermediates/cxx/Debug/1k694md1/obj/x86/libreact_codegen_rnsvg.so",
+      "runtimeFiles": [
+        "/Users/imac/.gradle/caches/8.14.3/transforms/5e3de19cdc6bd36e24739a92b8cabbb2/transformed/react-android-0.81.4-debug/prefab/modules/reactnative/libs/android.x86/libreactnative.so",
+        "/Users/imac/.gradle/caches/8.14.3/transforms/5e3de19cdc6bd36e24739a92b8cabbb2/transformed/react-android-0.81.4-debug/prefab/modules/jsi/libs/android.x86/libjsi.so",
+        "/Users/imac/.gradle/caches/8.14.3/transforms/48f32c88ab848eeaa4d6425b771aa34b/transformed/fbjni-0.7.0/prefab/modules/fbjni/libs/android.x86/libfbjni.so"
       ]
     },
     "react_codegen_rnworklets::@68f58d84d4754f193387": {
@@ -80,6 +93,11 @@
     },
     "react_codegen_rnreanimated::@8afabad14bfffa3f8b9a": {
       "artifactName": "react_codegen_rnreanimated",
+      "abi": "x86",
+      "runtimeFiles": []
+    },
+    "react_codegen_VectorIconsMaterialIcons::@31616434fa1e3b43792c": {
+      "artifactName": "react_codegen_VectorIconsMaterialIcons",
       "abi": "x86",
       "runtimeFiles": []
     },

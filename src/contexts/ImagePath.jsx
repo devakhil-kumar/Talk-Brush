@@ -19,5 +19,7 @@ export default {
     eventLight:require('../assets/image/eventlight.png'),
     Home: require('../assets/image/Home.png'),
     edit : require('../assets/image/edit.png'),
-    logout:require('../assets/image/Logout.png')
+    logout:require('../assets/image/Logout.png'),
+    callLines: require('../assets/image/line.png'),
+    convoImage: require('../assets/image/convoImage.png')
 };

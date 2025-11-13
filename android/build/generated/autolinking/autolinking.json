@@ -207,6 +207,31 @@
         }
       }
     },
+    "@react-native-vector-icons/material-icons": {
+      "root": "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons",
+      "name": "@react-native-vector-icons/material-icons",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/react-native-vector-icons-material-icons.podspec",
+          "version": "12.4.0",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android",
+          "packageImportPath": "import com.reactnativevectoricons.material_icons.VectorIconsMaterialIconsPackage;",
+          "packageInstance": "new VectorIconsMaterialIconsPackage()",
+          "buildTypes": [],
+          "libraryName": "VectorIconsMaterialIcons",
+          "componentDescriptors": [],
+          "cmakeListsPath": "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
     "react-native-gesture-handler": {
       "root": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-gesture-handler",
       "name": "react-native-gesture-handler",
@@ -253,6 +278,30 @@
           "libraryName": "RNImagePickerSpec",
           "componentDescriptors": [],
           "cmakeListsPath": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
+    "react-native-linear-gradient": {
+      "root": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-linear-gradient",
+      "name": "react-native-linear-gradient",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-linear-gradient/BVLinearGradient.podspec",
+          "version": "2.8.3",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-linear-gradient/android",
+          "packageImportPath": "import com.BV.LinearGradient.LinearGradientPackage;",
+          "packageInstance": "new LinearGradientPackage()",
+          "buildTypes": [],
+          "componentDescriptors": [],
+          "cmakeListsPath": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-linear-gradient/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -344,6 +393,61 @@
             "RNSBottomTabsComponentDescriptor"
           ],
           "cmakeListsPath": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
+    "react-native-svg": {
+      "root": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg",
+      "name": "react-native-svg",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/RNSVG.podspec",
+          "version": "15.14.0",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android",
+          "packageImportPath": "import com.horcrux.svg.SvgPackage;",
+          "packageInstance": "new SvgPackage()",
+          "buildTypes": [],
+          "libraryName": "rnsvg",
+          "componentDescriptors": [
+            "RNSVGCircleComponentDescriptor",
+            "RNSVGClipPathComponentDescriptor",
+            "RNSVGDefsComponentDescriptor",
+            "RNSVGFeBlendComponentDescriptor",
+            "RNSVGFeColorMatrixComponentDescriptor",
+            "RNSVGFeCompositeComponentDescriptor",
+            "RNSVGFeFloodComponentDescriptor",
+            "RNSVGFeGaussianBlurComponentDescriptor",
+            "RNSVGFeMergeComponentDescriptor",
+            "RNSVGFeOffsetComponentDescriptor",
+            "RNSVGFilterComponentDescriptor",
+            "RNSVGEllipseComponentDescriptor",
+            "RNSVGForeignObjectComponentDescriptor",
+            "RNSVGGroupComponentDescriptor",
+            "RNSVGImageComponentDescriptor",
+            "RNSVGLinearGradientComponentDescriptor",
+            "RNSVGLineComponentDescriptor",
+            "RNSVGMarkerComponentDescriptor",
+            "RNSVGMaskComponentDescriptor",
+            "RNSVGPathComponentDescriptor",
+            "RNSVGPatternComponentDescriptor",
+            "RNSVGRadialGradientComponentDescriptor",
+            "RNSVGRectComponentDescriptor",
+            "RNSVGSvgViewAndroidComponentDescriptor",
+            "RNSVGSymbolComponentDescriptor",
+            "RNSVGTextComponentDescriptor",
+            "RNSVGTextPathComponentDescriptor",
+            "RNSVGTSpanComponentDescriptor",
+            "RNSVGUseComponentDescriptor"
+          ],
+          "cmakeListsPath": "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,

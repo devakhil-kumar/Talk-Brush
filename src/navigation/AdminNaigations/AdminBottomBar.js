@@ -6,15 +6,29 @@ import AdminHome from '../../Admin/screens/home/AdminHome';
 import UserList from '../../Admin/screens/users/UserList';
 import ConvoSpace from '../../Admin/screens/convoSpace/ConvoSpace';
 import Analytics from '../../Admin/screens/analytics /Analytics';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ConvoSpaceStart from '../../Admin/screens/convoSpace/ConvoSpaceStart';
 
 
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+const ConvoNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ConvoSpaceMain" component={ConvoSpaceStart} />
+      <Stack.Screen name="ConvoSpaceTalk" component={ConvoSpace} />
+
+    </Stack.Navigator>
+  );
+};
+
 
 const AdminBottomTabs = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Users" 
+      initialRouteName="Users"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -27,7 +41,7 @@ const AdminBottomTabs = () => {
           fontSize: 12,
           color: '#fff',
         },
-        
+
       }}
     >
       <Tab.Screen
@@ -64,7 +78,7 @@ const AdminBottomTabs = () => {
 
       <Tab.Screen
         name="ConvoSpace"
-        component={ConvoSpace}
+        component={ConvoNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image

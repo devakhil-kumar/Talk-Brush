@@ -212,6 +212,31 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/armeabi-v7a/CMakeFiles/cmake.verify_globs")
 endif()
 
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/VectorIconsMaterialIcons-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/armeabi-v7a/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsMaterialIcons/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsMaterialIcons/ComponentDescriptors.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsMaterialIcons/EventEmitters.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsMaterialIcons/Props.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsMaterialIcons/ShadowNodes.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsMaterialIcons/States.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/react/renderer/components/VectorIconsMaterialIcons/VectorIconsMaterialIconsJSI-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/armeabi-v7a/CMakeFiles/cmake.verify_globs")
+endif()
+
 # react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/*.cpp")
 set(OLD_GLOB
@@ -380,6 +405,44 @@ set(OLD_GLOB
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnscreens/ShadowNodes.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnscreens/States.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnscreens/rnscreensJSI-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/armeabi-v7a/CMakeFiles/cmake.verify_globs")
+endif()
+
+# rnsvg_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt:10 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/rnsvg.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/armeabi-v7a/CMakeFiles/cmake.verify_globs")
+endif()
+
+# rnsvg_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt:10 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnsvg/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnsvg/RNSVGImageShadowNode.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnsvg/RNSVGImageState.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnsvg/RNSVGLayoutableShadowNode.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnsvg/RNSVGShadowNodes.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/armeabi-v7a/CMakeFiles/cmake.verify_globs")
+endif()
+
+# rnsvg_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt:11 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/*cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/ComponentDescriptors.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/EventEmitters.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/Props.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/ShadowNodes.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/States.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/rnsvgJSI-generated.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")

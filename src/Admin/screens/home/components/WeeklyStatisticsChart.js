@@ -121,9 +121,10 @@ const style = (theme) => StyleSheet.create({
     statTitle: {
         fontSize:moderateScale(14),
         color: theme.subText,
-        marginTop:GlobalStyles.margin.large * 2,
+        marginTop:GlobalStyles.margin.large ,
         marginBottom:5,
-        fontFamily:Fonts.InterMedium    },
+        fontFamily:Fonts.InterMedium   
+     },
     xAxisLabel: {
         color: '#999',
         fontSize: 10,

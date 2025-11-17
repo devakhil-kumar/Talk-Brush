@@ -8,6 +8,7 @@ import ConvoSpace from '../../Admin/screens/convoSpace/ConvoSpace';
 import Analytics from '../../Admin/screens/analytics /Analytics';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ConvoSpaceStart from '../../Admin/screens/convoSpace/ConvoSpaceStart';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 
@@ -15,6 +16,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const ConvoNavigator = () => {
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ConvoSpaceMain" component={ConvoSpaceStart} />
@@ -26,6 +28,8 @@ const ConvoNavigator = () => {
 
 
 const AdminBottomTabs = () => {
+  const insets = useSafeAreaInsets();
+  const bottomInset = Platform.OS === 'android' ? insets.bottom : 10;
   return (
     <Tab.Navigator
       initialRouteName="Users"
@@ -33,8 +37,10 @@ const AdminBottomTabs = () => {
         headerShown: false,
         tabBarStyle: {
           borderTopWidth: 0,
-          height: 65,
-          paddingBottom: 8,
+          height: 65 + bottomInset,
+          paddingBottom: bottomInset,
+          paddingTop: 8,
+
         },
         tabBarShowLabel: true,
         tabBarLabelStyle: {

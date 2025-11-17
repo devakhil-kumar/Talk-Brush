@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
         gap: 0,
     },
     logoHighlight: {
-        width: GlobalStyles.windowWidth / 1.8,
+        width: GlobalStyles.windowWidth / 1.6,
         height: GlobalStyles.windowHeight / 5.8,
         alignSelf: 'center'
     },

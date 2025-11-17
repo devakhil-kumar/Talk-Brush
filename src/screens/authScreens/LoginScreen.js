@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     gap: 0,
   },
   logoHighlight: {
-    width: GlobalStyles.windowWidth / 1.8,
+    width: GlobalStyles.windowWidth / 1.6,
     height: GlobalStyles.windowHeight / 5.8,
     alignSelf: 'center'
   },
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 3,
     borderColor: 'rgba(102, 88, 79, 0.3)',
-    marginBottom: 15,
+    marginBottom:40,
     backgroundColor: 'rgba(60, 45, 35, 0.55)',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },

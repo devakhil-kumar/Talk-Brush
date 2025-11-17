@@ -3,18 +3,20 @@ import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import GlobalStyles from '../../styles/GlobalStyles';
 import FontAwesome from "@react-native-vector-icons/fontawesome";
 import Feather from "@react-native-vector-icons/feather";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const CustomHeader = ({ navigation }) => {
   const [selectedBell, setSelectedBell] = useState(false);
   const [selectedActivities, setSelectedActivities] = useState(false);
   const [selectedSun, setSelectedSun] = useState(false);
+   const insets = useSafeAreaInsets();
 
   const handlePressBell = () => setSelectedBell(!selectedBell);
   const handlePressActivities = () => setSelectedActivities(!selectedActivities);
   const handlePressSelected = () => setSelectedSun(!selectedSun);
 
   return (
-    <View style={styles.headerContainer}>
+    <View style={[styles.headerContainer, { paddingTop: insets.top + 10 }]}>
       <View style={styles.leftContainer}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <FontAwesome name="bars" color={'black'} size={20} />

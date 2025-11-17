@@ -9,6 +9,8 @@ import CustomHeader from '../../Admin/components/CustomHeader';
 import ProfileNavigator from '../../navigation/AdminNaigations/ProfileNavigator';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../app/features/authSlice';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Delete from '../../Admin/screens/deleteMyAccount/Delete';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -47,7 +49,7 @@ const CustomDrawerContent = (props) => {
           activeOpacity={0.7}
         >
           <Image
-            source={ImagePath.logout} 
+            source={ImagePath.logout}
             style={styles.logoutIcon}
           />
           <Text style={styles.logoutText}>Logout</Text>
@@ -58,6 +60,8 @@ const CustomDrawerContent = (props) => {
 };
 
 const AdminDrawer = () => {
+  const insets = useSafeAreaInsets();
+  const bottomInset = Platform.OS === 'android' ? insets.bottom : 10;
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -66,11 +70,16 @@ const AdminDrawer = () => {
         drawerActiveTintColor: '#FAB713',
         drawerInactiveTintColor: '#ccc',
         drawerLabelStyle: { fontSize: 15 },
+        drawerStyle: {
+          paddingBottom: bottomInset,
+          paddingTop:20,
+        }
       }}
     >
       <Drawer.Screen
         name="DashBorad"
         component={AdminBottomTabs}
+
         options={{
           drawerIcon: ({ focused }) => (
             <Image
@@ -96,6 +105,19 @@ const AdminDrawer = () => {
       <Drawer.Screen
         name="Event"
         component={Event}
+        options={{
+          headerShown: false,
+          drawerIcon: ({ focused }) => (
+            <Image
+              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          ),
+        }}
+      />
+       <Drawer.Screen
+        name="Delete"
+        component={Delete}
         options={{
           headerShown: false,
           drawerIcon: ({ focused }) => (
@@ -172,7 +194,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     backgroundColor: '#FFFFFF',
-    marginBottom:40
+    marginBottom: 40
   },
   logoutButton: {
     flexDirection: 'row',

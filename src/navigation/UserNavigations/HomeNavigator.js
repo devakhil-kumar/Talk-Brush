@@ -45,7 +45,7 @@ const dispatch = useDispatch();
           activeOpacity={0.7}
         >
           <Image
-            source={ImagePath.logout} // Add your logout icon to ImagePath
+            source={ImagePath.logout} 
             style={styles.logoutIcon}
           />
           <Text style={styles.logoutText}>Logout</Text>

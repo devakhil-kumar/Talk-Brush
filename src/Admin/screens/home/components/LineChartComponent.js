@@ -18,17 +18,18 @@ const barData = [
 
 const ChartComponent = () => {
     const { theme } = useTheme();
-  const styles = style(theme);
+    const styles = style(theme);
 
     return (
         <View style={styles.chartContainer}>
             <Text style={styles.title}>Impression</Text>
             <BarChart
                 data={barData}
-                height={120} 
+                height={120}
                 barWidth={30}
                 spacing={22}
-                roundedTop={0}
+                barBorderTopLeftRadius={3}
+                barBorderTopRightRadius={3}
                 hideRules
                 hideYAxisText
                 yAxisThickness={0}
@@ -49,17 +50,17 @@ const ChartComponent = () => {
     );
 };
 
-const style = (theme) =>  StyleSheet.create({
+const style = (theme) => StyleSheet.create({
     chartContainer: {
-        backgroundColor:theme.background,
+        backgroundColor: theme.background,
         padding: 4,
         borderRadius: 12,
-        marginTop:GlobalStyles.margin.large
+        marginTop: GlobalStyles.margin.large
     },
     title: {
         fontSize: moderateScale(14),
-        fontFamily:Fonts.InterSemiBold,
-        color:theme.text
+        fontFamily: Fonts.InterSemiBold,
+        color: theme.text
     },
     bottomRow: {
         flexDirection: 'row',
@@ -68,13 +69,13 @@ const style = (theme) =>  StyleSheet.create({
     },
     bigText: {
         fontSize: moderateScale(14),
-        fontFamily:Fonts.InterMedium,
-            color:theme.text
+        fontFamily: Fonts.InterMedium,
+        color: theme.text
     },
     smallText: {
-        fontSize:moderateScale(11),
-        fontFamily:Fonts.InterRegular,
-        color:theme.subText
+        fontSize: moderateScale(11),
+        fontFamily: Fonts.InterRegular,
+        color: theme.subText
 
     },
 });

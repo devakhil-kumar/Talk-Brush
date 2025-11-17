@@ -47,7 +47,6 @@ const ConvoSpaceStart = () => {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
             <View style={styles.pageBg}>
                 <ScrollView
                     contentContainerStyle={styles.scrollContainer}
@@ -126,7 +125,6 @@ const ConvoSpaceStart = () => {
                     </View>
                 </ScrollView>
             </View>
-        </SafeAreaView>
     );
 };
 
@@ -140,7 +138,6 @@ const style = theme =>
         pageBg: {
             flex: 1,
             backgroundColor: theme.background,
-            paddingVertical: 20,
             paddingHorizontal: 20,
         },
         scrollContainer: {

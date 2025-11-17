@@ -12,7 +12,7 @@ const AdminHome = () => {
     const styles = style(theme)
 
     return (
-        <SafeAreaView style={styles.main}>
+        // <SafeAreaView style={styles.main}>
             <ScrollView>
                 <View style={styles.innerMain}>
                     <View style={styles.statsContainer}>
@@ -53,7 +53,7 @@ const AdminHome = () => {
                     <WeeklyStatisticsChart />
                 </View>
             </ScrollView>
-        </SafeAreaView >
+        // </SafeAreaView >
     )
 }
 

@@ -116,7 +116,7 @@ const UserList = () => {
     };
 
     return (
-        <SafeAreaView style={style.main}>
+        <View style={style.main}>
             <View style={style.innerCantainer}>
                 <View style={style.topButtonsRow}>
                     <TouchableOpacity style={style.filterBtn}>
@@ -159,12 +159,12 @@ const UserList = () => {
             <AddUserModal
                 visible={userModalVisible}
                 onSubmit={editMode ? handleEditUser : handleAddUser}
-                   onClose={handleCloseModal}
+                onClose={handleCloseModal}
                 loading={isloading}
                 editMode={editMode}
                 userData={selectedUser}
             />
-        </SafeAreaView>
+        </View>
     );
 };
 

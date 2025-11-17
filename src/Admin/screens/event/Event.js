@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Feather from '@react-native-vector-icons/feather';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import WebinarCard from './components/WebinarCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEvent, fetchEvents, resetAddEventState, updateEvent, resetUpdateEventState, deleteEvent } from '../../../app/features/eventSlice';
@@ -24,6 +24,7 @@ const Event = () => {
     const [confirmVisible, setConfirmVisible] = useState(false);
     const [deleteEventId, setDeleteEventId] = useState();
     const [editingEvent, setEditingEvent] = useState(null);
+    const insets = useSafeAreaInsets();
 
     const { list, page, loading, todayslist, addLoading, updateLoading, updateSuccess, deleteLoading } = useSelector((state) => state.eventlist);
 
@@ -188,7 +189,7 @@ const Event = () => {
                 data={dateGroup.events}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                renderItem={({ item , index}) => (
+                renderItem={({ item, index }) => (
                     <WebinarCard
                         item={item}
                         index={index}
@@ -214,8 +215,8 @@ const Event = () => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
+        <View style={styles.container}>
+            <View style={[styles.header, { paddingTop: insets.top }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Feather name='chevron-left' color={theme.text} size={25} />
                 </TouchableOpacity>
@@ -259,7 +260,7 @@ const Event = () => {
                 onCancel={() => setConfirmVisible(false)}
                 onConfirm={handleDeleteConfirm}
             />
-        </SafeAreaView>
+        </View>
     );
 };
 
@@ -354,7 +355,7 @@ const createStyles = (theme) =>
         fab: {
             position: 'absolute',
             right: 20,
-            bottom: 30,
+            bottom: 70,
             width: 60,
             height: 60,
             borderRadius: 30,

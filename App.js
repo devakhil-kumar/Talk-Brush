@@ -6,6 +6,7 @@ import store from './src/app/store'
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import CustomMessage from './src/component/CustomMessage';
 import { hideMessage } from './src/app/features/messageSlice';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 const GlobalMessageWrapper = () => {
@@ -27,6 +28,7 @@ const GlobalMessageWrapper = () => {
 
 const App = () => {
   return (
+    <SafeAreaProvider>
     <Provider store={store}>
       <NavigationContainer>
         <ThemeProvider>
@@ -34,6 +36,7 @@ const App = () => {
         </ThemeProvider>
       </NavigationContainer>
     </Provider>
+</SafeAreaProvider>
   );
 };
 

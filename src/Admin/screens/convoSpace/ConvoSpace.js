@@ -97,7 +97,6 @@ const ConvoSpace = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
       <ScrollView>
         <View style={styles.pageBg}>
           <View style={styles.headerRow}>
@@ -207,7 +206,6 @@ const ConvoSpace = () => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
   );
 };
 

@@ -74,3 +74,7 @@ export const updateEventAPI = (eventId, eventdata) => {
 export const deleteEventAPI = (eventId) => {
   return axiosInstance.delete(`${API_ROUTES.DELETE_EVENT}${eventId}`);
 }
+
+export const getactivities = () => {
+  return axiosInstance.get(`${API_ROUTES.ACTIVITIESADMIN}`);
+};

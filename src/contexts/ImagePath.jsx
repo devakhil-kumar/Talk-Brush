@@ -21,5 +21,8 @@ export default {
     edit : require('../assets/image/edit.png'),
     logout:require('../assets/image/Logout.png'),
     callLines: require('../assets/image/line.png'),
-    convoImage: require('../assets/image/convoImage.png')
+    convoImage: require('../assets/image/convoImage.png'),
+    activeAIresume: require('../assets/image/activeAIresume.png'),
+    activeJobs: require('../assets/image/activeJobs.png'),
+    activeSetting: require('../assets/image/activeSetting.png')
 };

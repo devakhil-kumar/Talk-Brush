@@ -5,6 +5,8 @@ import userlistReducer from '../app/features/listSlice';
 import userdeleteReducer from '../app/features/deleteSlice';
 import eventlistReducer from '../app/features/eventSlice';
 import profileReducer from '../app/features/profileSlice';
+import activitesReducer from '../app/features/activitiesSlice';
+
 
 const store = configureStore({
     reducer: {
@@ -13,7 +15,8 @@ const store = configureStore({
         userlist: userlistReducer,
         userdelete: userdeleteReducer,
         eventlist: eventlistReducer,
-        profile:profileReducer
+        profile:profileReducer,
+        activites:activitesReducer
     }
 })
 

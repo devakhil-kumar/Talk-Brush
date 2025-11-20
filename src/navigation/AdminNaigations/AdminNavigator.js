@@ -11,6 +11,9 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../../app/features/authSlice';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Delete from '../../Admin/screens/deleteMyAccount/Delete';
+import Notification from '../../screens/mainScreens/notification/Notification';
+import Activities from '../../screens/mainScreens/activities/Activities';
+import Feather from '@react-native-vector-icons/feather';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -38,7 +41,27 @@ const CustomDrawerContent = (props) => {
           </View>
         </View>
         <View style={styles.menuSection}>
-          <DrawerItemList {...props} />
+          {props.state.routes
+            .filter(route => route.name !== 'notification' && route.name !== 'Activities')
+            .map((route, index) => {
+              const { drawerIcon, drawerLabel } =
+                props.descriptors[route.key].options;
+              return (
+                <TouchableOpacity
+                  key={route.key}
+                  onPress={() => props.navigation.navigate(route.name)}
+                  style={styles.menuItem}
+                >
+                  <View style={styles.iconLeft}>
+                    {drawerIcon && drawerIcon({ focused: false })}
+                  </View>
+                  <Text style={styles.menuLabel}>
+                    {drawerLabel || route.name}
+                  </Text>
+                  <Feather name={'chevron-right'} size={20} color='#0000' />
+                </TouchableOpacity>
+              );
+            })}
         </View>
       </DrawerContentScrollView>
 
@@ -72,7 +95,7 @@ const AdminDrawer = () => {
         drawerLabelStyle: { fontSize: 15 },
         drawerStyle: {
           paddingBottom: bottomInset,
-          paddingTop:20,
+          paddingTop: 20,
         }
       }}
     >
@@ -115,11 +138,37 @@ const AdminDrawer = () => {
           ),
         }}
       />
-       <Drawer.Screen
+      <Drawer.Screen
         name="Delete"
         component={Delete}
         options={{
           headerShown: false,
+          drawerIcon: ({ focused }) => (
+            <Image
+              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="notification"
+        component={Notification}
+        options={{
+          headerShown: true,
+          drawerIcon: ({ focused }) => (
+            <Image
+              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Activities"
+        component={Activities}
+        options={{
+          headerShown: true,
           drawerIcon: ({ focused }) => (
             <Image
               source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
@@ -214,6 +263,31 @@ const styles = StyleSheet.create({
     fontSize: 15,
     // color: '#EF4444',
     fontWeight: '500',
+  },
+  menuWrapper: {
+    paddingTop: 10,
+  },
+
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F3F4F6",
+  },
+  iconLeft: {
+    width: 26,
+    height: 26,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 18,
+  },
+
+  menuLabel: {
+    fontSize: 15,
+    color: "#111",
+    flex: 1,
   },
 });
 

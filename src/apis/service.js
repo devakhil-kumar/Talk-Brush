@@ -1,4 +1,4 @@
-import { addEventAPI, deleteEventAPI, deleteUserAPI, editProfileAPI, editUserAPI, getEventAPI, getProfileAPI, getUsersAPI, loginAPI, signupAPI, updateEventAPI } from '../apis/api';
+import { addEventAPI, deleteEventAPI, deleteUserAPI, editProfileAPI, editUserAPI, getactivities, getEventAPI, getProfileAPI, getUsersAPI, loginAPI, signupAPI, updateEventAPI } from '../apis/api';
 
 export const signupService = async userData => {
     try {
@@ -126,5 +126,15 @@ export const editUserService = async (eventId, evendata) => {
         throw new Error(
             error?.response?.data?.message || "Failed to Update the Event"
         );
+    }
+};
+
+export const getActivitieService = async () => {
+    try {
+        const response = await getactivities();
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch users.');
     }
 };

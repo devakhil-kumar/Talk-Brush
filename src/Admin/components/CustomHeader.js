@@ -4,16 +4,31 @@ import GlobalStyles from '../../styles/GlobalStyles';
 import FontAwesome from "@react-native-vector-icons/fontawesome";
 import Feather from "@react-native-vector-icons/feather";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const CustomHeader = ({ navigation }) => {
-  const [selectedBell, setSelectedBell] = useState(false);
-  const [selectedActivities, setSelectedActivities] = useState(false);
-  const [selectedSun, setSelectedSun] = useState(false);
-   const insets = useSafeAreaInsets();
+const CustomHeader = () => {
+  const insets = useSafeAreaInsets();
+  const navigation = useNavigation()
+  const route = useRoute();
+  const ActivitiesScreen = route.name === 'Activities';
 
-  const handlePressBell = () => setSelectedBell(!selectedBell);
-  const handlePressActivities = () => setSelectedActivities(!selectedActivities);
-  const handlePressSelected = () => setSelectedSun(!selectedSun);
+  const handlePressActivities = () => {
+    if (ActivitiesScreen) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('Activities');
+    }
+  };
+
+  const isNotificationScreen = route.name === 'notification';
+
+  const handlePressBell = () => {
+    if (isNotificationScreen) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('notification');
+    }
+  };  
 
   return (
     <View style={[styles.headerContainer, { paddingTop: insets.top + 10 }]}>
@@ -37,13 +52,13 @@ const CustomHeader = ({ navigation }) => {
           </View>
         </TouchableOpacity> */}
         <TouchableOpacity onPress={handlePressActivities}>
-          <View style={[styles.iconContainer, selectedActivities && styles.selectedContainer]}>
-            <FontAwesome name="history" color={selectedActivities ? '#fff' : '#000'} size={16} />
+          <View style={[styles.iconContainer, ActivitiesScreen && styles.selectedContainer]}>
+            <FontAwesome name="history" color={ActivitiesScreen ? '#fff' : '#000'} size={16} />
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={handlePressBell}>
-          <View style={[styles.iconContainer, selectedBell && styles.selectedContainer]}>
-            <FontAwesome name="bell-o" size={16} color={selectedBell ? '#fff' : '#000'} />
+          <View style={[styles.iconContainer, isNotificationScreen && styles.selectedContainer]}>
+            <FontAwesome name="bell-o" size={16} color={isNotificationScreen ? '#fff' : '#000'} />
           </View>
         </TouchableOpacity>
       </View>
@@ -70,7 +85,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: "rgba(0, 0, 0, 0.04)",
     borderRadius: GlobalStyles.borderRadius.medium * 2,
-    width: GlobalStyles.windowWidth /1.8,
+    width: GlobalStyles.windowWidth / 1.8,
     paddingHorizontal: 7,
     alignItems: 'center',
     marginLeft: GlobalStyles.margin.medium,

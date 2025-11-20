@@ -1,88 +1,74 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     View,
     Text,
     FlatList,
     StyleSheet,
     Image,
+    ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const DATA = [
-    {
-        id: '1',
-        title: 'Changed the style.',
-        time: '10 hours ago',
-        color: '#8B5CF6',
-        image: 'https://via.placeholder.com/32/8B5CF6/FFFFFF?text=1',
-    },
-    {
-        id: '2',
-        title: 'Released a new version.',
-        time: '15 minutes ago',
-        color: '#10B981',
-        image: 'https://via.placeholder.com/32/10B981/FFFFFF?text=2',
-    },
-    {
-        id: '3',
-        title: 'Submitted a bug.',
-        time: '2 hours ago',
-        color: '#F59E0B',
-        image: 'https://via.placeholder.com/32/F59E0B/FFFFFF?text=3',
-    },
-    {
-        id: '4',
-        title: 'Modified 4 data in Page X.',
-        time: 'today, 11:59 AM',
-        color: '#8B5CF6',
-        image: 'https://via.placeholder.com/32/8B5CF6/FFFFFF?text=4',
-    },
-    {
-        id: '5',
-        title: 'Deleted a page in Project X.',
-        time: '23 hours ago',
-        color: '#EF4444',
-        image: 'https://via.placeholder.com/32/EF4444/FFFFFF?text=5',
-    },
-];
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchActivities } from '../../../app/features/activitiesSlice'; // update path if needed
+import { moderateScale } from 'react-native-size-matters';
+import Fonts from '../../../styles/GlobalFonts';
 
 const Activity = () => {
+
+    const dispatch = useDispatch();
+    const { activities, loading } = useSelector(state => state.activites);
+
+    useEffect(() => {
+        dispatch(fetchActivities());
+    }, []);
 
     const ActivityItem = ({ item, index }) => {
         return (
             <View style={styles.itemContainer}>
                 <View style={styles.leftSection}>
-                    <View style={[styles.iconCircle, { backgroundColor: item.color }]}>
+                    <View style={[styles.iconCircle, { backgroundColor: "#8B5CF6" }]}>
                         <Image
-                            source={typeof item.image === 'string' ? { uri: item.image } : item.image}
+                            source={{ uri: "https://via.placeholder.com/32/8B5CF6/FFFFFF?text=A" }}
                             style={styles.iconImage}
                         />
                     </View>
-                    {index < DATA.length - 1 && <View style={styles.connector} />}
+                    {index < activities.length - 1 && <View style={styles.connector} />}
                 </View>
+
                 <View style={styles.contentSection}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.time}>{item.time}</Text>
+                    <Text style={styles.title}>{item.description}</Text>
+                    <Text style={styles.time}>{item.timeAgo}</Text>
                 </View>
             </View>
         );
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <FlatList
-                data={DATA}
-                renderItem={({ item, index }) => (
-                    <ActivityItem item={item} index={index} />
-                )}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.listContent}
-                showsVerticalScrollIndicator={false}
-            />
+        <SafeAreaView style={styles.container} edges={[0, 'bottom']}>
+            {loading ? (
+                <ActivityIndicator size="large" color="#8B5CF6" style={{ marginTop: 40 }} />
+            ) : (
+                <View>
+                    <Text style={styles.header}>Activities</Text>
+                    <FlatList
+                        data={activities}
+                        renderItem={({ item, index }) => (
+                            <ActivityItem item={item} index={index} />
+                        )}
+                        keyExtractor={(item) => item.id}
+                        contentContainerStyle={styles.listContent}
+                        showsVerticalScrollIndicator={false}
+                        ListEmptyComponent={() => (
+                            <View style={styles.emptyContainer}>
+                                <Text style={styles.emptyText}>No activities found</Text>
+                            </View>
+                        )}
+                    />
+                </View>
+            )}
         </SafeAreaView>
     );
-}
+};
 
 export default Activity;
 
@@ -90,10 +76,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',
+        padding: 16
     },
     listContent: {
-        padding: 20,
-        paddingTop: 30,
+        marginTop: 20
     },
     itemContainer: {
         flexDirection: 'row',
@@ -111,8 +97,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         zIndex: 1,
     },
-    iconText: {
-        fontSize: 16,
+    iconImage: {
+        width: 16,
+        height: 16,
     },
     connector: {
         width: 2,
@@ -127,13 +114,29 @@ const styles = StyleSheet.create({
         paddingBottom: 16,
     },
     title: {
-        fontSize: 15,
-        fontWeight: '500',
+        fontSize:moderateScale(15),
         color: '#111827',
-        marginBottom: 4,
+        fontFamily:Fonts.InterMedium
+    },
+    header: {
+        fontSize: moderateScale(20),
+        fontFamily: Fonts.InterSemiBold,
+        color: '#111827',
+        marginTop: 0
     },
     time: {
-        fontSize: 13,
+        fontSize: moderateScale(13),
+        fontFamily:Fonts.InterRegular,
         color: '#9CA3AF',
     },
+    emptyContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 20,
+    },
+    emptyText: {
+        fontSize: 16,
+        color: '#999',
+    },
+
 });

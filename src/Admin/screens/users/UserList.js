@@ -15,10 +15,13 @@ import AddUserModal from '../users/components/AddUserModal';
 import { useTheme } from "../../../contexts/ThemeProvider";
 import { registerUser } from "../../../app/features/authSlice";
 import { showMessage } from "../../../app/features/messageSlice";
+import FilterModal from './components/FilterModal';
 
 const UserList = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [userModalVisible, setUserModalVisible] = useState(false);
+    const [filterModalVisible, setFilterModalVisible] = useState(false);
+    const [filterOptions, setFilterOptions] = useState(null);
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
     const [editMode, setEditMode] = useState(false);
@@ -31,13 +34,14 @@ const UserList = () => {
     const { list, loading, page, hasMore } = useSelector((state) => state.userlist);
 
     useEffect(() => {
+        console.log('cbdfkvcdfvkjbfdgblfgkbjbjnh')
         dispatch(resetList());
-        dispatch(fetchUsers(1));
-    }, [refresh]);
+        dispatch(fetchUsers({ page: 1, filter: filterOptions }));
+    }, [refresh, filterOptions]);
 
     const loadMoreUsers = () => {
         if (!loading && hasMore) {
-            dispatch(fetchUsers(page + 1));
+           dispatch(fetchUsers({ page: page + 1, filter: filterOptions }));
         }
     };
 
@@ -115,11 +119,17 @@ const UserList = () => {
         setSelectedUser(null);
     };
 
+    const handleApplyFilters = (filters) => {
+        setFilterOptions(filters);
+        setFilterModalVisible(false);
+    };
+
+
     return (
         <View style={style.main}>
             <View style={style.innerCantainer}>
                 <View style={style.topButtonsRow}>
-                    <TouchableOpacity style={style.filterBtn}>
+                    <TouchableOpacity style={style.filterBtn} onPress={() => setFilterModalVisible(true)} >
                         <Ionicons name="filter" color={theme.text} size={16} />
                         <Text style={style.filterText}>Filters</Text>
                     </TouchableOpacity>
@@ -163,6 +173,11 @@ const UserList = () => {
                 loading={isloading}
                 editMode={editMode}
                 userData={selectedUser}
+            />
+            <FilterModal
+                visible={filterModalVisible}
+                onClose={() => setFilterModalVisible(false)}
+                onApply={handleApplyFilters}
             />
         </View>
     );

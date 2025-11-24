@@ -5,7 +5,7 @@ import ImagePath from '../../contexts/ImagePath';
 import AdminHome from '../../Admin/screens/home/AdminHome';
 import UserList from '../../Admin/screens/users/UserList';
 import ConvoSpace from '../../Admin/screens/convoSpace/ConvoSpace';
-import Analytics from '../../Admin/screens/analytics /Analytics';
+import AnalyticsScreen from '../../Admin/screens/analytics /AnalyticsScreen1';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ConvoSpaceStart from '../../Admin/screens/convoSpace/ConvoSpaceStart';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,7 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const ConvoNavigator = () => {
+export const ConvoNavigator = () => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -32,7 +32,7 @@ const AdminBottomTabs = () => {
   const bottomInset = Platform.OS === 'android' ? insets.bottom : 10;
   return (
     <Tab.Navigator
-      initialRouteName="Users"
+      initialRouteName="Dashboard"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -100,7 +100,7 @@ const AdminBottomTabs = () => {
 
       <Tab.Screen
         name="Analytics"
-        component={Analytics}
+        component={AnalyticsScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image

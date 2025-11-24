@@ -16,6 +16,7 @@ const RnTextInput = ({
   iconName,
   iconSize = 18,
   iconColor = '#fff',
+  textInput
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -47,7 +48,7 @@ const RnTextInput = ({
         </TouchableOpacity>
       )}
       <TextInput
-        style={[styles.input]}
+        style={[styles.input, textInput]}
         placeholder={placeholder}
         placeholderTextColor={placeholderTextColor}
         value={value}

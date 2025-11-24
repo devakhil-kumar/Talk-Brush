@@ -81,3 +81,6 @@ const style = (theme) => StyleSheet.create({
 });
 
 export default ChartComponent;
+
+
+

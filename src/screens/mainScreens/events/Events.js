@@ -11,7 +11,7 @@ import { useTheme } from '../../../contexts/ThemeProvider';
 const Event = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const { theme } = useTheme(); 
+    const { theme } = useTheme();
     const styles = createStyles(theme);
 
     const { list, page, loading, todayslist } = useSelector((state) => state.eventlist);
@@ -94,7 +94,7 @@ const Event = () => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top']}>
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -104,8 +104,8 @@ const Event = () => {
                 <View style={{ width: 24 }} />
             </View>
 
-            <ScrollView style={styles.scroll}>
-                <View style={{ paddingVertical: 16 }}>
+            <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+                <View style={{ paddingVertical: 0 }}>
                     <TodaySection data={todayslist} />
 
                     {groupedEvents.length > 0 && (
@@ -131,7 +131,6 @@ const Event = () => {
 
 export default Event;
 
-// ✅ Theme Based Styles
 const createStyles = (theme) =>
     StyleSheet.create({
         container: {
@@ -140,14 +139,12 @@ const createStyles = (theme) =>
         },
         scroll: {
             flex: 1,
-            backgroundColor: theme.background,
         },
         header: {
             height: 56,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            backgroundColor: theme.background,
             paddingHorizontal: 16,
             elevation: 4,
         },
@@ -157,7 +154,7 @@ const createStyles = (theme) =>
             color: theme.text,
         },
         section: {
-            marginBottom: 24,
+            marginBottom: 0,
         },
         sectionHeader: {
             paddingHorizontal: 16,

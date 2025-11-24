@@ -5,22 +5,35 @@ import {
     FlatList,
     StyleSheet,
     Image,
-    ActivityIndicator
+    ActivityIndicator,
+    Platform
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchActivities } from '../../../app/features/activitiesSlice'; // update path if needed
+import { fetchActivities, fetchUserActivities } from '../../../app/features/activitiesSlice'; // update path if needed
 import { moderateScale } from 'react-native-size-matters';
 import Fonts from '../../../styles/GlobalFonts';
 
 const Activity = () => {
 
     const dispatch = useDispatch();
-    const { activities, loading } = useSelector(state => state.activites);
+    const { activities, loading, data } = useSelector(state => state.activites);
+    console.log(data, 'data +++++++++++')
+    const insets = useSafeAreaInsets();
+    const bottomInset = Platform.OS === 'android' ? insets.bottom : 10;
+    const { userRole } = useSelector((state) => state.auth);
+
+
 
     useEffect(() => {
-        dispatch(fetchActivities());
+        if (userRole === "2") {
+            dispatch(fetchActivities());
+        } else if (userRole === "3") {
+            dispatch(fetchUserActivities());
+        }
     }, []);
+    const listData = userRole === "2" ? activities : data;
+
 
     const ActivityItem = ({ item, index }) => {
         return (
@@ -44,14 +57,14 @@ const Activity = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container} edges={[0, 'bottom']}>
+        <SafeAreaView style={[styles.container, { paddingBottom: bottomInset }]} edges={[0, 'bottom']}>
             {loading ? (
                 <ActivityIndicator size="large" color="#8B5CF6" style={{ marginTop: 40 }} />
             ) : (
                 <View>
                     <Text style={styles.header}>Activities</Text>
                     <FlatList
-                        data={activities}
+                        data={listData}
                         renderItem={({ item, index }) => (
                             <ActivityItem item={item} index={index} />
                         )}
@@ -76,7 +89,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',
-        padding: 16
+        padding: 16,
     },
     listContent: {
         marginTop: 20
@@ -114,9 +127,9 @@ const styles = StyleSheet.create({
         paddingBottom: 16,
     },
     title: {
-        fontSize:moderateScale(15),
+        fontSize: moderateScale(15),
         color: '#111827',
-        fontFamily:Fonts.InterMedium
+        fontFamily: Fonts.InterMedium
     },
     header: {
         fontSize: moderateScale(20),
@@ -126,7 +139,7 @@ const styles = StyleSheet.create({
     },
     time: {
         fontSize: moderateScale(13),
-        fontFamily:Fonts.InterRegular,
+        fontFamily: Fonts.InterRegular,
         color: '#9CA3AF',
     },
     emptyContainer: {

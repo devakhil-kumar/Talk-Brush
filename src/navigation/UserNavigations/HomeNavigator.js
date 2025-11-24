@@ -1,4 +1,4 @@
-import React, { } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
@@ -6,35 +6,70 @@ import ImagePath from '../../contexts/ImagePath';
 import CustomHeader from '../../Admin/components/CustomHeader';
 import UserBottomBar from '../UserNavigations/UserBottomBar';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../app/features/authSlice';
+import Activities from '../../screens/mainScreens/activities/Activities'
+import Feather from '@react-native-vector-icons/feather';
+import { getUserData } from '../../units/asyncStorageManager';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const CustomDrawerContent = (props) => {
-const dispatch = useDispatch();
+const CustomDrawerContent = (props, navigation) => {
+  const dispatch = useDispatch();
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const loadUser = async () => {
+      const stored = await getUserData('userProfile');
+      if (stored?.user) {
+        setUser(stored.user);
+      }
+    };
+    loadUser();
+  }, []);
+
   const handleLogout = async () => {
     dispatch(logout());
   };
 
   return (
-    <View style={styles.drawerWrapper}>
+    <SafeAreaView style={styles.drawerWrapper} edges={['top']} >
       <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContainer}>
         <View style={styles.profileSection}>
           <View style={styles.profileImageContainer}>
             <Image
-              source={ImagePath.dammyProfile}
+              source={{ uri: user?.image }}
               style={styles.profileImage}
             />
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>Antonio</Text>
-            <Text style={styles.profileEmail}>Antonio@demo.com</Text>
+            <Text style={styles.profileName}>{user?.fullName || ''}</Text>
+            <Text style={styles.profileEmail}>{user?.email || ''} </Text>
           </View>
         </View>
         <View style={styles.menuSection}>
-          <DrawerItemList {...props} />
+          {props.state.routes
+            .filter(route => route.name !== 'Activities')
+            .map((route, index) => {
+              const { drawerIcon, drawerLabel } =
+                props.descriptors[route.key].options;
+              return (
+                <TouchableOpacity
+                  key={route.key}
+                  onPress={() => props.navigation.navigate(route.name)}
+                  style={styles.menuItem}
+                >
+                  <View style={styles.iconLeft}>
+                    {drawerIcon && drawerIcon({ focused: false })}
+                  </View>
+                  <Text style={styles.menuLabel}>
+                    {drawerLabel || route.name}
+                  </Text>
+                  <Feather name={'chevron-right'} size={20} color='#0000' />
+                </TouchableOpacity>
+              );
+            })}
         </View>
       </DrawerContentScrollView>
 
@@ -45,13 +80,13 @@ const dispatch = useDispatch();
           activeOpacity={0.7}
         >
           <Image
-            source={ImagePath.logout} 
+            source={ImagePath.logout}
             style={styles.logoutIcon}
           />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -83,6 +118,23 @@ const HomeDrawer = () => {
             drawerLabel: 'Dashboard',
           };
         }}
+      />
+      <Drawer.Screen
+        name="Activities"
+        component={Activities}
+        options={({ navigation }) => {
+          return {
+            header: ({ navigation }) => <CustomHeader navigation={navigation} />,
+            headerShown: true,
+            drawerIcon: ({ focused }) => (
+              <Image
+                source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+                style={{ width: 22, height: 22, resizeMode: 'contain' }}
+              />
+            ),
+          }
+        }
+        }
       />
       {/* <Drawer.Screen
         name="Profile Settings"
@@ -176,7 +228,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     backgroundColor: '#FFFFFF',
-    marginBottom:40
+    marginBottom: 40
   },
   logoutButton: {
     flexDirection: 'row',
@@ -196,6 +248,26 @@ const styles = StyleSheet.create({
     fontSize: 15,
     // color: '#EF4444',
     fontWeight: '500',
+  },
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F3F4F6",
+  },
+  iconLeft: {
+    width: 26,
+    height: 26,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 18,
+  },
+  menuLabel: {
+    fontSize: 15,
+    color: "#111",
+    flex: 1,
   },
 });
 

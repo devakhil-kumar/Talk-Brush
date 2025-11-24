@@ -2,7 +2,8 @@ import axios from 'axios';
 import { API_ROUTES } from './constant';
 import { getUserData } from '../units/asyncStorageManager';
 
-const BASE_URL = "http://5.161.122.193:8000/api/"
+const BASE_URL = "https://talkbrush.com/api/"
+
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -37,9 +38,26 @@ export const loginAPI = userData => {
   return axiosInstance.post(API_ROUTES.LOGIN, userData)
 }
 
-export const getUsersAPI = (page = 1) => {
-  return axiosInstance.get(`${API_ROUTES.USER_LIST}&page=${page}&limit=20`);
+// export const getUsersAPI = (page = 1, filters) => {
+//   return axiosInstance.get(`${API_ROUTES.USER_LIST}&page=${page}&limit=20&sortBy=${filters.fullName}&sortOrder=${filters}`);
+// };
+export const getUsersAPI = (page = 1, filters = null) => {
+  if (!filters) {
+    return axiosInstance.get(
+      `${API_ROUTES.USER_LIST}&page=${page}&limit=20`
+    );
+  }
+  const {
+    sortBy = filters.sortBy,
+    sortOrder = filters.sortOrder,
+  } = filters;
+
+  return axiosInstance.get(
+    `${API_ROUTES.USER_LIST}&page=${page}&limit=20&sortBy=${sortBy}&sortOrder=${sortOrder}`
+  );
 };
+
+
 
 export const deleteUserAPI = (id) => {
   return axiosInstance.delete(`${API_ROUTES.USER_DELETE}`, {
@@ -77,4 +95,24 @@ export const deleteEventAPI = (eventId) => {
 
 export const getactivities = () => {
   return axiosInstance.get(`${API_ROUTES.ACTIVITIESADMIN}`);
+};
+
+export const GetChartData = (typeValue) => {
+  return axiosInstance.get(API_ROUTES.DASHBORADAPI, {
+    params: {
+      type: typeValue
+    }
+  })
+}
+
+export const GetAnalyticsScreenData = (periodValue) => {
+    return axiosInstance.get(API_ROUTES.ANALYTICSDATA, {
+  params: {
+    period: periodValue  
+  }
+});
+};
+
+export const getUserActivities = () => {
+  return axiosInstance.get(`${API_ROUTES.ACTIVITIESUSER}`);
 };

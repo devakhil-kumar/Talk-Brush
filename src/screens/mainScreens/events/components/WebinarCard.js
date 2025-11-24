@@ -46,7 +46,7 @@ const WebinarCard = ({ item }) => {
         </View>
 
         <Text style={styles.title}>{item.fullName}</Text>
-        <Text style={styles.description} numberOfLines={2}>
+        <Text style={styles.description} numberOfLines={15}>
           {item.description}
         </Text>
       </View>
@@ -70,7 +70,7 @@ const createStyles = (theme) =>
       shadowRadius: 4,
       elevation: 6,
       marginBottom: 10,
-      width: GlobalStyles.windowWidth / 1.4,
+      width: GlobalStyles.windowWidth / 1.2,
       marginLeft: 10,
     },
     sideBar: {

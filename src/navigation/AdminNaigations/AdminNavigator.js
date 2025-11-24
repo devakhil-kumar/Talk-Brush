@@ -1,4 +1,4 @@
-import React, { } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
@@ -7,37 +7,51 @@ import ImagePath from '../../contexts/ImagePath';
 import Event from '../../Admin/screens/event/Event';
 import CustomHeader from '../../Admin/components/CustomHeader';
 import ProfileNavigator from '../../navigation/AdminNaigations/ProfileNavigator';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../app/features/authSlice';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Delete from '../../Admin/screens/deleteMyAccount/Delete';
 import Notification from '../../screens/mainScreens/notification/Notification';
 import Activities from '../../screens/mainScreens/activities/Activities';
 import Feather from '@react-native-vector-icons/feather';
+import ContactUs from '../../Admin/screens/utilities/ContactUs';
+import PrivacyPolicy from '../../Admin/screens/utilities/PrivacyPolicy';
+import TermsConditions from '../../Admin/screens/utilities/Terms&Conditions';
+import { getUserData } from '../../units/asyncStorageManager';
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerContent = (props) => {
   const dispatch = useDispatch();
-
+   const [user, setUser] = useState(null);
+    useEffect(() => {
+      const loadUser = async () => {
+        const stored = await getUserData('userProfile');
+        if (stored?.user) {
+          setUser(stored.UserProfile?.user);
+        }
+      };
+      loadUser();
+    }, []);
   const handleLogout = async () => {
     dispatch(logout());
   };
 
   return (
-    <View style={styles.drawerWrapper}>
+   <SafeAreaView style={styles.drawerWrapper} edges={['top']} >
       <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContainer}>
         <View style={styles.profileSection}>
           <View style={styles.profileImageContainer}>
             <Image
-              source={ImagePath.dammyProfile}
+              source={{ uri: user?.image }}
               style={styles.profileImage}
             />
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>Antonio</Text>
-            <Text style={styles.profileEmail}>Antonio@demo.com</Text>
+            <Text style={styles.profileName}>{user?.fullName || ''}</Text>
+            <Text style={styles.profileEmail}>{user?.email || ''} </Text>
           </View>
         </View>
         <View style={styles.menuSection}>
@@ -78,7 +92,7 @@ const CustomDrawerContent = (props) => {
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -169,6 +183,45 @@ const AdminDrawer = () => {
         component={Activities}
         options={{
           headerShown: true,
+          drawerIcon: ({ focused }) => (
+            <Image
+              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Contact Us"
+        component={ContactUs}
+        options={{
+          headerShown: false,
+          drawerIcon: ({ focused }) => (
+            <Image
+              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Privacy Policy"
+        component={PrivacyPolicy}
+        options={{
+          headerShown: false,
+          drawerIcon: ({ focused }) => (
+            <Image
+              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Terms & Conditions"
+        component={TermsConditions}
+        options={{
+          headerShown: false,
           drawerIcon: ({ focused }) => (
             <Image
               source={focused ? ImagePath.eventIcon : ImagePath.eventLight}

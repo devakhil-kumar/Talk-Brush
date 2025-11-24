@@ -5,12 +5,15 @@ import FontAwesome from "@react-native-vector-icons/fontawesome";
 import Feather from "@react-native-vector-icons/feather";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const CustomHeader = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation()
   const route = useRoute();
   const ActivitiesScreen = route.name === 'Activities';
+  const { userRole } = useSelector((state) => state.auth);
+
 
   const handlePressActivities = () => {
     if (ActivitiesScreen) {
@@ -28,7 +31,7 @@ const CustomHeader = () => {
     } else {
       navigation.navigate('notification');
     }
-  };  
+  };
 
   return (
     <View style={[styles.headerContainer, { paddingTop: insets.top + 10 }]}>
@@ -56,11 +59,12 @@ const CustomHeader = () => {
             <FontAwesome name="history" color={ActivitiesScreen ? '#fff' : '#000'} size={16} />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handlePressBell}>
+
+        {userRole === "2" && <TouchableOpacity onPress={handlePressBell}>
           <View style={[styles.iconContainer, isNotificationScreen && styles.selectedContainer]}>
             <FontAwesome name="bell-o" size={16} color={isNotificationScreen ? '#fff' : '#000'} />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
     </View>
   );

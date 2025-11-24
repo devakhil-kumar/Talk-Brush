@@ -1,18 +1,22 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, View, Text } from 'react-native';
+import { Image, View, Text, Platform } from 'react-native';
 import ImagePath from '../../contexts/ImagePath';
 import ConvoSpace from '../../Admin/screens/convoSpace/ConvoSpace';
-import HomeScreen from '../../screens/mainScreens/home/HomeScreen';
-import UserProfileNavigator from './UserProfileNavigator';
+import AdminHome from '../../Admin/screens/home/AdminHome';
+import ProfileNavigator from '../../navigation/AdminNaigations/ProfileNavigator';
 import Events from '../../screens/mainScreens/events/Events';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ConvoNavigator } from '../AdminNaigations/AdminBottomBar'
 
 
 
 const Tab = createBottomTabNavigator();
 
 const UserBottomBar = () => {
+    const insets = useSafeAreaInsets();
+    const bottomInset = Platform.OS === 'android' ? insets.bottom : 10;
     return (
         <Tab.Navigator
             screenOptions={{
@@ -20,8 +24,8 @@ const UserBottomBar = () => {
                 keyboardHidesTabBar: true,
                 tabBarStyle: {
                     borderTopWidth: 0,
-                    height: 65,
-                    paddingBottom: 8,
+                    height: 65 + bottomInset,
+                    paddingBottom: bottomInset,
                 },
                 tabBarShowLabel: true,
                 tabBarLabelStyle: {
@@ -32,7 +36,7 @@ const UserBottomBar = () => {
         >
             <Tab.Screen
                 name="Dashboard"
-                component={HomeScreen}
+                component={AdminHome}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
@@ -64,7 +68,7 @@ const UserBottomBar = () => {
 
             <Tab.Screen
                 name="ConvoSpace"
-                component={ConvoSpace}
+                component={ConvoNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
@@ -80,14 +84,14 @@ const UserBottomBar = () => {
 
             <Tab.Screen
                 name="Profile"
-                component={UserProfileNavigator}
+                component={ProfileNavigator}
                 options={({ route }) => {
                     const routeName = getFocusedRouteNameFromRoute(route) ?? 'ManageProfile';
                     return {
                         tabBarStyle: {
                             display: routeName === 'EditProfile' ? 'none' : 'flex',
-                            height: 65,
-                            paddingBottom: 8,
+                            height: 65 + bottomInset,
+                            paddingBottom: bottomInset,
                         },
                         tabBarIcon: ({ focused }) => (
                             <Image

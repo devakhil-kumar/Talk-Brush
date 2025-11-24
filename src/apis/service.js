@@ -1,4 +1,4 @@
-import { addEventAPI, deleteEventAPI, deleteUserAPI, editProfileAPI, editUserAPI, getactivities, getEventAPI, getProfileAPI, getUsersAPI, loginAPI, signupAPI, updateEventAPI } from '../apis/api';
+import { addEventAPI, deleteEventAPI, deleteUserAPI, editProfileAPI, editUserAPI, getactivities, GetAnalyticsScreenData, GetChartData, getEventAPI, getProfileAPI, getUserActivities, getUsersAPI, loginAPI, signupAPI, updateEventAPI } from '../apis/api';
 
 export const signupService = async userData => {
     try {
@@ -31,9 +31,10 @@ export const loginService = async userData => {
     }
 };
 
-export const getUsersService = async (page = 1) => {
+export const getUsersService = async (page = 1, filter = null) => {
     try {
-        const response = await getUsersAPI(page);
+        const response = await getUsersAPI(page, filter);
+        console.log(response, 'response+++++++++++')
         return response.data;
     } catch (error) {
         console.log(error);
@@ -132,6 +133,58 @@ export const editUserService = async (eventId, evendata) => {
 export const getActivitieService = async () => {
     try {
         const response = await getactivities();
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch users.');
+    }
+};
+
+export const GetTalkChartData = async (typeValue) => {
+    try {
+        const response = await GetChartData(typeValue);
+        console.log(response, 'response_________')
+        console.log(response.data, 'response_________')
+        return response.data
+    } catch (error) {
+        console.log(error.response, 'error')
+        if (error.response && error.response.data) {
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
+                'Failed while fetching Chart Data. Please try again.';
+            throw new Error(errorMessage);
+        } else if (error.request) {
+            throw new Error('No response from server. Please check your connection.');
+        } else {
+            throw new Error('Failde while fetching Chart Data. Please try again.');
+        }
+    }
+}
+
+export const GetAnalyticsData = async (periodValue) => {
+    try {
+        console.log(periodValue, 'per++++++++++++++++')
+        const response = await GetAnalyticsScreenData(periodValue);
+        console.log(response.data, 'response_________')
+        return response.data
+    } catch (error) {
+        console.log(error.response, 'error')
+        if (error.response && error.response.data) {
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
+                'Failed while fetching Analytics Data. Please try again.';
+            throw new Error(errorMessage);
+        } else if (error.request) {
+            throw new Error('No response from server. Please check your connection.');
+        } else {
+            throw new Error('Failde while fetching Analytics Data. Please try again.');
+        }
+    }
+}
+
+export const getActivitieServiceUser = async () => {
+    try {
+        const response = await getUserActivities();
         return response.data;
     } catch (error) {
         console.log(error);

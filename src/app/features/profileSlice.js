@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { editProfileService, getProfileService } from '../../apis/service';
+import { saveProfileData } from '../../units/asyncStorageManager';
 
 export const fetchProfile = createAsyncThunk(
     'profile/fetchProfile',
     async (_, { rejectWithValue }) => {
         try {
             const data = await getProfileService();
+            saveProfileData(data)
             return data?.user || {};
         } catch (error) {
             return rejectWithValue(error.message);
@@ -18,7 +20,7 @@ export const updateProfile = createAsyncThunk(
     async (formData, { rejectWithValue }) => {
         try {
             const data = await editProfileService(formData);
-            console.log(formData, 'data==================')
+            console.log('data==================', data)
             return data;
         } catch (error) {
             return rejectWithValue(error.message);

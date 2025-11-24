@@ -11,4 +11,7 @@ export const API_ROUTES = {
    UPDATE_EVENT: "event/updateEvent/",
    DELETE_EVENT: "event/deleteEvent/",
    ACTIVITIESADMIN: "activities/getAllActivities",
+   DASHBORADAPI: "dashboard/overview",
+   ANALYTICSDATA: "analysis/type3?",
+   ACTIVITIESUSER: "activities/getUserActivities"
 }

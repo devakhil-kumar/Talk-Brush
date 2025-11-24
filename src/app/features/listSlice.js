@@ -5,11 +5,13 @@ import { deleteUser } from './deleteSlice';
 
 export const fetchUsers = createAsyncThunk(
     'userList/fetchUsers',
-    async (page, { rejectWithValue }) => {
+    async ({page,filter = null}, { rejectWithValue }) => {
         try {
-            const data = await getUsersService(page);
+            const data = await getUsersService(page,filter);
+            console.log(data?.user, "cbsdkfvbdfhf")
             return { users: data?.users || [], page };
         } catch (error) {
+            console.log(error, 'eroorr')
             return rejectWithValue(error.message);
         }
     }

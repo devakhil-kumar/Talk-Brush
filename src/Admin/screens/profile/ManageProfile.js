@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, ActivityIndicator } fr
 import { SafeAreaView } from "react-native-safe-area-context";
 import Feather from '@react-native-vector-icons/feather';
 import FontAwesome from "@react-native-vector-icons/fontawesome";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import ImagePath from "../../../contexts/ImagePath";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../../../app/features/profileSlice";
@@ -17,13 +17,16 @@ const ManageProfile = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const { user, loading } = useSelector(state => state.profile);
+    console.log(user, 'user++++++++')
     const { theme } = useTheme();
     const style = styles(theme)
 
-    useEffect(() => {
-        dispatch(fetchProfile())
-    }, []
-    )
+  useFocusEffect(
+    React.useCallback(() => {
+        dispatch(fetchProfile());
+    }, [])
+);
+
 
     if (loading || !user) {
         return (
@@ -34,7 +37,7 @@ const ManageProfile = () => {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <View style={style.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Feather name='chevron-left' color={'#0000'} size={25} />
@@ -44,7 +47,14 @@ const ManageProfile = () => {
             </View>
             <View style={{ alignItems: "center", marginTop: 20 }}>
                 <View style={style.avatarContainer}>
-                    <FontAwesome name="user" size={50} color="#555" />
+                    {user?.image ? (
+                        <Image
+                            source={{ uri: user?.image }}
+                            style={{ width: 90, height: 90, borderRadius: 45 }}
+                        />
+                    ) : (
+                        <FontAwesome name="user" size={50} color="#555" />
+                    )}
                     <TouchableOpacity style={style.editIcon}>
                         <Image source={ImagePath.edit} style={{ width: 18, height: 18 }} />
                     </TouchableOpacity>
@@ -71,7 +81,7 @@ const styles = (theme) => StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: theme.background,
         paddingHorizontal: 16,
-        elevation: 4,
+        // elevation: 4,
         shadowColor: theme.text,
         shadowOpacity: 0.1,
         shadowRadius: 3,

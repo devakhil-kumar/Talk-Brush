@@ -301,10 +301,7 @@ const WeeklyStatisticsChart = ({ chartData, selectedValue, stats }) => {
         selectedValue === "Weekly" ? weekLabels : selectedValue === "Monthly" ? monthLabelsWeekly : yearLabels);
     return (
         <View style={styles.container}>
-
-            {/* <View style={styles.header}> */}
             <Text style={styles.periodText}>{selectedValue}</Text>
-            {/* </View> */}
             <View style={styles.legendContainer}>
                 <View style={styles.legendItem}>
                     <Text style={styles.thisWeekLabel}>This {selectedValue === 'Weekly' ? "Week" : selectedValue === 'Monthly' ? "Month" : "Year"}</Text>
@@ -319,7 +316,7 @@ const WeeklyStatisticsChart = ({ chartData, selectedValue, stats }) => {
             <LineChart
                 data={thisData}
                 data2={lastData}
-                noOfSections={chartData?.labels?.length - 1}  // This controls the number of Y-axis divisions
+                noOfSections={chartData?.labels?.length - 1}  
                 yAxisLabelTexts={chartData?.labels}
                 showYAxisIndices={false}
                 xAxisLabelTexts={selectedValue === "Weekly" ? weekLabels : selectedValue === "Monthly" ? monthLabelsWeekly : yearLabels}
@@ -344,7 +341,7 @@ const WeeklyStatisticsChart = ({ chartData, selectedValue, stats }) => {
                 xAxisLabelTextStyle={styles.xAxisLabel}
                 hideOrigin
                 height={160}
-                width={GlobalStyles.windowWidth}
+                width={GlobalStyles.windowWidth * 0.9}
                 showScrollIndicator={false}
                 scrollAnimation={false}
             />
@@ -389,11 +386,6 @@ const style = (theme) => StyleSheet.create({
         fontSize: 12,
         marginTop: 2,
     },
-    // statTitle: {
-    //     fontSize: 14,
-    //     color: 'black',
-    //     marginBottom: 5,
-    // },
     statTitle: {
         fontSize: moderateScale(14),
         color: theme.subText,
@@ -405,12 +397,6 @@ const style = (theme) => StyleSheet.create({
         color: '#999',
         fontSize: 10,
     },
-    // drop down style:
-    // container: {
-    //     paddingHorizontal: 16
-    //     , paddingVertical: 40
-    // },
-
     dropdownButton: {
         borderWidth: 1,
         borderColor: "#ccc",
@@ -419,12 +405,10 @@ const style = (theme) => StyleSheet.create({
         borderRadius: 8,
         backgroundColor: "#fff",
     },
-
     dropdownText: {
         fontSize: 16,
         color: "#333",
     },
-
     optionsContainer: {
 
         borderWidth: 1,

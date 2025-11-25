@@ -55,9 +55,6 @@ const ManageProfile = () => {
                     ) : (
                         <FontAwesome name="user" size={50} color="#555" />
                     )}
-                    <TouchableOpacity style={style.editIcon}>
-                        <Image source={ImagePath.edit} style={{ width: 18, height: 18 }} />
-                    </TouchableOpacity>
                 </View>
                 <>
                     <Text style={style.name}>{user?.fullName || ''}</Text>

@@ -31,6 +31,7 @@ export const getUserData = async () => {
     const userRole = await AsyncStorage.getItem('userRole');
     const token = await AsyncStorage.getItem('token');
     const UserProfile = await AsyncStorage.getItem('userProfile')
+    
     return {
       user: user ? JSON.parse(user) : null,
       userRole: userRole ? JSON.parse(userRole) : null,

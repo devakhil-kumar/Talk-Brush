@@ -23,7 +23,7 @@ const CustomDrawerContent = (props, navigation) => {
     const loadUser = async () => {
       const stored = await getUserData('userProfile');
       if (stored?.user) {
-        setUser(stored.user);
+         setUser(stored.UserProfile?.user);
       }
     };
     loadUser();

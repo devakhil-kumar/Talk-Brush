@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useMemo } from 'react';
 import { GetAnalyticsScreenData } from '../../../app/features/AnalyticsSlice';
 import { useTheme } from '../../../contexts/ThemeProvider';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const screenWidth = Dimensions.get("window").width;
@@ -60,7 +61,7 @@ const AnalyticsScreen = () => {
     }, [analyticsData?.data]);
 
     return (
-        <View style={styles.pageBg}>
+        <View style={styles.pageBg} >
             <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
                 <View style={styles.barChartContainer}>
                     <Text style={[styles.smallText, { marginBottom: 10 }]}>Conversation per day/week/month</Text>
@@ -177,7 +178,8 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 16
+        paddingHorizontal: 16,
+        paddingVertical:5
     },
     selectedItem: {
         borderColor: '#007BFF',

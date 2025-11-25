@@ -12,46 +12,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchActivities } from '../../../app/features/activitiesSlice';
 import { moderateScale } from 'react-native-size-matters';
 import Fonts from '../../../styles/GlobalFonts';
+import MaterialIcons from '@react-native-vector-icons/material-icons';
 
-const DATA = [
-  {
-    id: '1',
-    title: 'You fixed a bug.',
-    time: 'Just now',
-    image: 'https://via.placeholder.com/40/6366F1/FFFFFF?text=🐛',
-  },
-  {
-    id: '2',
-    title: 'New user registered.',
-    time: '59 minutes ago',
-    image: 'https://via.placeholder.com/40/10B981/FFFFFF?text=👤',
-  },
-  {
-    id: '3',
-    title: 'You fixed a bug.',
-    time: '12 hours ago',
-    image: 'https://via.placeholder.com/40/6366F1/FFFFFF?text=🐛',
-  },
-  {
-    id: '4',
-    title: 'Andi Lane subscribed to you.',
-    time: 'Today, 11:59 AM',
-    image: 'https://via.placeholder.com/40/8B5CF6/FFFFFF?text=📡',
-  },
-];
 
 const NotificationItem = ({ item }) => {
-
+  const iconMap = {
+    UPDATE: { name: 'update', color: '#E3F2FD', iconColor: 'blue' },
+    DELETE: { name: 'delete', color: '#FFEBEE', iconColor: 'red' },
+    CREATE: { name: 'add', color: '#E8F5E9', iconColor: 'green' },
+  };
 
   return (
     <View style={styles.itemContainer}>
-      <Image
-        source={{ uri: 'https://via.placeholder.com/40/8B5CF6/FFFFFF?text=📡' }}
-        style={styles.iconImage}
-      />
+      <View style={[
+        styles.iconCircle,
+        { backgroundColor: iconMap[item.actionType]?.color }
+      ]}>
+        <MaterialIcons
+          name={iconMap[item.actionType]?.name}
+          size={18}
+          color={iconMap[item.actionType]?.iconColor}
+        />
+      </View>
       <View style={styles.contentSection}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.time}>{item.time}</Text>
+        <Text style={styles.title}>{item.description}</Text>
+        <Text style={styles.time}>{item.timeAgo}</Text>
       </View>
     </View>
   );
@@ -66,18 +51,6 @@ const Notification = () => {
   }, []);
   return (
     <SafeAreaView style={styles.container} edges={[0, 'bottom']}>
-      {/* <View style={styles.header}>
-        <Text style={styles.headerTitle}>Notifications</Text>
-      </View>
-      <FlatList
-        data={notifications}
-        renderItem={({ item }) => (
-          <NotificationItem item={item} />
-        )}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-      /> */}
       {loading ? (
         <ActivityIndicator size="large" color="#8B5CF6" style={{ marginTop: 40 }} />
       ) : (
@@ -130,7 +103,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#F3F4F6',
@@ -171,6 +144,16 @@ const styles = StyleSheet.create({
     color: '#999',
     fontFamily: Fonts.InterRegular
   },
+  iconCircle: {
+    width: 35,
+    height: 35,
+    borderRadius: 35 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+    marginTop:5
+  },
+
 });
 
 export default Notification;

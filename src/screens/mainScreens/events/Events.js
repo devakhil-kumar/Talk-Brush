@@ -7,6 +7,10 @@ import WebinarCard from './components/WebinarCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEvents } from '../../../app/features/eventSlice';
 import { useTheme } from '../../../contexts/ThemeProvider';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
+import Fonts from '../../../styles/GlobalFonts';
+
 
 const Event = () => {
     const dispatch = useDispatch();
@@ -42,6 +46,7 @@ const Event = () => {
         return (
             <View style={styles.section}>
                 <View style={styles.sectionHeader}>
+                    <Ionicons name='time-outline' size={20} color={theme.text} />
                     <Text style={styles.sectionTitle}>Today</Text>
                 </View>
                 {safeData.length === 0 ? (
@@ -110,6 +115,7 @@ const Event = () => {
 
                     {groupedEvents.length > 0 && (
                         <View style={styles.upcomingHeader}>
+                            <FontAwesome name='calendar-minus-o' size={20} color={theme.text} />
                             <Text style={styles.upcomingTitle}>Upcoming Events</Text>
                         </View>
                     )}
@@ -160,15 +166,17 @@ const createStyles = (theme) =>
             paddingHorizontal: 16,
             marginBottom: 12,
             marginTop: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
         },
         sectionTitle: {
             fontSize: 18,
-            fontWeight: '700',
+            fontFamily: Fonts.InterSemiBold,
             color: theme.text,
+            marginLeft: 5
         },
         upcomingHeader: {
             flexDirection: 'row',
-            justifyContent: 'space-between',
             alignItems: 'center',
             paddingHorizontal: 16,
             marginBottom: 8,
@@ -176,8 +184,9 @@ const createStyles = (theme) =>
         },
         upcomingTitle: {
             fontSize: 18,
-            fontWeight: '700',
+            fontFamily:Fonts.InterSemiBold,
             color: theme.text,
+            marginLeft:5
         },
         dateHeader: {
             paddingHorizontal: 16,

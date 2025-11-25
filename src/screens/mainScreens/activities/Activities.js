@@ -18,7 +18,6 @@ const Activity = () => {
 
     const dispatch = useDispatch();
     const { activities, loading, data } = useSelector(state => state.activites);
-    console.log(data, 'data +++++++++++')
     const insets = useSafeAreaInsets();
     const bottomInset = Platform.OS === 'android' ? insets.bottom : 10;
     const { userRole } = useSelector((state) => state.auth);
@@ -40,10 +39,9 @@ const Activity = () => {
             <View style={styles.itemContainer}>
                 <View style={styles.leftSection}>
                     <View style={[styles.iconCircle, { backgroundColor: "#8B5CF6" }]}>
-                        <Image
-                            source={{ uri: "https://via.placeholder.com/32/8B5CF6/FFFFFF?text=A" }}
-                            style={styles.iconImage}
-                        />
+                        <Text style={styles.iconLetter}>
+                            {item.description?.charAt(0)?.toUpperCase()}
+                        </Text>
                     </View>
                     {index < activities.length - 1 && <View style={styles.connector} />}
                 </View>
@@ -100,7 +98,7 @@ const styles = StyleSheet.create({
     },
     leftSection: {
         alignItems: 'center',
-        marginRight: 16,
+        marginRight: 10,
     },
     iconCircle: {
         width: 32,
@@ -109,6 +107,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 1,
+        marginTop:10
     },
     iconImage: {
         width: 16,
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
     },
     contentSection: {
         flex: 1,
-        paddingTop: 4,
+        marginTop:5,
         paddingBottom: 16,
     },
     title: {
@@ -150,6 +149,11 @@ const styles = StyleSheet.create({
     emptyText: {
         fontSize: 16,
         color: '#999',
+    },
+    iconLetter: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "bold",
     },
 
 });

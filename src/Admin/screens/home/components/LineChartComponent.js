@@ -24,7 +24,10 @@ const ChartComponent = () => {
         <View style={styles.chartContainer}>
             <Text style={styles.title}>Impression</Text>
             <BarChart
-                data={barData}
+                data={barData.map(item => ({
+                    ...item,
+                    onPress: null,  
+                }))}
                 height={120}
                 barWidth={30}
                 spacing={22}
@@ -38,7 +41,6 @@ const ChartComponent = () => {
                 frontColor={theme.secandprimary}
                 yAxisTextStyle={{ color: 'gray' }}
                 xAxisLabelTextStyle={{ color: 'gray', fontSize: 12 }}
-
             />
             <View style={styles.bottomRow}>
                 <Text style={styles.bigText}>12.345</Text>

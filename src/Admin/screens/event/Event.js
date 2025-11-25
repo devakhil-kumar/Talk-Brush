@@ -145,7 +145,7 @@ const Event = () => {
 
     const TodaySection = ({ data }) => {
         const safeData = Array.isArray(data) ? data : [];
-        return (
+        return ( 
             <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                     <Ionicons name='time-outline' size={20} color={theme.text} />
@@ -215,7 +215,7 @@ const Event = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container} edges={[0,'bottom']}>
             <View style={[styles.header, { paddingTop: insets.top }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Feather name='chevron-left' color={theme.text} size={25} />
@@ -260,7 +260,7 @@ const Event = () => {
                 onCancel={() => setConfirmVisible(false)}
                 onConfirm={handleDeleteConfirm}
             />
-        </View>
+        </SafeAreaView>
     );
 };
 

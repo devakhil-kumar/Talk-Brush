@@ -1,0 +1,18 @@
+current directory: /Users/apple/Desktop/AkhilProfwork/Talk-Brush/TalkBrush/vendor/bundle/ruby/3.4.0+1/gems/nkf-0.2.0/ext/nkf
+/Users/apple/.rbenv/versions/3.4.0/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/apple/Desktop/AkhilProfwork/Talk-Brush/TalkBrush/vendor/bundle/ruby/3.4.0+1/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20251001-6749-1gndd3 sitelibdir\=./.gem.20251001-6749-1gndd3 clean
+
+current directory: /Users/apple/Desktop/AkhilProfwork/Talk-Brush/TalkBrush/vendor/bundle/ruby/3.4.0+1/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20251001-6749-1gndd3 sitelibdir\=./.gem.20251001-6749-1gndd3
+compiling nkf.c
+linking shared-object nkf.bundle
+
+current directory: /Users/apple/Desktop/AkhilProfwork/Talk-Brush/TalkBrush/vendor/bundle/ruby/3.4.0+1/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20251001-6749-1gndd3 sitelibdir\=./.gem.20251001-6749-1gndd3 install
+/usr/bin/install -c -m 0755 nkf.bundle ./.gem.20251001-6749-1gndd3
+
+current directory: /Users/apple/Desktop/AkhilProfwork/Talk-Brush/TalkBrush/vendor/bundle/ruby/3.4.0+1/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20251001-6749-1gndd3 sitelibdir\=./.gem.20251001-6749-1gndd3 clean

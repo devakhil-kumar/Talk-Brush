@@ -309,6 +309,7 @@ const AddEventModal = ({ visible, onClose, onSubmit, editingEvent = null }) => {
                 onConfirm={handleDateConfirm}
                 onCancel={() => setShowDatePicker(false)}
                 date={date || new Date()}
+                minimumDate={new Date()}
             />
 
             <DateTimePickerModal

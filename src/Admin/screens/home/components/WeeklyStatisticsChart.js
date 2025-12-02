@@ -291,7 +291,7 @@ const convertToChartFormat = (array = [], labels = []) => {
 };
 
 const WeeklyStatisticsChart = ({ chartData, selectedValue, stats }) => {
-    const theme = useTheme()
+    const {theme} = useTheme()
     const styles = style(theme);
 
     const thisData = convertToChartFormat(chartData?.thisWeekData,
@@ -304,12 +304,12 @@ const WeeklyStatisticsChart = ({ chartData, selectedValue, stats }) => {
             <Text style={styles.periodText}>{selectedValue}</Text>
             <View style={styles.legendContainer}>
                 <View style={styles.legendItem}>
-                    <Text style={styles.thisWeekLabel}>This {selectedValue === 'Weekly' ? "Week" : selectedValue === 'Monthly' ? "Month" : "Year"}</Text>
-                    <Text style={[styles.percent,]}>+{stats?.thisPeriod}%</Text>
+                    <View style={{height:10, width:10, borderRadius:5, backgroundColor:theme.primary}}/>
+                    <Text style={[styles.thisWeekLabel,{color:theme.primary}]}>This {selectedValue === 'Weekly' ? "Week" : selectedValue === 'Monthly' ? "Month" : "Year"}</Text>
                 </View>
                 <View style={styles.legendItem}>
+                    <View style={{height:10, width:10, borderRadius:5, backgroundColor:theme.secandprimary}}/>
                     <Text style={styles.thisWeekLabel}>Last {selectedValue === 'Weekly' ? 'Week' : selectedValue === 'Monthly' ? "Month" : "Year"}</Text>
-                    <Text style={[styles.percent,]}>+{stats?.lastPeriod}%</Text>
                 </View>
             </View>
             <Text style={styles.statTitle}>Statistic</Text>
@@ -320,8 +320,8 @@ const WeeklyStatisticsChart = ({ chartData, selectedValue, stats }) => {
                 yAxisLabelTexts={chartData?.labels}
                 showYAxisIndices={false}
                 xAxisLabelTexts={selectedValue === "Weekly" ? weekLabels : selectedValue === "Monthly" ? monthLabelsWeekly : yearLabels}
-                color1="#4B7BE5"
-                color2="#F5A623"
+                color1={theme.secandprimary}
+                color2={theme.primary}
                 curved
                 hideRules={false}
                 rulesColor="#E8E8E8"
@@ -331,8 +331,8 @@ const WeeklyStatisticsChart = ({ chartData, selectedValue, stats }) => {
                 yAxisThickness={0}
                 xAxisThickness={0}
                 hideDataPoints={false}
-                dataPointsColor1="#4B7BE5"
-                dataPointsColor2="#F5A623"
+                dataPointsColor1={theme.secandprimary}
+                dataPointsColor2={theme.primary}
                 dataPointsRadius={3}
                 startOpacity={0}
                 endOpacity={0}
@@ -361,29 +361,33 @@ const style = (theme) => StyleSheet.create({
     },
     periodText: {
         fontSize: moderateScale(16),
-        fontFamily: Fonts.InterMedium,
+        fontFamily: Fonts.InterSemiBold,
         color: 'black'
     },
     legendContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginTop:10
     },
     legendItem: {
         marginLeft: 16,
         alignItems: 'center',
+        flexDirection:'row',
     },
     thisWeekLabel: {
-        color: 'black',
         fontSize: moderateScale(12),
+        color:theme.secandprimary,
         fontFamily: Fonts.InterMedium,
-        marginTop: 10
+        marginLeft:5
     },
     lastWeekLabel: {
         color: 'black',
         fontSize: 12
     },
     percent: {
-        fontSize: 12,
+        fontSize: moderateScale(12),
+        fontFamily:Fonts.InterRegular,
+        color:theme.secandprimary,
         marginTop: 2,
     },
     statTitle: {

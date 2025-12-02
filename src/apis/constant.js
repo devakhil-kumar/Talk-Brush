@@ -13,5 +13,9 @@ export const API_ROUTES = {
    ACTIVITIESADMIN: "activities/getAllActivities",
    DASHBORADAPI: "dashboard/overview",
    ANALYTICSDATA: "analysis/type3?",
-   ACTIVITIESUSER: "activities/getUserActivities"
+   ACTIVITIESUSER: "activities/getUserActivities",
+   RESETPASSWORD: 'users/resetPassword',
+   RESETCODE: "users/verifyResetCode",
+   CREATE_ROOM:"accent/create-room",
+   ROOMLINK_GENRATE:"accent/create_room",
 }

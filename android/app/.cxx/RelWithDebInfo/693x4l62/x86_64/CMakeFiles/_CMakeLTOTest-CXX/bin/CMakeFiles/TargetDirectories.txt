@@ -1,4 +1,0 @@
-/Users/imac/Desktop/Talk-Brush/android/app/.cxx/RelWithDebInfo/693x4l62/x86_64/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/foo.dir
-/Users/imac/Desktop/Talk-Brush/android/app/.cxx/RelWithDebInfo/693x4l62/x86_64/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/boo.dir
-/Users/imac/Desktop/Talk-Brush/android/app/.cxx/RelWithDebInfo/693x4l62/x86_64/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/edit_cache.dir
-/Users/imac/Desktop/Talk-Brush/android/app/.cxx/RelWithDebInfo/693x4l62/x86_64/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/rebuild_cache.dir

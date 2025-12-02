@@ -2,7 +2,7 @@ export const lightTheme = {
   mode: 'light',
   primary:'#FAB713',
   inputBackgroundColor: 'rgba(250, 183, 19, 0.2)',
-  secandprimary: '#3340C4',
+  secandprimary:'#3340C4',
   background: '#FFFFFF',   
   cardBackground: '#F5F5F5',   
   text: '#121212',           

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View, PermissionsAndroid, Platform, Alert, Linking } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import Feather from "@react-native-vector-icons/feather";
 import Ionicons from "@react-native-vector-icons/ionicons";
@@ -16,6 +16,9 @@ import { useTheme } from "../../../contexts/ThemeProvider";
 import { registerUser } from "../../../app/features/authSlice";
 import { showMessage } from "../../../app/features/messageSlice";
 import FilterModal from './components/FilterModal';
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
+import * as XLSX from 'xlsx';
 
 const UserList = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -26,6 +29,7 @@ const UserList = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [isloading, setIsLoading] = useState(false);
+    const [exportLoading, setExportLoading] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const { theme } = useTheme();
     const style = styles(theme);
@@ -34,14 +38,13 @@ const UserList = () => {
     const { list, loading, page, hasMore } = useSelector((state) => state.userlist);
 
     useEffect(() => {
-        console.log('cbdfkvcdfvkjbfdgblfgkbjbjnh')
         dispatch(resetList());
         dispatch(fetchUsers({ page: 1, filter: filterOptions }));
     }, [refresh, filterOptions]);
 
     const loadMoreUsers = () => {
         if (!loading && hasMore) {
-           dispatch(fetchUsers({ page: page + 1, filter: filterOptions }));
+            dispatch(fetchUsers({ page: page + 1, filter: filterOptions }));
         }
     };
 
@@ -102,6 +105,74 @@ const UserList = () => {
     };
 
 
+    const handleExportNonExpo = async () => {
+        if (!list || list.length === 0) {
+            dispatch(showMessage({
+                type: 'error',
+                text: 'No users to export',
+            }));
+            return;
+        }
+        setExportLoading(true);
+        try {
+            const exportData = list.map(user => ({
+                'Name': user.fullName || 'N/A',
+                'Email': user.email || 'N/A',
+                'Phone Number': user.phoneNumber || 'N/A',
+                'Last Login': user.lastLogin
+                    ? new Date(user.lastLogin).toLocaleString()
+                    : 'Never',
+                'Status': user.status || 'N/A',
+                'Role': user.role || 'N/A'
+            }));
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Users");
+            const wbout = XLSX.write(wb, { type: 'base64', bookType: "xlsx" });
+            const fileName = `users_${new Date().toISOString().split('T')[0]}.xlsx`;
+            const filePath = `${RNFS.CachesDirectoryPath}/${fileName}`;
+            await RNFS.writeFile(filePath, wbout, 'base64');
+            const shareOptions = {
+                title: 'Export Users',
+                message: 'Here is the exported users list',
+                url: `file://${filePath}`, 
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                filename: fileName,
+                saveToFiles: true, 
+                subject: `Users Export - ${new Date().toLocaleDateString()}`, 
+            };
+            const result = await Share.open(shareOptions);
+            console.log('Share result:', result);
+            if (result.dismissedAction) {
+                console.log('User cancelled share');
+            } else {
+                dispatch(showMessage({
+                    type: 'success',
+                    text: `${list.length} user${list.length > 1 ? 's' : ''} exported successfully!`,
+                }));
+            }
+        } catch (error) {
+            if (error.message?.includes('cancelled') || error.message?.includes('dismissed') || error.message?.includes('User did not share')) {
+                console.log('User cancelled share – no error toast');
+                return;
+            }
+            if (error.message?.includes('getScheme') || error.message?.includes('NullPointerException')) {
+                dispatch(showMessage({
+                    type: 'error',
+                    text: 'Share failed – try saving via Files app. (Android URI issue)',
+                }));
+                return;
+            }
+            dispatch(showMessage({
+                type: 'error',
+                text: 'Failed to export: ' + (error.message || 'Unknown error'),
+            }));
+        } finally {
+            setExportLoading(false);
+        }
+    };
+
+
     const handleDelete = (userId) => {
         setSelectedUserId(userId);
         setModalVisible(true);
@@ -133,7 +204,11 @@ const UserList = () => {
                         <Ionicons name="filter" color={theme.text} size={16} />
                         <Text style={style.filterText}>Filters</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={style.exportBtn}>
+                    <TouchableOpacity
+                        style={style.exportBtn}
+                        onPress={handleExportNonExpo}
+                        disabled={exportLoading || list.length === 0}
+                    >
                         <Feather name="download-cloud" color={theme.text} size={16} />
                         <Text style={style.exportText}>Export</Text>
                     </TouchableOpacity>

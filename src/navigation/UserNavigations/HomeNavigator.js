@@ -10,8 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../app/features/authSlice';
 import Activities from '../../screens/mainScreens/activities/Activities'
 import Feather from '@react-native-vector-icons/feather';
-import { getUserData } from '../../units/asyncStorageManager';
+import { getProfileData, getUserData } from '../../units/asyncStorageManager';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ContactUS from '../../Admin/screens/utilities/ContactUs';
+import PrivacyPolicy from '../../Admin/screens/utilities/PrivacyPolicy';
+import TermsAndConditions from '../../Admin/screens/utilities/Terms&Conditions';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -19,11 +22,12 @@ const Drawer = createDrawerNavigator();
 const CustomDrawerContent = (props, navigation) => {
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     const loadUser = async () => {
-      const stored = await getUserData('userProfile');
+      const stored = await getUserData('user');
       if (stored?.user) {
-         setUser(stored.UserProfile?.user);
+        setUser(stored.user);
       }
     };
     loadUser();
@@ -39,7 +43,11 @@ const CustomDrawerContent = (props, navigation) => {
         <View style={styles.profileSection}>
           <View style={styles.profileImageContainer}>
             <Image
-              source={{ uri: user?.image }}
+              source={
+                user?.profileImage
+                  ? { uri: user?.profileImage }
+                  : ImagePath.convoImage
+              }
               style={styles.profileImage}
             />
           </View>
@@ -136,6 +144,47 @@ const HomeDrawer = () => {
         }
         }
       />
+      <Drawer.Screen
+        name="Contact Us"
+        component={ContactUS}
+        options={{
+          headerShown: false,
+          drawerIcon: ({ focused }) => (
+            <Image
+              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Privacy Policy"
+        component={PrivacyPolicy}
+        options={{
+          headerShown: false,
+          drawerIcon: ({ focused }) => (
+            <Image
+              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Terms & Conditions"
+        component={TermsAndConditions}
+        options={{
+          headerShown: false,
+          drawerIcon: ({ focused }) => (
+            <Image
+              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          ),
+        }}
+      />
+
+
       {/* <Drawer.Screen
         name="Profile Settings"
         component={UserProfileNavigator}

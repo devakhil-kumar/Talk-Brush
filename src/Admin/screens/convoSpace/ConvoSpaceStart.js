@@ -1,36 +1,40 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, Alert } from 'react-native';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
-import Swiper from 'react-native-swiper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImagePath from '../../../contexts/ImagePath';
 import { moderateScale } from 'react-native-size-matters';
 import Fonts from '../../../styles/GlobalFonts';
 import { useTheme } from '../../../contexts/ThemeProvider';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { generateCode, generateCodeAndCreateRoom } from '../../../app/features/CreateRoomSlice';
+import SliderContent from '../convoSpace/component/SliderContent';
+import GlobalStyles from '../../../styles/GlobalStyles';
+import { showMessage } from '../../../app/features/messageSlice';
 
 const { width } = Dimensions.get('window');
 
 const data = [
     {
         id: 1,
-        title: 'Obtén un vínculo para compartir',
+        title: 'Share Your Room Link',
         description:
-            'Haz clic en Nueva reunión para obtener un vínculo que puedas enviar a las personas con quienes quieras reunirte',
+            'Generate a unique join link and share it with others to start speaking together effortlessly.',
         image: ImagePath.convoImage,
     },
     {
         id: 2,
-        title: 'Obtén un vínculo para compartir',
+        title: 'Experience Real-Time Accent Conversion',
         description:
-            'Haz clic en Nueva reunión para obtener un vínculo que puedas enviar a las personas con quienes quieras reunirte',
+            'TalkBrush transforms voices in real time, helping you speak, learn, and enjoy different English accents naturally.',
         image: ImagePath.convoImage,
     },
     {
         id: 3,
-        title: 'Obtén un vínculo para compartir',
+        title: 'Start a Conversation Instantly',
         description:
-            'Haz clic en Nueva reunión para obtener un vínculo que puedas enviar a las personas con quienes quieras reunirte',
+            'Create a private room and practice English accents with friends, colleagues, or anyone you invite.',
         image: ImagePath.convoImage,
     },
 ];
@@ -41,90 +45,77 @@ const ConvoSpaceStart = () => {
     const { theme } = useTheme();
     const styles = style(theme);
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const { room, code, loading, error } = useSelector(state => state.RoomSlices);
 
-    const startConversation = () => {
-        navigation.navigate('ConvoSpaceTalk');
+    const startConversation = async () => {
+        try {
+            console.log("Starting conversation...");
+            const response = await dispatch(generateCodeAndCreateRoom()).unwrap();
+            console.log("API response:", response?.room?.room?.room_code);
+
+            if (response?.room?.success === true) {
+                const roomCode = response?.room?.room?.room_code;
+                dispatch(
+                    showMessage({
+                        type: 'success',
+                        text: response?.message || 'Room created successfully',
+                    })
+                );
+                console.log("Navigating to ConvoSpaceTalk...");
+                navigation.navigate('ConvoSpaceTalk', { roomCode });
+                console.log("Navigating to ConvoSpaceTalk...");
+
+            } else {
+                console.log("API returned success:false");
+            }
+
+        } catch (error) {
+            console.log("Catch error:", error);
+
+            dispatch(
+                showMessage({
+                    type: 'error',
+                    text: error?.message || "Room not created",
+                })
+            );
+        }
     };
 
+
     return (
-            <View style={styles.pageBg}>
-                <ScrollView
-                    contentContainerStyle={styles.scrollContainer}
-                    showsVerticalScrollIndicator={false}
-                >
-                    <Text style={styles.headingText}>
-                        Start Conversation with TalkBrush para todos.
-                    </Text>
+        <View style={styles.pageBg}>
+            <ScrollView
+                contentContainerStyle={styles.scrollContainer}
+                showsVerticalScrollIndicator={false}
+            >
+                <Text style={styles.headingText}>
+                    Start Conversation with TalkBrush para todos.
+                </Text>
 
-                    <Text style={styles.descriptionText}>
-                        TalkBrush is an innovative app that lets users communicate in various accents. With TalkBrush, you can enhance your language skills while having fun chatting with people from around the globe. Discover the magic of linguistic diversity and connect with others through unique accents!
-                    </Text>
+                <Text style={styles.descriptionText}>
+                    TalkBrush is an innovative app that lets users communicate in various accents. With TalkBrush, you can enhance your language skills while having fun chatting with people from around the globe. Discover the magic of linguistic diversity and connect with others through unique accents!
+                </Text>
 
-                    <TouchableOpacity style={styles.startConversationButton} onPress={startConversation}>
-                        <MaterialIcons name="mic" color="lightgrey" size={20} />
-                        <Text style={styles.startButtonText}>Start Conversation</Text>
-                    </TouchableOpacity>
+                <TouchableOpacity style={styles.startConversationButton} onPress={startConversation}>
+                    <MaterialIcons name="mic" color="lightgrey" size={20} />
+                    <Text style={styles.startButtonText}>Start Conversation</Text>
+                </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.copyLinkButton}>
+                {/* <TouchableOpacity style={styles.copyLinkButton}>
                         <MaterialIcons name="keyboard" color="grey" size={20} />
                         <Text style={styles.copyLinkText}>Copy the link and share</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
-                    <Text style={styles.infoText}>
-                        más información <Text style={styles.inlineInfo}>sobre Talk Brush</Text>
-                    </Text>
+                <Text style={styles.infoText}>
+                    Discover how TalkBrush works
+                </Text>
+                {/* <View style={{width:GlobalStyles.windowWidth}}> */}
+                <SliderContent data={data} />
+                {/* </View> */}
 
-                    <View style={styles.swiperContainer}>
-                        <TouchableOpacity
-                            style={[styles.arrowButton, { marginTop: (width * 0.8) / 2 }]}
-                            disabled={activeIndex === 0}
-                            onPress={() => swiperRef.current.scrollBy(-1)}
-                        >
-                            <MaterialIcons
-                                name="keyboard-arrow-left"
-                                color={activeIndex === 0 ? 'grey' : 'black'}
-                                size={28}
-                            />
-                        </TouchableOpacity>
-
-                        <View style={styles.swiperWrapper}>
-                            <Swiper
-                                ref={swiperRef}
-                                onIndexChanged={index => setActiveIndex(index)}
-                                style={styles.swiper}
-                                showsPagination={false}
-                                loop={false}
-                            >
-                                {data.map(item => (
-                                    <View key={item.id} style={styles.slideContainer}>
-                                        <Image source={item.image} style={styles.slideImage} />
-                                        <Text style={styles.slideTitle}>{item.title}</Text>
-                                        <Text style={styles.slideDescription}>{item.description}</Text>
-                                    </View>
-                                ))}
-                            </Swiper>
-
-                            <View style={styles.paginationContainer}>
-                                <View style={activeIndex === 0 ? styles.selectedDot : styles.dot} />
-                                <View style={activeIndex === 1 ? styles.selectedDot : styles.dot} />
-                                <View style={activeIndex === 2 ? styles.selectedDot : styles.dot} />
-                            </View>
-                        </View>
-
-                        <TouchableOpacity
-                            style={[styles.arrowButton, { marginTop: (width * 0.8) / 2 }]}
-                            disabled={activeIndex === data.length - 1}
-                            onPress={() => swiperRef.current.scrollBy(1)}
-                        >
-                            <MaterialIcons
-                                name="keyboard-arrow-right"
-                                color={activeIndex === 2 ? 'grey' : 'black'}
-                                size={28}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
-            </View>
+            </ScrollView>
+        </View>
     );
 };
 
@@ -153,7 +144,7 @@ const style = theme =>
             marginTop: 20,
             fontSize: moderateScale(16),
             fontFamily: Fonts.InterMedium,
-            color: 'grey',
+            color: theme.subText,
         },
         startConversationButton: {
             flexDirection: 'row',
@@ -220,8 +211,6 @@ const style = theme =>
         slideImage: {
             width: width * 0.7,
             height: width * 0.8,
-            borderWidth: 3,
-            borderColor: 'deepskyblue',
             borderRadius: 500,
             alignSelf: 'center',
         },

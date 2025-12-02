@@ -7,7 +7,7 @@ export const fetchProfile = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const data = await getProfileService();
-            saveProfileData(data)
+            saveProfileData(data?.user)
             return data?.user || {};
         } catch (error) {
             return rejectWithValue(error.message);

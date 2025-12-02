@@ -1,1 +1,0 @@
-/Users/imac/Desktop/Talk-Brush/android/app/build/intermediates/cxx/RelWithDebInfo/693x4l62/obj/x86_64

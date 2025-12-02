@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LineChartComponent from '../../../Admin/screens/home/components/LineChartComponent'
 import { useTheme } from "../../../contexts/ThemeProvider";
@@ -29,24 +29,20 @@ const AdminHome = () => {
 
     const SimpleDropdown = ({ selectedOption, setSelectedOption }) => {
         const [showOptions, setShowOptions] = useState(false);
-        // const [selectedOption, setSelectedOption] = useState("Weekly");
-
         const options = ["Weekly", "Monthly", "Yearly"];
 
         const handleSelect = (item) => {
             setSelectedOption(item);
             setShowOptions(false);
         };
-        // const styles = style();
         return (
             <View style={styles.dropdownWrapper}>
                 <View style={styles.container}>
                     <View style={{
-                        flexDirection: "row", alignItems: "center", justifyContent: 'space-around', paddingHorizontal: 0, width: GlobalStyles.windowWidth / 4,
+                        flexDirection: "row", alignItems: "center", justifyContent: 'space-evenly', paddingHorizontal: 0, width: GlobalStyles.windowWidth / 4,
                         paddingVertical: 4,
                     }}>
                         <Feather name="chevron-down" size={15} color={'black'} />
-                        {/* Dropdown Button */}
                         <TouchableOpacity
                             style={styles.dropdownButton}
                             onPress={() => setShowOptions(!showOptions)}
@@ -54,8 +50,6 @@ const AdminHome = () => {
                             <Text style={styles.dropdownText}>{selectedOption}</Text>
                         </TouchableOpacity>
                     </View>
-
-                    {/* Dropdown Options */}
                     {showOptions && (
                         <View style={styles.optionsContainer}>
                             {options.map((item) => (
@@ -71,7 +65,6 @@ const AdminHome = () => {
                     )}
 
 
-                    {/* Backdrop overlay */}
                     {showOptions && (
                         <TouchableOpacity
                             style={styles.backdrop}
@@ -85,6 +78,14 @@ const AdminHome = () => {
         );
     };
 
+
+    if (loading) {
+        return (
+            <View style={styles.loaderContainer}>
+                <ActivityIndicator size="large" color={theme.secandprimary} />
+            </View>
+        );
+    }
 
     return (
         // <SafeAreaView style={styles.main}>
@@ -132,7 +133,13 @@ const AdminHome = () => {
                             </View>
                         </View>
                     </View>
-                    <LineChartComponent />
+                    {chartData?.stats && chartData?.impression ? (
+                        <LineChartComponent
+                            stats={chartData.stats}
+                            impression={chartData.impression}
+                            selectedValue={selectedValue}
+                        />
+                    ) : null}
                     <WeeklyStatisticsChart chartData={chartData.statistics} selectedValue={selectedValue} stats={chartData.stats} />
                 </View>
             </ScrollView>
@@ -233,7 +240,6 @@ const style = (theme) => StyleSheet.create({
     },
     header: {
         flexDirection: 'row',
-        paddingHorizontal: 12,
         justifyContent: 'space-between',
     },
     periodText: {
@@ -242,14 +248,12 @@ const style = (theme) => StyleSheet.create({
         fontFamily: Fonts.InterSemiBold
     },
     container: {
-        backgroundColor: 'white',
-        borderRadius: 10,
+        backgroundColor: theme.background,
+        borderRadius: 8,
         borderColor: 'black',
-        borderWidth: 1,
+        borderWidth: 0,
+        elevation: 5,
         zIndex: 1001
-        // paddingHorizontal: 20,
-        // paddingVertical: 4,
-
     },
     dropdownButton: {
         // borderWidth: 1,
@@ -261,7 +265,7 @@ const style = (theme) => StyleSheet.create({
     },
 
     dropdownText: {
-        fontSize: moderateScale(15),
+        fontSize: moderateScale(14),
         fontFamily: Fonts.InterRegular,
         color: "#333",
     },
@@ -273,7 +277,7 @@ const style = (theme) => StyleSheet.create({
         borderRadius: 8,
         backgroundColor: "#fff",
         zIndex: 1002,
-          position: 'absolute',
+        position: 'absolute',
         top: '100%',
         left: 0,
         right: 0,
@@ -294,13 +298,19 @@ const style = (theme) => StyleSheet.create({
         position: 'relative',
         zIndex: 1000,
     },
-      backdrop: {
+    backdrop: {
         position: 'absolute',
         top: 0,
         left: -1000,
         right: -1000,
         bottom: -1000,
         zIndex: 999,
-    }
+    },
+    loaderContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: theme.background,
+    },
 
 })

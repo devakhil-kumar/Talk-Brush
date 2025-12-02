@@ -25,6 +25,9 @@ const Event = () => {
     const [deleteEventId, setDeleteEventId] = useState();
     const [editingEvent, setEditingEvent] = useState(null);
     const insets = useSafeAreaInsets();
+    const listRef = React.createRef();
+    const TodaylistRef = React.createRef();
+
 
     const { list, page, loading, todayslist, addLoading, updateLoading, updateSuccess, deleteLoading } = useSelector((state) => state.eventlist);
 
@@ -143,13 +146,27 @@ const Event = () => {
         return Object.entries(grouped).map(([date, events]) => ({ date, events }));
     };
 
-    const TodaySection = ({ data }) => {
+    const TodaySection = ({ data, TodaylistRef}) => {
         const safeData = Array.isArray(data) ? data : [];
-        return ( 
+        return (
             <View style={styles.section}>
                 <View style={styles.sectionHeader}>
-                    <Ionicons name='time-outline' size={20} color={theme.text} />
-                    <Text style={styles.sectionTitle}>Today</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Ionicons name='time-outline' size={20} color={theme.text} style={{ marginTop: 4 }} />
+                        <Text style={styles.sectionTitle}>Today</Text>
+                    </View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (TodaylistRef?.current) {
+                                TodaylistRef.current.scrollToOffset({
+                                    offset: 300,
+                                    animated: true
+                                });
+                            }
+                        }}
+                    >
+                        <Feather name='chevron-right' color={theme.text} size={22} />
+                    </TouchableOpacity>
                 </View>
                 {safeData.length === 0 ? (
                     <View style={styles.emptyContainer}>
@@ -157,6 +174,7 @@ const Event = () => {
                     </View>
                 ) : (
                     <FlatList
+                       ref={TodaylistRef}
                         data={safeData}
                         horizontal
                         showsHorizontalScrollIndicator={false}
@@ -177,15 +195,25 @@ const Event = () => {
         );
     };
 
-    const DateGroupSection = ({ dateGroup }) => (
+    const DateGroupSection = ({ dateGroup, listRef }) => (
         <View style={styles.section}>
             <View style={styles.dateHeader}>
                 <Text style={styles.dateTitle}>{dateGroup.date}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        if (listRef?.current) {
+                            listRef.current.scrollToOffset({
+                                offset: 300,
+                                animated: true
+                            });
+                        }
+                    }}
+                >
                     <Feather name='chevron-right' color={theme.text} size={22} />
                 </TouchableOpacity>
             </View>
             <FlatList
+                ref={listRef}
                 data={dateGroup.events}
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -215,7 +243,7 @@ const Event = () => {
     }
 
     return (
-        <SafeAreaView style={styles.container} edges={[0,'bottom']}>
+        <SafeAreaView style={styles.container} edges={[0, 'bottom']}>
             <View style={[styles.header, { paddingTop: insets.top }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Feather name='chevron-left' color={theme.text} size={25} />
@@ -225,15 +253,17 @@ const Event = () => {
             </View>
             <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
                 <View style={{ paddingVertical: 16 }}>
-                    <TodaySection data={todayslist} />
+                    <TodaySection data={todayslist} TodaylistRef={TodaylistRef} />
                     <View style={styles.upcomingHeader}>
                         <FontAwesome name='calendar-minus-o' size={20} color={theme.text} />
                         <Text style={styles.upcomingTitle}>Upcoming Events</Text>
                     </View>
 
-                    {groupedEvents.map((dateGroup, index) => (
-                        <DateGroupSection key={index} dateGroup={dateGroup} />
-                    ))}
+                    {groupedEvents.map((dateGroup, index) => {
+                        return (
+                            <DateGroupSection key={index} dateGroup={dateGroup} listRef={listRef} />
+                        )
+                    })}
 
                     {groupedEvents.length === 0 && (
                         <View style={styles.emptyContainer}>
@@ -296,19 +326,20 @@ const createStyles = (theme) =>
         sectionHeader: {
             paddingHorizontal: 16,
             flexDirection: 'row',
-            alignItems: 'center'
+            alignItems: 'center',
+            justifyContent: 'space-between'
         },
         sectionTitle: {
             fontSize: 18,
             fontFamily: Fonts.InterBold,
             color: theme.text,
             marginLeft: GlobalStyles.margin.small,
+            marginBottom: 5
         },
         upcomingHeader: {
             flexDirection: 'row',
             alignItems: 'center',
             paddingHorizontal: 16,
-            marginTop: 8,
         },
         upcomingTitle: {
             fontSize: 18,

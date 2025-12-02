@@ -1,4 +1,4 @@
-import { addEventAPI, deleteEventAPI, deleteUserAPI, editProfileAPI, editUserAPI, getactivities, GetAnalyticsScreenData, GetChartData, getEventAPI, getProfileAPI, getUserActivities, getUsersAPI, loginAPI, signupAPI, updateEventAPI } from '../apis/api';
+import { addEventAPI, Create_Room, deleteEventAPI, deleteUserAPI, editProfileAPI, editUserAPI, getactivities, GetAnalyticsScreenData, GetChartData, getCreateCode, getEventAPI, getProfileAPI, getUserActivities, getUsersAPI, loginAPI, ResetPassword, signupAPI, updateEventAPI, VerifyResetCode } from '../apis/api';
 
 export const signupService = async userData => {
     try {
@@ -65,7 +65,6 @@ export const getEventService = async (page = 1) => {
 export const getProfileService = async () => {
     try {
         const response = await getProfileAPI();
-        console.log(response, 'response+++++')
         return response.data;
     } catch (error) {
         console.log(error);
@@ -110,7 +109,6 @@ export const updateEventService = async (eventId, evendata) => {
 export const deleteEventService = async (eventId) => {
     try {
         const response = await deleteEventAPI(eventId);
-        console.log(response.data, 'response------')
         return response.data
     } catch (error) {
         throw new error(
@@ -143,8 +141,6 @@ export const getActivitieService = async () => {
 export const GetTalkChartData = async (typeValue) => {
     try {
         const response = await GetChartData(typeValue);
-        console.log(response, 'response_________')
-        console.log(response.data, 'response_________')
         return response.data
     } catch (error) {
         console.log(error.response, 'error')
@@ -163,9 +159,7 @@ export const GetTalkChartData = async (typeValue) => {
 
 export const GetAnalyticsData = async (periodValue) => {
     try {
-        console.log(periodValue, 'per++++++++++++++++')
         const response = await GetAnalyticsScreenData(periodValue);
-        console.log(response.data, 'response_________')
         return response.data
     } catch (error) {
         console.log(error.response, 'error')
@@ -189,5 +183,67 @@ export const getActivitieServiceUser = async () => {
     } catch (error) {
         console.log(error);
         throw new Error('Failed to fetch users.');
+    }
+};
+
+export const ResetPasswordService = async (email) => {
+    try {
+        const response = await ResetPassword(email);
+        return response.data;
+    } catch (error) {
+        console.log(error.response, 'error')
+        if (error.response && error.response.data) {
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
+                'Failed while Reset Password. Please try again.';
+            throw new Error(errorMessage);
+        } else if (error.request) {
+            throw new Error('No response from server. Please check your connection.');
+        } else {
+            throw new Error('Failde while Reset Password. Please try again.');
+        }
+    }
+}
+
+export const VerifyResetCodeService = async (data) => {
+    try {
+        const response = await VerifyResetCode(data);
+        console.log("Response from  service :", response);
+        return response;
+    } catch (error) {
+        console.log(error.response, 'error')
+        if (error.response && error.response.data) {
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
+                'Failed while Verify Reset Code. Please try again.';
+            throw new Error(errorMessage);
+        } else if (error.request) {
+            throw new Error('No response from server. Please check your connection.');
+        } else {
+            throw new Error('Failde while Verify Reset Code. Please try again.');
+        }
+    }
+}
+
+export const CreateRoomTlak = async (RoomId) => {
+    try {
+        const response = await Create_Room(RoomId)
+        return response.data
+    } catch (error) {
+        const errorMessage =
+            error.response?.data?.message ||
+            error.response?.data?.error;
+        return Promise.reject(errorMessage);
+    }
+}
+
+export const getCodeGenrate = async () => {
+    try {
+        const response = await getCreateCode();
+        console.log(response, 'response+++++')
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch profile.');
     }
 };

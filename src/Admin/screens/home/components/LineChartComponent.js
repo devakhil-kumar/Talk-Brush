@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import { useTheme } from '../../../../contexts/ThemeProvider';
@@ -16,14 +16,14 @@ const barData = [
 ];
 
 
-const ChartComponent = () => {
+const ChartComponent = ({ stats, impression, selectedValue }) => {
     const { theme } = useTheme();
     const styles = style(theme);
 
     return (
         <View style={styles.chartContainer}>
-            <Text style={styles.title}>Impression</Text>
-            <BarChart
+            <Text style={styles.title}>{selectedValue} Summary</Text>
+            {/* <BarChart
                 data={barData.map(item => ({
                     ...item,
                     onPress: null,  
@@ -41,12 +41,27 @@ const ChartComponent = () => {
                 frontColor={theme.secandprimary}
                 yAxisTextStyle={{ color: 'gray' }}
                 xAxisLabelTextStyle={{ color: 'gray', fontSize: 12 }}
-            />
-            <View style={styles.bottomRow}>
-                <Text style={styles.bigText}>12.345</Text>
-                <Text style={styles.smallText}>
-                    <Text style={{ color: '#EB5757', fontWeight: 'bold' }}>5.4%</Text> than last year
-                </Text>
+            /> */}
+            <View style={styles.rowView}>
+                <View style={styles.weekCard}>
+                    <Text style={{ fontSize: moderateScale(12), fontFamily: Fonts.InterMedium, color: theme.subText }}>This Week</Text>
+                    <Text style={styles.bigText}>{stats.thisPeriod}%</Text>
+                </View>
+                <View style={[styles.weekCard, { backgroundColor: `${theme.primary}40`, borderColor: theme.primary }]}>
+                    <Text style={{ fontSize: moderateScale(12), fontFamily: Fonts.InterMedium, color: theme.subText }}>Last Week</Text>
+                    <Text style={[styles.bigText, {color:theme.primary}]}>{stats.lastPeriod}%</Text>
+                </View>
+                <View style={styles.bottomRow}>
+                    <Text style={{ fontSize: moderateScale(12), fontFamily: Fonts.InterMedium, color: theme.subText }}>Total Impression</Text>
+                    <Text style={styles.bigText}> {Number(impression.count).toLocaleString('en-US')}</Text>
+                    <Text style={styles.smallText}>
+                        <Text style={{
+                            color: impression.change >= 0
+                                ? "#27AE60"
+                                : "#EB5757", fontFamily: Fonts.InterMedium, fontSize: 10
+                        }}>{impression.change}% </Text> vs last peroid
+                    </Text>
+                </View>
             </View>
         </View>
     );
@@ -55,24 +70,36 @@ const ChartComponent = () => {
 const style = (theme) => StyleSheet.create({
     chartContainer: {
         backgroundColor: theme.background,
-        padding: 4,
         borderRadius: 12,
         marginTop: GlobalStyles.margin.large
     },
     title: {
-        fontSize: moderateScale(14),
+        fontSize: moderateScale(15),
         fontFamily: Fonts.InterSemiBold,
         color: theme.text
     },
     bottomRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: theme.secandprimary,
+        padding: 10,
+        width: GlobalStyles.windowWidth / 2.8,
+        borderRadius: 10,
+        backgroundColor: `${theme.secandprimary}40`
+    },
+    weekCard: {
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: theme.secandprimary,
+        width: GlobalStyles.windowWidth / 4,
+        borderRadius: 10,
+        backgroundColor: `${theme.secandprimary}40`,
+        justifyContent: "center"
     },
     bigText: {
         fontSize: moderateScale(14),
-        fontFamily: Fonts.InterMedium,
-        color: theme.text
+        fontFamily: Fonts.InterSemiBold,
+        color: theme.secandprimary
     },
     smallText: {
         fontSize: moderateScale(11),
@@ -80,6 +107,11 @@ const style = (theme) => StyleSheet.create({
         color: theme.subText
 
     },
+    rowView:{
+        flexDirection: 'row',
+         justifyContent: "space-around",
+          marginVertical:10
+    }
 });
 
 export default ChartComponent;

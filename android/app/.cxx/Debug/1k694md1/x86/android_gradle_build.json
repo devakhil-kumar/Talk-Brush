@@ -2,7 +2,6 @@
   "buildFiles": [
     "/Users/imac/Desktop/Talk-Brush/node_modules/@bam.tech/react-native-image-resizer/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt",
-    "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/ant-design/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/feather/android/build/generated/source/codegen/jni/CMakeLists.txt",
@@ -11,9 +10,11 @@
     "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-vector-icons/material-icons/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
+    "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
+    "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/imac/Desktop/Talk-Brush/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt"
@@ -47,6 +48,11 @@
         "/Users/imac/.gradle/caches/8.14.3/transforms/5e3de19cdc6bd36e24739a92b8cabbb2/transformed/react-android-0.81.4-debug/prefab/modules/reactnative/libs/android.x86/libreactnative.so"
       ]
     },
+    "react_codegen_NitroModulesSpec::@472a82f9c57d3d3b8644": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "react_codegen_NitroModulesSpec"
+    },
     "react_codegen_RNDateTimePickerCGen::@59b70ddc31ba2f8ef1d2": {
       "toolchain": "toolchain",
       "abi": "x86",
@@ -61,6 +67,11 @@
       "toolchain": "toolchain",
       "abi": "x86",
       "artifactName": "react_codegen_RNImageResizerSpec"
+    },
+    "react_codegen_RNShareSpec::@e6c4c2b5aedb2ea213b7": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "react_codegen_RNShareSpec"
     },
     "react_codegen_VectorIconsAntDesign::@14ab999fbc2fb062569b": {
       "toolchain": "toolchain",
@@ -91,11 +102,6 @@
       "toolchain": "toolchain",
       "abi": "x86",
       "artifactName": "react_codegen_rnasyncstorage"
-    },
-    "react_codegen_rnblurview::@9a34ffec6e39b5c9049e": {
-      "toolchain": "toolchain",
-      "abi": "x86",
-      "artifactName": "react_codegen_rnblurview"
     },
     "react_codegen_rngesturehandler_codegen::@39f233abcd2c728bc6ec": {
       "toolchain": "toolchain",

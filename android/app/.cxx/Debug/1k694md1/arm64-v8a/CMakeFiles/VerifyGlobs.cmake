@@ -62,31 +62,6 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/arm64-v8a/CMakeFiles/cmake.verify_globs")
 endif()
 
-# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/*.cpp")
-set(OLD_GLOB
-  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/rnblurview-generated.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/arm64-v8a/CMakeFiles/cmake.verify_globs")
-endif()
-
-# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/*.cpp")
-set(OLD_GLOB
-  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/ComponentDescriptors.cpp"
-  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/EventEmitters.cpp"
-  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/Props.cpp"
-  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/ShadowNodes.cpp"
-  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/States.cpp"
-  "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/blur/android/build/generated/source/codegen/jni/react/renderer/components/rnblurview/rnblurviewJSI-generated.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/arm64-v8a/CMakeFiles/cmake.verify_globs")
-endif()
-
 # react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/*.cpp")
 set(OLD_GLOB
@@ -287,6 +262,31 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/arm64-v8a/CMakeFiles/cmake.verify_globs")
 endif()
 
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/NitroModulesSpec-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/arm64-v8a/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec/ComponentDescriptors.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec/EventEmitters.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec/NitroModulesSpecJSI-generated.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec/Props.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec/ShadowNodes.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec/States.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/arm64-v8a/CMakeFiles/cmake.verify_globs")
+endif()
+
 # react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/*.cpp")
 set(OLD_GLOB
@@ -374,6 +374,8 @@ set(OLD_GLOB
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSBottomTabsState.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayShadowNode.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSModalScreenShadowNode.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSSafeAreaViewShadowNode.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSSafeAreaViewState.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSScreenShadowNode.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSScreenStackHeaderConfigShadowNode.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSScreenStackHeaderConfigState.cpp"
@@ -405,6 +407,31 @@ set(OLD_GLOB
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnscreens/ShadowNodes.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnscreens/States.cpp"
   "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnscreens/rnscreensJSI-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/arm64-v8a/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/RNShareSpec-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/imac/Desktop/Talk-Brush/android/app/.cxx/Debug/1k694md1/arm64-v8a/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/react/renderer/components/RNShareSpec/*.cpp")
+set(OLD_GLOB
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/react/renderer/components/RNShareSpec/ComponentDescriptors.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/react/renderer/components/RNShareSpec/EventEmitters.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/react/renderer/components/RNShareSpec/Props.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/react/renderer/components/RNShareSpec/RNShareSpecJSI-generated.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/react/renderer/components/RNShareSpec/ShadowNodes.cpp"
+  "/Users/imac/Desktop/Talk-Brush/node_modules/react-native-share/android/build/generated/source/codegen/jni/react/renderer/components/RNShareSpec/States.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")

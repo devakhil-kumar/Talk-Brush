@@ -8,6 +8,8 @@ import profileReducer from '../app/features/profileSlice';
 import activitesReducer from '../app/features/activitiesSlice';
 import chartReducer from '../app/features/ChartSlice';
 import analyticsReducer from '../app/features/AnalyticsSlice';
+import resetPasswordSlice from '../app/features/ResetPasswordSlice';
+import CreateRoomSLiceReducer from '../app/features/CreateRoomSlice';
 
 const store = configureStore({
     reducer: {
@@ -19,7 +21,9 @@ const store = configureStore({
         profile:profileReducer,
         activites:activitesReducer,
         chartData:chartReducer,
-        analyticsData:analyticsReducer
+        analyticsData:analyticsReducer,
+        forgetData:resetPasswordSlice,
+        RoomSlices:CreateRoomSLiceReducer
     }
 })
 

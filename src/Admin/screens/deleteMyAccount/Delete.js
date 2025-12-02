@@ -35,9 +35,9 @@ const Delete = () => {
                 <Text style={styles.headerTitle}>Delete My Account</Text>
                 <View style={{ width: 24 }} />
             </View>
-            <Text style={[styles.mediumText, { color: 'blue', paddingHorizontal: '14%', paddingVertical: 10 }]}>Important</Text>
+            {/* <Text style={[styles.mediumText, { color: 'blue', paddingHorizontal: '14%', paddingVertical: 10 }]}>Important</Text>
             <View style={{ height: 1, backgroundColor: 'lightgrey', borderRadius: 100 }} />
-            <View style={styles.horizontalBlueBar} />
+            <View style={styles.horizontalBlueBar} /> */}
             <Text style={[styles.smallText, { color: 'grey', marginTop: 30 }]}>Reason for Deletion</Text>
             <Dropdown
                 style={styles.dropdownConatiner}

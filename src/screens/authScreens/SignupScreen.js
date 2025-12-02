@@ -283,6 +283,9 @@ const SignupScreen = () => {
                                                     validationErrors.phoneNumber && styles.errorInput,
                                                 ]}
                                             />
+                                            {validationErrors.phoneNumber && (
+                                                <Text style={styles.errorText}>{validationErrors.phoneNumber}</Text>
+                                            )}
                                             <RnTextInput
                                                 placeholder="Password"
                                                 value={password}

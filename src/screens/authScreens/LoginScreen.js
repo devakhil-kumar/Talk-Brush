@@ -162,6 +162,7 @@ const LoginScreen = () => {
       setValidationErrors({});
       const userData = { email, password };
       const response = await dispatch(loginUser(userData)).unwrap();
+      console.log(response, 'response+++++++')
     } catch (error) {
       const errorMessage = typeof error === "string"
         ? error
@@ -186,6 +187,10 @@ const LoginScreen = () => {
       setIsLoading(false);
     }
   };
+
+  const handleGoForgetPassword = () => {
+    navigation.navigate('ResetPasswordScreen')
+  }
 
 
   const tabRowStyle = styles.tabRowLogin;
@@ -265,15 +270,17 @@ const LoginScreen = () => {
                       onPress={handleRememberToggle}
                       label="Remember Me"
                     />
-                    <Text style={{ fontSize: moderateScale(11), color: 'white', fontFamily: Fonts.PoppinsRegular }}>
-                      Forgot Password?
-                    </Text>
+                    <TouchableOpacity onPress={handleGoForgetPassword}>
+                      <Text style={{ fontSize: moderateScale(11), color: 'white', fontFamily: Fonts.PoppinsRegular }}>
+                        Forgot Password?
+                      </Text>
+                    </TouchableOpacity>
                   </View>
 
                   <CommonBtn title={'LOGIN'} onPress={handleSubmitLogin} />
                   <View style={styles.navigationContainer}>
                     <Text style={styles.navigationText}>
-                      Don't have an Account?
+                      Don't have an account?
                     </Text>
                     <TouchableOpacity onPress={handleGoSignup}>
                       <Text style={styles.navigationGoText}>Signup</Text>
@@ -347,7 +354,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 3,
     borderColor: 'rgba(102, 88, 79, 0.3)',
-    marginBottom:40,
+    marginBottom: 40,
     backgroundColor: 'rgba(60, 45, 35, 0.55)',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },

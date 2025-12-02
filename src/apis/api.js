@@ -38,9 +38,7 @@ export const loginAPI = userData => {
   return axiosInstance.post(API_ROUTES.LOGIN, userData)
 }
 
-// export const getUsersAPI = (page = 1, filters) => {
-//   return axiosInstance.get(`${API_ROUTES.USER_LIST}&page=${page}&limit=20&sortBy=${filters.fullName}&sortOrder=${filters}`);
-// };
+
 export const getUsersAPI = (page = 1, filters = null) => {
   if (!filters) {
     return axiosInstance.get(
@@ -116,3 +114,28 @@ export const GetAnalyticsScreenData = (periodValue) => {
 export const getUserActivities = () => {
   return axiosInstance.get(`${API_ROUTES.ACTIVITIESUSER}`);
 };
+
+export const ResetPassword = (email) => {
+  console.log("Email :", email);
+  return axiosInstance.post(API_ROUTES.RESETPASSWORD, {
+    email: email
+  });
+}
+ 
+export const VerifyResetCode = (data) => {
+  console.log("Data :", data);
+  return axiosInstance.post(API_ROUTES.RESETCODE, {
+    "email": data?.email,
+    "code": data?.code,
+    "newPassword": data?.newPassword
+  });
+}
+
+
+export const Create_Room = (RoomId) => {
+  return axiosInstance.post(API_ROUTES.CREATE_ROOM, RoomId)
+}
+
+export const getCreateCode = () => {
+  return axiosInstance.get('https://talkbrush.com/accent/create_room')
+}

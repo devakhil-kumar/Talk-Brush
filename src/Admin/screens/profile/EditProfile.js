@@ -86,7 +86,7 @@ const EditProfile = () => {
                 console.log('User cancelled image picker');
                 return;
             }
-            
+
             if (response.error) {
                 console.log('ImagePicker Error: ', response.error);
                 Alert.alert('Error', 'Failed to pick image');
@@ -103,11 +103,11 @@ const EditProfile = () => {
                 console.log('Original image URI:', asset.uri);
                 const resized = await ImageResizer.createResizedImage(
                     asset.uri,
-                    600,     // max width
-                    600,     // max height
-                    'JPEG',  // format
-                    60,      // quality (0-100)
-                    0        // rotation
+                    600,
+                    600,
+                    'JPEG',
+                    60,
+                    0
                 );
                 const base64String = await convertToBase64(resized.uri);
                 if (base64String) {
@@ -128,18 +128,26 @@ const EditProfile = () => {
             dispatch(showMessage({ type: 'error', text: 'Please fill all required fields' }));
             return;
         }
-        
+
+        if (!/^\d{10}$/.test(phone)) {
+            dispatch(showMessage({
+                type: 'error',
+                text: 'Phone number must be 10 digits'
+            }));
+            return;
+        }
+
         const payload = {
             fullName: name,
             email: email,
             phoneNumber: phone,
             image: image
         };
-        
+
         try {
             const resultAction = await dispatch(updateProfile(payload));
             console.log("Update payload:", payload);
-            
+
             if (updateProfile.fulfilled.match(resultAction)) {
                 dispatch(showMessage({
                     type: 'success',

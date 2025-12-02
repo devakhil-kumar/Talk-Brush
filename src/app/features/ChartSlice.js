@@ -6,12 +6,12 @@ export const GetTalkBrushChart = createAsyncThunk(
     async (typeValue, { rejectWithValue }) => {
         try {
             const response = await GetTalkChartData(typeValue);
-            console.log("Chart Data :", response);
+            console.log("Chart Data :______", response);
             // console.log("Chart Data :", response.statistics);
 
             return response;
         } catch (error) {
-            console.log(error.message, 'error from slice.')
+            console.log(error, 'error from slice.')
             return rejectWithValue(error.message);
         }
     }

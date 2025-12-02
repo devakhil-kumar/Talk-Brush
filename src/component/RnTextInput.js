@@ -38,9 +38,9 @@ const RnTextInput = ({
         />
       )}
       {isPasswordField && (
-        <TouchableOpacity onPress={handleTogglePassword}>
+        <TouchableOpacity >
           <Ionicons
-            name={showPassword ? 'lock-open' : 'lock-closed'}
+            name={'lock-closed'}
             size={18}
             color={iconColor}
             style={styles.icon}
@@ -56,9 +56,16 @@ const RnTextInput = ({
         secureTextEntry={isPasswordField && !showPassword}
         keyboardType={keyboardType}
       />
-
-
-
+       {isPasswordField && (
+        <TouchableOpacity onPress={handleTogglePassword}>
+          <Ionicons
+            name={showPassword ? 'eye' : 'eye-off'}
+            size={18}
+            color={iconColor}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -83,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(12),
     fontFamily: Fonts.PoppinsRegular,
     height: '100%',
-    width: '90%',
+    width: '70%',
     paddingBottom: 6
   },
   icon: {

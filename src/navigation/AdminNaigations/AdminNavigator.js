@@ -17,7 +17,7 @@ import Feather from '@react-native-vector-icons/feather';
 import ContactUs from '../../Admin/screens/utilities/ContactUs';
 import PrivacyPolicy from '../../Admin/screens/utilities/PrivacyPolicy';
 import TermsConditions from '../../Admin/screens/utilities/Terms&Conditions';
-import { getUserData } from '../../units/asyncStorageManager';
+import { getProfileData, getUserData } from '../../units/asyncStorageManager';
 
 
 const Stack = createNativeStackNavigator();
@@ -25,27 +25,34 @@ const Drawer = createDrawerNavigator();
 
 const CustomDrawerContent = (props) => {
   const dispatch = useDispatch();
-   const [user, setUser] = useState(null);
-    useEffect(() => {
-      const loadUser = async () => {
-        const stored = await getUserData('userProfile');
-        if (stored?.user) {
-          setUser(stored.UserProfile?.user);
-        }
-      };
-      loadUser();
-    }, []);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const stored = await getUserData('user');
+      console.log(stored, 'stroed++++++++++++')
+      if (stored?.user) {
+        setUser(stored?.user);
+      }
+    };
+    loadUser();
+  }, []);
+
   const handleLogout = async () => {
     dispatch(logout());
   };
 
   return (
-   <SafeAreaView style={styles.drawerWrapper} edges={['top']} >
+    <SafeAreaView style={styles.drawerWrapper} edges={['top']} >
       <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContainer}>
         <View style={styles.profileSection}>
           <View style={styles.profileImageContainer}>
             <Image
-              source={{ uri: user?.image }}
+              source={
+                user?.profileImage
+                  ? { uri: user?.profileImage}
+                  : ImagePath.convoImage
+              }
               style={styles.profileImage}
             />
           </View>

@@ -239,7 +239,7 @@ const LoginScreen = () => {
                   <View style={boxStyle}>
                     <RnTextInput
                       placeholder="Email Address"
-                      value={email}
+                      value={email}    
                       onChangeText={setEmail}
                       keyboardType="email-address"
                       iconName="mail"
@@ -257,7 +257,7 @@ const LoginScreen = () => {
                       secureTextEntry
                       style={[
                         styles.marginInput,
-                        validationErrors.password && styles.errorInput,
+                          validationErrors.password && styles.errorInput,
                       ]}
                     />
                     {validationErrors.password && (

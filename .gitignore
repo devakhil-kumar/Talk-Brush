@@ -13,6 +13,9 @@ android/local.properties
 android/captures/
 android/.idea/
 android/*.iml
+android/app/.cxx/
+vendor/
+vendor/bundle/
 
 # iOS
 ios/build/
@@ -34,6 +37,8 @@ web-build/
 *.log
 
 # OS
+*.swp
+*~
 .DS_Store
 Thumbs.db
 
@@ -50,4 +55,16 @@ Thumbs.db
 
 # Temporary files
 *.tmp
-*.swp
+
+.cxx/
+**/android/app/.cxx/
+**/android/app/build/
+**/android/build/
+**/.cxx/
+
+# General generated files
+*.o
+*.json
+!package.json
+!app.json
+!tsconfig.json

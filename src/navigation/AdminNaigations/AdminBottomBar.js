@@ -9,14 +9,15 @@ import AnalyticsScreen from '../../Admin/screens/analytics /AnalyticsScreen1';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ConvoSpaceStart from '../../Admin/screens/convoSpace/ConvoSpaceStart';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-export const ConvoNavigator = () => {
-
+export const ConvoNavigator = ({ route }) => {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'ConvoSpaceMain';
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ConvoSpaceMain" component={ConvoSpaceStart} />
@@ -85,19 +86,30 @@ const AdminBottomTabs = () => {
       <Tab.Screen
         name="ConvoSpace"
         component={ConvoNavigator}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={focused ? ImagePath.convoActive : ImagePath.convoInActive}
-              style={{ width: 24, height: 24, resizeMode: 'contain' }}
-            />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <Text style={{ color: focused ? '#000000' : '#ccc', fontSize: 12 }}>ConvoSpace</Text>
-          ),
+        options={({ route }) => {
+          const routeName =
+            getFocusedRouteNameFromRoute(route) ?? 'ConvoSpaceMain';
+
+          return {
+            tabBarStyle: {
+              display: routeName === 'ConvoSpaceTalk' ? 'none' : 'flex',
+            },
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={focused ? ImagePath.convoActive : ImagePath.convoInActive}
+                style={{ width: 24, height: 24, resizeMode: 'contain' }}
+              />
+            ),
+            tabBarLabel: ({ focused }) => (
+              <Text
+                style={{ color: focused ? '#000000' : '#ccc', fontSize: 12 }}
+              >
+                ConvoSpace
+              </Text>
+            ),
+          };
         }}
       />
-
       <Tab.Screen
         name="Analytics"
         component={AnalyticsScreen}

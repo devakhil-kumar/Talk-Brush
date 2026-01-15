@@ -12,6 +12,10 @@ import { generateCode, generateCodeAndCreateRoom } from '../../../app/features/C
 import SliderContent from '../convoSpace/component/SliderContent';
 import GlobalStyles from '../../../styles/GlobalStyles';
 import { showMessage } from '../../../app/features/messageSlice';
+import { TextInput } from 'react-native-gesture-handler';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
+import { getRoomInfoDetailsThunk, joinRoomThunk } from '../../../app/features/roomDetailsSlice';
+import RoomInviteModal from './component/RoomInviteModal';
 
 const { width } = Dimensions.get('window');
 
@@ -45,10 +49,21 @@ const ConvoSpaceStart = () => {
     const { theme } = useTheme();
     const styles = style(theme);
     const navigation = useNavigation();
+    const [joincode, setJoinCode] = useState();
     const dispatch = useDispatch();
     const { room, code, loading, error } = useSelector(state => state.RoomSlices);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [roomDetails, setRoomDetails] = useState(null);
+    const [isJoining, setIsJoining] = useState(false)
+    const [checkRoom, setCheckRoom] = useState(false);
+    const [isCreatingRoom, setIsCreatingRoom] = useState(false);
+
+
+
 
     const startConversation = async () => {
+        if (isCreatingRoom) return;
+        setIsCreatingRoom(true);
         try {
             console.log("Starting conversation...");
             const response = await dispatch(generateCodeAndCreateRoom()).unwrap();
@@ -79,6 +94,73 @@ const ConvoSpaceStart = () => {
                     text: error?.message || "Room not created",
                 })
             );
+        } finally {
+            setIsCreatingRoom(false);
+        }
+    };
+
+    const handleJoinRoom = async () => {
+        // const trimmedCode = code.trim();
+        console.log(joincode, 'code+++++++++++')
+        if (!joincode || joincode.length !== 8) {
+            Alert.alert('Please enter a valid 8-character room code');
+            return;
+        }
+        setCheckRoom(true)
+        try {
+            const result = await dispatch(getRoomInfoDetailsThunk(joincode));
+            console.log(result, 'result=====')
+            if (getRoomInfoDetailsThunk.fulfilled.match(result)) {
+                setRoomDetails(result.payload);
+                setIsModalVisible(true);
+            } else {
+                Alert.alert('Room are not found. Please check the room code and try again.');
+                setJoinCode('');
+            }
+        } catch (error) {
+            console.error('Error joining room:', error);
+            Alert.alert('Room not found. Please check the room code and try again.');
+            setJoinCode('');
+        } finally {
+            setCheckRoom(false)
+        }
+    };
+
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+        setRoomDetails(null);
+    };
+
+    const handleJoinRoomFromModal = async () => {
+        if (!joincode) {
+            Alert.alert('Error', 'Room code is missing');
+            return;
+        }
+        console.log(joincode, 'joincode')
+        setIsJoining(true);
+        try {
+            const result = await dispatch(joinRoomThunk(joincode)).unwrap();
+            console.log("Join room response:", result);
+            setIsModalVisible(false);
+            dispatch(
+                showMessage({
+                    type: 'success',
+                    text: 'Successfully joined the room!',
+                })
+            );
+            navigation.navigate('ConvoSpaceTalk', { roomCode: joincode });
+            setJoinCode('');
+        } catch (error) {
+            console.error('Error joining room from modal:', error);
+            const errormessage = error;
+            dispatch(
+                showMessage({
+                    type: 'error',
+                    text: errormessage || 'Failed to join room. Please try again.',
+                })
+            );
+        } finally {
+            setIsJoining(false);
         }
     };
 
@@ -90,7 +172,7 @@ const ConvoSpaceStart = () => {
                 showsVerticalScrollIndicator={false}
             >
                 <Text style={styles.headingText}>
-                    Start Conversation with TalkBrush para todos.
+                    Start Conversation with TalkBrush everyone, everywhere.
                 </Text>
 
                 <Text style={styles.descriptionText}>
@@ -99,8 +181,21 @@ const ConvoSpaceStart = () => {
 
                 <TouchableOpacity style={styles.startConversationButton} onPress={startConversation}>
                     <MaterialIcons name="mic" color="lightgrey" size={20} />
-                    <Text style={styles.startButtonText}>Start Conversation</Text>
+                    <Text style={styles.startButtonText}>{isCreatingRoom ? 'Wait...' : 'Start Conversation'}</Text>
                 </TouchableOpacity>
+                <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <TextInput
+                        style={{ width: '50%', borderWidth: 1, borderColor: theme.subText, borderRadius: 5, padding: 10 }}
+                        placeholder='Enter Room Code'
+                        value={joincode}
+                        onChangeText={setJoinCode}
+                    />
+                    <TouchableOpacity style={[styles.startConversationButton, { backgroundColor: "#519377", marginTop: 4 }]} onPress={handleJoinRoom}>
+                        <FontAwesome name="chain" color="#fff" size={20} />
+                        <Text style={styles.startButtonText}>{checkRoom ? "Wait..." : "Join Room"}</Text>
+                    </TouchableOpacity>
+                </View>
+
 
                 {/* <TouchableOpacity style={styles.copyLinkButton}>
                         <MaterialIcons name="keyboard" color="grey" size={20} />
@@ -115,6 +210,14 @@ const ConvoSpaceStart = () => {
                 {/* </View> */}
 
             </ScrollView>
+
+            <RoomInviteModal
+                visible={isModalVisible}
+                onClose={handleCloseModal}
+                roomData={roomDetails}
+                onJoinRoom={handleJoinRoomFromModal}
+                isJoining={isJoining}
+            />
         </View>
     );
 };
@@ -135,7 +238,7 @@ const style = theme =>
             paddingBottom: 0,
         },
         headingText: {
-            width: '80%',
+            width: '94%',
             fontSize: moderateScale(26),
             fontFamily: Fonts.InterBold,
             color: theme.text,
@@ -157,7 +260,7 @@ const style = theme =>
             borderRadius: 5,
         },
         startButtonText: {
-            color: 'lightgrey',
+            color: '#fff',
             paddingStart: 10,
             fontSize: moderateScale(12),
             fontFamily: Fonts.InterMedium,

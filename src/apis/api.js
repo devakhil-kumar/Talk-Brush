@@ -104,11 +104,11 @@ export const GetChartData = (typeValue) => {
 }
 
 export const GetAnalyticsScreenData = (periodValue) => {
-    return axiosInstance.get(API_ROUTES.ANALYTICSDATA, {
-  params: {
-    period: periodValue  
-  }
-});
+  return axiosInstance.get(API_ROUTES.ANALYTICSDATA, {
+    params: {
+      period: periodValue
+    }
+  });
 };
 
 export const getUserActivities = () => {
@@ -121,7 +121,7 @@ export const ResetPassword = (email) => {
     email: email
   });
 }
- 
+
 export const VerifyResetCode = (data) => {
   console.log("Data :", data);
   return axiosInstance.post(API_ROUTES.RESETCODE, {
@@ -138,4 +138,12 @@ export const Create_Room = (RoomId) => {
 
 export const getCreateCode = () => {
   return axiosInstance.get('https://talkbrush.com/accent/create_room')
+}
+
+export const joinRoomAPI = (roomCode) => {
+  return axiosInstance.post(API_ROUTES.JOIN_ROOM, { room_code: roomCode })
+}
+
+export const getRoomInfoAPI = (roomCode) => {
+  return axiosInstance.get(`${API_ROUTES.GET_ROOM_INFO(roomCode)}`)
 }

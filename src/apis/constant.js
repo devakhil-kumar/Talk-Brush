@@ -16,6 +16,8 @@ export const API_ROUTES = {
    ACTIVITIESUSER: "activities/getUserActivities",
    RESETPASSWORD: 'users/resetPassword',
    RESETCODE: "users/verifyResetCode",
-   CREATE_ROOM:"accent/create-room",
-   ROOMLINK_GENRATE:"accent/create_room",
+   CREATE_ROOM: "accent/create-room",
+   ROOMLINK_GENRATE: "accent/create_room",
+   JOIN_ROOM: "accent/add-member",
+   GET_ROOM_INFO: (roomId) => `accent/room/${roomId}/info`,
 }

@@ -10,20 +10,22 @@ import chartReducer from '../app/features/ChartSlice';
 import analyticsReducer from '../app/features/AnalyticsSlice';
 import resetPasswordSlice from '../app/features/ResetPasswordSlice';
 import CreateRoomSLiceReducer from '../app/features/CreateRoomSlice';
+import roomDetailsReducer from '../app/features/roomDetailsSlice';
 
 const store = configureStore({
     reducer: {
-        auth: authReducer ,
-        message: messageReducer ,
+        auth: authReducer,
+        message: messageReducer,
         userlist: userlistReducer,
         userdelete: userdeleteReducer,
         eventlist: eventlistReducer,
-        profile:profileReducer,
-        activites:activitesReducer,
-        chartData:chartReducer,
-        analyticsData:analyticsReducer,
-        forgetData:resetPasswordSlice,
-        RoomSlices:CreateRoomSLiceReducer
+        profile: profileReducer,
+        activites: activitesReducer,
+        chartData: chartReducer,
+        analyticsData: analyticsReducer,
+        forgetData: resetPasswordSlice,
+        RoomSlices: CreateRoomSLiceReducer,
+        roomDetails: roomDetailsReducer
     }
 })
 

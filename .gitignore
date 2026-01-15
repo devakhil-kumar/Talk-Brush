@@ -1,23 +1,53 @@
-# dependencies
+# Node
 node_modules/
-npm-debug.log
-yarn-error.log
-
-# macOS
-.DS_Store
-
-# Xcode
-ios/build/
-ios/Pods/
-*.xcworkspace
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Android
 android/.gradle/
+android/gradle/
 android/app/build/
+android/build/
 android/local.properties
+android/captures/
+android/.idea/
+android/*.iml
 
-# vscode
+# iOS
+ios/build/
+ios/Pods/
+ios/DerivedData/
+ios/*.xcworkspace
+ios/*.xcuserstate
+ios/.idea/
+ios/.DS_Store
+
+# Metro / React Native
+.expo/
+.expo-shared/
+web-build/
+.bundle/
+.packager-info.json
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*
+
+# VS Code
 .vscode/
 
-# env
-.env
+# Keystore (IMPORTANT)
+*.keystore
+*.jks
+
+# Temporary files
+*.tmp
+*.swp

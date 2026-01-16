@@ -68,3 +68,16 @@ Thumbs.db
 !package.json
 !app.json
 !tsconfig.json
+
+# Android Studio
+.idea/
+*.iml
+.gradle/
+local.properties
+
+# Build files
+/build/
+/app/build/
+
+# Generated
+gradle-wrapper.jar

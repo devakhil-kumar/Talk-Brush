@@ -213,7 +213,7 @@ const UserList = () => {
                         <Text style={style.exportText}>Export</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={style.addUserBtn} onPress={() => setUserModalVisible(true)}>
-                        <Feather name="plus" color={theme.background} size={16} />
+                        <Feather name="plus" color={'#fff'} size={16} />
                         <Text style={style.addUserText}>Add New User</Text>
                     </TouchableOpacity>
                 </View>
@@ -269,7 +269,7 @@ const styles = (theme) => StyleSheet.create({
     exportBtn: { flexDirection: 'row', padding: 7, borderWidth: 1, borderRadius: GlobalStyles.borderRadius.small, borderColor: theme.border, marginLeft: GlobalStyles.margin.medium },
     exportText: { fontSize: moderateScale(14), fontFamily: Fonts.InterRegular, marginLeft: GlobalStyles.margin.small },
     addUserBtn: { flexDirection: 'row', backgroundColor: theme.secandprimary, borderRadius: GlobalStyles.borderRadius.small, alignItems: "center", padding: 12, marginLeft: GlobalStyles.margin.medium },
-    addUserText: { fontSize: moderateScale(14), fontFamily: Fonts.InterRegular, marginLeft: GlobalStyles.margin.small, lineHeight: moderateScale(15), color: theme.background },
+    addUserText: { fontSize: moderateScale(14), fontFamily: Fonts.InterRegular, marginLeft: GlobalStyles.margin.small, lineHeight: moderateScale(15), color:'#fff'},
     listWrapper: { marginTop: GlobalStyles.margin.large, marginBottom: GlobalStyles.margin.large * 3.8 },
     listContent: { paddingBottom: GlobalStyles.margin.large },
     fab: {

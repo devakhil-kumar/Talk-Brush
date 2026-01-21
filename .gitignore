@@ -3,21 +3,84 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
-# macOS
-.DS_Store
-
-# Xcode
-ios/build/
-ios/Pods/
-*.xcworkspace
 
 # Android
 android/.gradle/
+android/gradle/
 android/app/build/
+android/build/
 android/local.properties
+android/captures/
+android/.idea/
+android/*.iml
+android/app/.cxx/
+vendor/
+vendor/bundle/
 
 # vscode
 .vscode/
 
 # env
 .env
+
+.vscode/
+
+# Keystore (IMPORTANT)
+*.keystore
+*.jks
+
+
+# iOS
+ios/build/
+ios/Pods/
+ios/DerivedData/
+ios/*.xcworkspace
+ios/*.xcuserstate
+ios/.idea/
+ios/.DS_Store
+
+
+.expo/
+.expo-shared/
+web-build/
+.bundle/
+.packager-info.json
+
+# Temporary files
+*.tmp
+
+.cxx/
+**/android/app/.cxx/
+**/android/app/build/
+**/android/build/
+**/.cxx/
+
+# General generated files
+*.o
+*.json
+!package.json
+!app.json
+!tsconfig.json
+
+# Android Studio
+.idea/
+*.iml
+.gradle/
+local.properties
+
+# Build files
+/build/
+/app/build/
+
+# Generated
+gradle-wrapper.jar
+
+
+# Logs
+*.log
+
+# OS
+*.swp
+*~
+.DS_Store
+Thumbs.db

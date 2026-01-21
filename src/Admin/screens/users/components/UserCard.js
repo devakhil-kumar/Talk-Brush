@@ -40,7 +40,7 @@ export default UserCard;
 
 const style = (theme) => StyleSheet.create({
     card: {
-        backgroundColor:theme.background,
+        backgroundColor:'#fff',
         borderRadius: 8,
         marginBottom: 12,
         padding: 16,

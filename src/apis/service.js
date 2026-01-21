@@ -1,4 +1,4 @@
-import { addEventAPI, Create_Room, deleteEventAPI, deleteUserAPI, editProfileAPI, editUserAPI, getactivities, GetAnalyticsScreenData, GetChartData, getCreateCode, getEventAPI, getProfileAPI, getRoomDetailsAPI, getUserActivities, getUsersAPI, leaveRoomAPI, loginAPI, ResetPassword, signupAPI, updateEventAPI, VerifyResetCode } from '../apis/api';
+import { addEventAPI, Create_Room, deleteEventAPI, deleteUserAPI, editProfileAPI, editUserAPI, getactivities, GetAnalyticsScreenData, GetChartData, getCreateCode, getEventAPI, getProfileAPI, getUserActivities, getUsersAPI, loginAPI, ResetPassword, signupAPI, updateEventAPI, VerifyResetCode } from '../apis/api';
 
 export const signupService = async userData => {
     try {
@@ -245,33 +245,5 @@ export const getCodeGenrate = async () => {
     } catch (error) {
         console.log(error);
         throw new Error('Failed to fetch profile.');
-    }
-};
-
-export const getRoomDetailsService = async (roomCode) => {
-    try {
-        const response = await getRoomDetailsAPI(roomCode);
-        return response.data;
-    } catch (error) {
-        console.log(error);
-        const errorMessage =
-            error.response?.data?.message ||
-            error.response?.data?.error ||
-            'Failed to fetch room details.';
-        throw new Error(errorMessage);
-    }
-};
-
-export const leaveRoomService = async (roomCode) => {
-    try {
-        const response = await leaveRoomAPI(roomCode);
-        return response.data;
-    } catch (error) {
-        console.log(error);
-        const errorMessage =
-            error.response?.data?.message ||
-            error.response?.data?.error ||
-            'Failed to leave room.';
-        throw new Error(errorMessage);
     }
 };

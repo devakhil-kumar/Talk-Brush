@@ -198,7 +198,7 @@ const AdminDrawer = () => {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Contact Us"
         component={ContactUs}
         options={{
@@ -210,7 +210,7 @@ const AdminDrawer = () => {
             />
           ),
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="Privacy Policy"
         component={PrivacyPolicy}
@@ -218,13 +218,13 @@ const AdminDrawer = () => {
           headerShown: false,
           drawerIcon: ({ focused }) => (
             <Image
-              source={focused ? ImagePath.eventIcon : ImagePath.eventLight}
-              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+              source={focused ? ImagePath.PrivacyPolicy : ImagePath.PrivacyPolicy}
+              style={{ width: 25, height: 25, resizeMode: 'contain' }}
             />
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Terms & Conditions"
         component={TermsConditions}
         options={{
@@ -236,7 +236,7 @@ const AdminDrawer = () => {
             />
           ),
         }}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };

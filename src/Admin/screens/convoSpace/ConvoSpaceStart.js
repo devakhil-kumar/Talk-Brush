@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, Alert, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, Alert } from 'react-native';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImagePath from '../../../contexts/ImagePath';
@@ -9,11 +9,13 @@ import { useTheme } from '../../../contexts/ThemeProvider';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { generateCode, generateCodeAndCreateRoom } from '../../../app/features/CreateRoomSlice';
-import { getRoomDetailsThunk } from '../../../app/features/roomSlice';
 import SliderContent from '../convoSpace/component/SliderContent';
 import GlobalStyles from '../../../styles/GlobalStyles';
 import { showMessage } from '../../../app/features/messageSlice';
-import { getUserData } from '../../../units/asyncStorageManager';
+import { TextInput } from 'react-native-gesture-handler';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
+import { getRoomInfoDetailsThunk, joinRoomThunk } from '../../../app/features/roomDetailsSlice';
+import RoomInviteModal from './component/RoomInviteModal';
 
 const { width } = Dimensions.get('window');
 
@@ -43,34 +45,25 @@ const data = [
 
 const ConvoSpaceStart = () => {
     const [activeIndex, setActiveIndex] = useState(0);
-    const [roomCodeInput, setRoomCodeInput] = useState('');
-    const [isJoiningRoom, setIsJoiningRoom] = useState(false);
-    const [userRole, setUserRole] = useState(null);
-    console.log(userRole, "👤 User Role");
     const swiperRef = useRef(null);
     const { theme } = useTheme();
     const styles = style(theme);
     const navigation = useNavigation();
+    const [joincode, setJoinCode] = useState();
     const dispatch = useDispatch();
     const { room, code, loading, error } = useSelector(state => state.RoomSlices);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [roomDetails, setRoomDetails] = useState(null);
+    const [isJoining, setIsJoining] = useState(false)
+    const [checkRoom, setCheckRoom] = useState(false);
+    const [isCreatingRoom, setIsCreatingRoom] = useState(false);
 
-    // Load user role from AsyncStorage
-    React.useEffect(() => {
-        loadUserRole();
-    }, []);
 
-    const loadUserRole = async () => {
-        try {
-            const userData = await getUserData();
-            if (userData && userData.user) {
-                setUserRole(userData.user.type || userData.user.role);
-            }
-        } catch (error) {
-            console.error('Error loading user role:', error);
-        }
-    };
+
 
     const startConversation = async () => {
+        if (isCreatingRoom) return;
+        setIsCreatingRoom(true);
         try {
             console.log("Starting conversation...");
             const response = await dispatch(generateCodeAndCreateRoom()).unwrap();
@@ -101,61 +94,73 @@ const ConvoSpaceStart = () => {
                     text: error?.message || "Room not created",
                 })
             );
+        } finally {
+            setIsCreatingRoom(false);
         }
     };
 
-    const joinRoom = async () => {
-        if (!roomCodeInput || roomCodeInput.trim() === '') {
-            dispatch(
-                showMessage({
-                    type: 'error',
-                    text: 'Please enter a valid room code',
-                })
-            );
+    const handleJoinRoom = async () => {
+        // const trimmedCode = code.trim();
+        console.log(joincode, 'code+++++++++++')
+        if (!joincode || joincode.length !== 8) {
+            Alert.alert('Please enter a valid 8-character room code');
             return;
         }
-
-        const trimmedCode = roomCodeInput.trim();
-        console.log("Validating room with code:", trimmedCode);
-
+        setCheckRoom(true)
         try {
-            setIsJoiningRoom(true);
-
-            // Validate room exists by fetching room details
-            const response = await dispatch(getRoomDetailsThunk(trimmedCode)).unwrap();
-
-            if (response) {
-                console.log("Room found:", response);
-
-                dispatch(
-                    showMessage({
-                        type: 'success',
-                        text: 'Room found! Joining...',
-                    })
-                );
-
-                // Navigate to room
-                navigation.navigate('ConvoSpaceTalk', { roomCode: trimmedCode });
-                setRoomCodeInput('');
+            const result = await dispatch(getRoomInfoDetailsThunk(joincode));
+            console.log(result, 'result=====')
+            if (getRoomInfoDetailsThunk.fulfilled.match(result)) {
+                setRoomDetails(result.payload);
+                setIsModalVisible(true);
             } else {
-                dispatch(
-                    showMessage({
-                        type: 'error',
-                        text: 'Room not found. Please check the room code.',
-                    })
-                );
+                Alert.alert('Room are not found. Please check the room code and try again.');
+                setJoinCode('');
             }
         } catch (error) {
-            console.log("Room validation error:", error);
+            console.error('Error joining room:', error);
+            Alert.alert('Room not found. Please check the room code and try again.');
+            setJoinCode('');
+        } finally {
+            setCheckRoom(false)
+        }
+    };
 
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+        setRoomDetails(null);
+    };
+
+    const handleJoinRoomFromModal = async () => {
+        if (!joincode) {
+            Alert.alert('Error', 'Room code is missing');
+            return;
+        }
+        console.log(joincode, 'joincode')
+        setIsJoining(true);
+        try {
+            const result = await dispatch(joinRoomThunk(joincode)).unwrap();
+            console.log("Join room response:", result);
+            setIsModalVisible(false);
+            dispatch(
+                showMessage({
+                    type: 'success',
+                    text: 'Successfully joined the room!',
+                })
+            );
+            navigation.navigate('ConvoSpaceTalk', { roomCode: joincode });
+            setJoinCode('');
+        } catch (error) {
+            console.error('Error joining room from modal:', error);
+            const errormessage = error;
             dispatch(
                 showMessage({
                     type: 'error',
-                    text: error?.message || 'Invalid room code. Please try again.',
+                    text: errormessage || 'Failed to join room. Please try again.',
                 })
             );
         } finally {
-            setIsJoiningRoom(false);
+            setIsJoining(false);
         }
     };
 
@@ -167,62 +172,36 @@ const ConvoSpaceStart = () => {
                 showsVerticalScrollIndicator={false}
             >
                 <Text style={styles.headingText}>
-                    Start Conversation with TalkBrush para todos.
+                    Start Conversation with TalkBrush everyone, everywhere.
                 </Text>
 
                 <Text style={styles.descriptionText}>
                     TalkBrush is an innovative app that lets users communicate in various accents. With TalkBrush, you can enhance your language skills while having fun chatting with people from around the globe. Discover the magic of linguistic diversity and connect with others through unique accents!
                 </Text>
 
-                {/* Show Start Conversation only for admin (type 1) */}
-            
-                    <>
-                        <TouchableOpacity style={styles.startConversationButton} onPress={startConversation}>
-                            <MaterialIcons name="mic" color="white" size={20} />
-                            <Text style={styles.startButtonText}>Start Conversation</Text>
-                        </TouchableOpacity>
-
-                        <View style={styles.orContainer}>
-                            <View style={styles.orLine} />
-                            <Text style={styles.orText}>OR</Text>
-                            <View style={styles.orLine} />
-                        </View>
-                    </>
-             
-
-                <Text style={styles.joinRoomLabel}>
-                  Join an existing room
-                </Text>
-
-                <View style={styles.joinRoomContainer}>
+                <TouchableOpacity style={styles.startConversationButton} onPress={startConversation}>
+                    <MaterialIcons name="mic" color="lightgrey" size={20} />
+                    <Text style={styles.startButtonText}>{isCreatingRoom ? 'Wait...' : 'Start Conversation'}</Text>
+                </TouchableOpacity>
+                <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <TextInput
-                        style={styles.roomCodeInput}
-                        placeholder="Enter room code"
-                        placeholderTextColor="grey"
-                        value={roomCodeInput}
-                        onChangeText={setRoomCodeInput}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        editable={!isJoiningRoom}
+                        style={{ width: '50%', borderWidth: 1, borderColor: theme.subText, borderRadius: 5, padding: 10 }}
+                        placeholder='Enter Room Code'
+                        value={joincode}
+                        onChangeText={setJoinCode}
+                        placeholderTextColor={'gray'}
                     />
-                    <TouchableOpacity
-                        style={[styles.joinRoomButton, isJoiningRoom && styles.disabledButton]}
-                        onPress={joinRoom}
-                        disabled={isJoiningRoom}
-                    >
-                        {isJoiningRoom ? (
-                            <>
-                                <ActivityIndicator color="white" size="small" />
-                                <Text style={styles.joinButtonText}>Validating...</Text>
-                            </>
-                        ) : (
-                            <>
-                                <MaterialIcons name="login" color="white" size={20} />
-                                <Text style={styles.joinButtonText}>Join Room</Text>
-                            </>
-                        )}
+                    <TouchableOpacity style={[styles.startConversationButton, { backgroundColor: "#519377", marginTop: 4 }]} onPress={handleJoinRoom}>
+                        <FontAwesome name="chain" color="#fff" size={20} />
+                        <Text style={styles.startButtonText}>{checkRoom ? "Wait..." : "Join Room"}</Text>
                     </TouchableOpacity>
                 </View>
+
+
+                {/* <TouchableOpacity style={styles.copyLinkButton}>
+                        <MaterialIcons name="keyboard" color="grey" size={20} />
+                        <Text style={styles.copyLinkText}>Copy the link and share</Text>
+                    </TouchableOpacity> */}
 
                 <Text style={styles.infoText}>
                     Discover how TalkBrush works
@@ -232,6 +211,14 @@ const ConvoSpaceStart = () => {
                 {/* </View> */}
 
             </ScrollView>
+
+            <RoomInviteModal
+                visible={isModalVisible}
+                onClose={handleCloseModal}
+                roomData={roomDetails}
+                onJoinRoom={handleJoinRoomFromModal}
+                isJoining={isJoining}
+            />
         </View>
     );
 };
@@ -245,17 +232,18 @@ const style = theme =>
         },
         pageBg: {
             flex: 1,
-            backgroundColor: theme.background,
+            // backgroundColor: theme.background,
             paddingHorizontal: 20,
         },
         scrollContainer: {
             paddingBottom: 0,
         },
         headingText: {
-            width: '80%',
+            width: '94%',
             fontSize: moderateScale(26),
             fontFamily: Fonts.InterBold,
             color: theme.text,
+            marginTop:10
         },
         descriptionText: {
             marginTop: 20,
@@ -265,79 +253,18 @@ const style = theme =>
         },
         startConversationButton: {
             flexDirection: 'row',
-            backgroundColor: '#3B82F6',
+            backgroundColor: theme.secandprimary,
             alignSelf: 'flex-start',
             paddingHorizontal: 20,
             marginTop: 20,
             alignItems: 'center',
-            paddingVertical: 10,
-            borderRadius: 8,
-            gap: 8,
+            paddingVertical: 8,
+            borderRadius: 5,
         },
         startButtonText: {
-            color: 'white',
+            color: '#fff',
             paddingStart: 10,
-            fontSize: moderateScale(14),
-            fontFamily: Fonts.InterMedium,
-        },
-        orContainer: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 30,
-            marginBottom: 20,
-        },
-        orLine: {
-            flex: 1,
-            height: 1,
-            backgroundColor: 'lightgrey',
-        },
-        orText: {
-            color: theme.subText,
-            paddingHorizontal: 15,
-            fontSize: moderateScale(14),
-            fontFamily: Fonts.InterMedium,
-        },
-        joinRoomLabel: {
-            fontSize: moderateScale(18),
-            fontFamily: Fonts.InterMedium,
-            fontWeight: '600',
-            color: theme.text,
-                marginTop: 20,
-            marginBottom: 10,
-        },
-        joinRoomContainer: {
-            marginTop: 10,
-        },
-        roomCodeInput: {
-            backgroundColor: 'white',
-            borderWidth: 1,
-            borderColor: 'lightgrey',
-            borderRadius: 8,
-            paddingHorizontal: 15,
-            paddingVertical: 12,
-            fontSize: moderateScale(14),
-            fontFamily: Fonts.InterMedium,
-            color: theme.text,
-            marginBottom: 10,
-        },
-        joinRoomButton: {
-            flexDirection: 'row',
-            backgroundColor: '#3B82F6',
-            alignSelf: 'flex-start',
-            paddingHorizontal: 20,
-            alignItems: 'center',
-            paddingVertical: 10,
-            borderRadius: 8,
-            gap: 8,
-        },
-        disabledButton: {
-            backgroundColor: '#9CA3AF',
-            opacity: 0.7,
-        },
-        joinButtonText: {
-            color: 'white',
-            paddingStart: 10,
-            fontSize: moderateScale(14),
+            fontSize: moderateScale(12),
             fontFamily: Fonts.InterMedium,
         },
         copyLinkButton: {

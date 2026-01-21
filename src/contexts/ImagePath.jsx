@@ -24,5 +24,6 @@ export default {
     convoImage: require('../assets/image/convoImage.png'),
     activeAIresume: require('../assets/image/activeAIresume.png'),
     activeJobs: require('../assets/image/activeJobs.png'),
-    activeSetting: require('../assets/image/activeSetting.png')
+    activeSetting: require('../assets/image/activeSetting.png'),
+    PrivacyPolicy: require('../assets/image/icon_privacy.png')
 };

@@ -3,13 +3,13 @@ import { View, Text, Image, Dimensions, TouchableOpacity, StyleSheet } from 'rea
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import Carousel from 'react-native-reanimated-carousel';
 import { Pagination } from 'react-native-reanimated-carousel'; // optional built-in dots
-import Animated, {  Extrapolation, interpolate, useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { Extrapolation, interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import GlobalStyles from '../../../../styles/GlobalStyles';
 import { useTheme } from '../../../../contexts/ThemeProvider';
 import { moderateScale } from 'react-native-size-matters';
 import Fonts from '../../../../styles/GlobalFonts';
 
-const { width , height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const SLIDE_WIDTH = width * 0.85;
 const AUTO_PLAY_INTERVAL = 5000;
 
@@ -25,7 +25,7 @@ const SmoothFadeCarousel = ({ data }) => {
       const opacity = interpolate(
         animationValue.value,
         [-1, 0, 1],
-        [0.3, 1, 0.3],         
+        [0.3, 1, 0.3],
         Extrapolation.CLAMP
       );
 
@@ -58,7 +58,7 @@ const SmoothFadeCarousel = ({ data }) => {
       <Carousel
         ref={carouselRef}
         width={SLIDE_WIDTH}
-        height={height/1.8}
+        height={height / 1.8}
         data={data}
         mode="parallax"
         modeConfig={{
@@ -72,7 +72,7 @@ const SmoothFadeCarousel = ({ data }) => {
         snapEnabled={true}
         onSnapToItem={(index) => setActiveIndex(index)}
         renderItem={renderItem}
-        style={{ width: width/1.2 }}
+        style={{ width: width / 1.2 }}
         defaultScrollAnimationDuration={3000}
       />
       <View style={styles.paginationContainer}>
@@ -104,10 +104,11 @@ const style = (theme) => StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#fff',
     elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
+    shadowColor: theme.text,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -120,17 +121,17 @@ const style = (theme) => StyleSheet.create({
     padding: 16,
   },
   slideTitle: {
-    fontSize:moderateScale(20),
-    fontFamily:Fonts.InterMedium,
-    color:theme.text,
+    fontSize: moderateScale(20),
+    fontFamily: Fonts.InterMedium,
+    color: theme.text,
   },
   slideDescription: {
-    fontSize:moderateScale(13),
-    color:theme.subText,
-    fontFamily:Fonts.InterRegular,
+    fontSize: moderateScale(13),
+    color: theme.subText,
+    fontFamily: Fonts.InterRegular,
     marginTop: 8,
   },
- 
+
   paginationContainer: {
     flexDirection: 'row',
     position: 'absolute',

@@ -6,11 +6,11 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
-  Clipboard,
   Animated,
   PermissionsAndroid,
   Platform,
 } from "react-native";
+import Clipboard from '@react-native-clipboard/clipboard';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
@@ -19,11 +19,12 @@ import { Dropdown } from "react-native-element-dropdown";
 import { moderateScale } from "react-native-size-matters";
 import io from "socket.io-client";
 import { useDispatch } from "react-redux";
-// import { getRoomDetailsThunk } from "../../features/roomSlice";
+import { getRoomDetailsThunk } from "../../../app/features/roomSlice";
 import Fonts from "../../../styles/GlobalFonts";
 import Sound from 'react-native-nitro-sound';
 import RNFS from "react-native-fs";
 import { useTheme } from "../../../contexts/ThemeProvider";
+import { getUserData } from "../../../units/asyncStorageManager";
 
 const ConvoSpace = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const ConvoSpace = () => {
   const isPlayingAudioRef = useRef(false);
   const recordingIntervalRef = useRef(null);
   const streamingSessionStartedRef = useRef(false);
+  const isRecordingActiveRef = useRef(false);
 
   // State
   const [isListening, setIsListening] = useState(true);
@@ -51,13 +53,14 @@ const ConvoSpace = () => {
   const [currentGender, setCurrentGender] = useState("male");
   const [handRaised, setHandRaised] = useState(false);
   const [participants, setParticipants] = useState([]);
-  const [username, setUsername] = useState(`Guest_${Math.random().toString(36).substr(2, 6)}`);
+  const [username, setUsername] = useState('');
+  const [userData, setUserData] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [stats, setStats] = useState({ sent: 0, received: 0, latency: 0 });
   const [roomDetails, setRoomDetails] = useState(null);
-  const [isRecorderReady, setIsRecorderReady] = useState(false);
   const [hasPermissions, setHasPermissions] = useState(false);
-  let isRecordingActive = false;  // ← Yeh add kar do top pe
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
+  console.log(participants)
   const ACCENT_OPTIONS = [
     { label: "American", value: "american" },
     { label: "British", value: "british" },
@@ -76,7 +79,47 @@ const ConvoSpace = () => {
     { label: "US – New York", value: "us_new_york" },
   ];
 
+  const GENDER_OPTIONS = [
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+  ];
+
   const NATURAL_PAUSE_MS = 450;
+
+  // Load User Data from AsyncStorage
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    try {
+      const storedData = await getUserData();
+      if (storedData && storedData.user) {
+        const user = storedData.user;
+        setUsername(user.username || user.name || 'Admin');
+        setUserData({
+          username: user.username || user.name || 'Admin',
+          user_id: user._id || user.id,
+          profile_image: user.profile_image || user.profileImage,
+        });
+      } else {
+        setUsername('Admin');
+        setUserData({
+          username: 'Admin',
+          user_id: 'admin_' + Date.now(),
+        });
+      }
+      setIsLoadingUser(false);
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      setUsername('Admin');
+      setUserData({
+        username: 'Admin',
+        user_id: 'admin_' + Date.now(),
+      });
+      setIsLoadingUser(false);
+    }
+  };
 
   // Request Permissions
   useEffect(() => {
@@ -129,39 +172,7 @@ const ConvoSpace = () => {
   };
 
 
-  // const requestPermissions = async () => {
-  //   try {
-  //     if (Platform.OS === 'android') {
-  //       const granted = await PermissionsAndroid.requestMultiple([
-  //         PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-  //         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-  //       ]);
-
-  //       const allGranted = Object.values(granted).every(
-  //         (status) => status === PermissionsAndroid.RESULTS.GRANTED
-  //       );
-
-  //       setHasPermissions(allGranted);
-  //       console.log(hasPermissions, 'hasPermissions')
-  //       if (!allGranted) {
-  //         Alert.alert("Permissions Required", "Please grant microphone and storage permissions");
-  //         return;
-  //       }
-  //     } else {
-  //       // iOS permissions are handled through Info.plist
-  //       setHasPermissions(true);
-  //     }
-
-  //     console.log("✅ Permissions granted");
-  //   } catch (error) {
-  //     console.error("❌ Permission error:", error);
-  //     Alert.alert("Error", "Could not request permissions");
-  //   }
-  // };
-
-  // Wave Animation
-
+ 
 
   useEffect(() => {
     if (!isListening) {
@@ -175,27 +186,7 @@ const ConvoSpace = () => {
     }
   }, [isListening]);
 
-  // Fetch Room Details
-  // useEffect(() => {
-  //   if (roomCode) {
-  //     dispatch(getRoomDetailsThunk(roomCode)).then((response) => {
-  //       if (response.payload) {
-  //         setRoomDetails(response.payload);
-  //         setUsername(response.payload.initiator_name);
-
-  //         const apiParticipants = response.payload.members.map((member) => ({
-  //           username: member.username,
-  //           sid: member.user_id,
-  //           muted: true,
-  //           hand_raised: false,
-  //           accent: "american",
-  //           gender: "male",
-  //         }));
-  //         setParticipants(apiParticipants);
-  //       }
-  //     });
-  //   }
-  // }, [dispatch, roomCode]);
+ 
 
   // Socket.IO Connection
 
@@ -223,11 +214,13 @@ const ConvoSpace = () => {
       console.log("✅ Connected - SID:", socketRef.current.id);
       setIsConnected(true);
 
-      socketRef.current.emit("join_room", {
-        room_code: roomCode,
-        username: username,
-        user_id: roomDetails?.initiator_id,
-      });
+      if (userData) {
+        socketRef.current.emit("join_room", {
+          room_code: roomCode,
+          username: userData.username,
+          user_id: userData.user_id,
+        });
+      }
     });
 
     socketRef.current.on("disconnect", (reason) => {
@@ -238,10 +231,14 @@ const ConvoSpace = () => {
     socketRef.current.on("reconnect", (attemptNumber) => {
       console.log("🔄 Reconnected after", attemptNumber, "attempts");
       setIsConnected(true);
-      socketRef.current.emit("join_room", {
-        room_code: roomCode,
-        username: username,
-      });
+
+      if (userData) {
+        socketRef.current.emit("join_room", {
+          room_code: roomCode,
+          username: userData.username,
+          user_id: userData.user_id,
+        });
+      }
     });
 
     socketRef.current.on("error", (data) => {
@@ -269,6 +266,11 @@ const ConvoSpace = () => {
       setParticipants(data.participants || []);
     });
 
+    socketRef.current.on("gender_changed", (data) => {
+      console.log("👤 Gender changed:", data);
+      setParticipants(data.participants || []);
+    });
+
     socketRef.current.on("receive_audio", (data) => {
       const receiveTime = Date.now();
       console.log(`📥 Audio from: ${data.username}`);
@@ -283,206 +285,102 @@ const ConvoSpace = () => {
       queueAudio(data);
     });
 
+    setupRecorder();
+
     return () => {
-      if (socketRef.current) {
-        socketRef.current.emit("leave_room", { room_code: roomCode });
-        socketRef.current.disconnect();
-      }
-      stopRecording();
+      cleanup();
     };
-  }, [roomCode, username, navigation]);
+  }, [roomCode, username, navigation, isLoadingUser, userData]);
 
-  // Audio Recording with NitroSound
-  // const startRecording = async () => {
-  //   if (!hasPermissions) return;
-  //   try {
-  //     Sound.addRecordBackListener((e) => {
-  //       //     console.log('Recording:', e.currentPosition);
-  //     });
-
-  //     if (!streamingSessionStartedRef.current) {
-  //       socketRef.current.emit("start_streaming", {});
-  //       streamingSessionStartedRef.current = true;
-  //     }
-  //     // ← YEH LINE CHANGE KI (unique filename har baar)
-  //     const recordPath = Platform.select({
-  //       ios: `recording_${Date.now()}.m4a`,
-  //       android: `${RNFS.CachesDirectoryPath}/recording_${Date.now()}.aac`,
-  //     });
-  //     const audioSet = {
-  //       AudioEncodingBitRate: 96000,
-  //       AudioSampleRate: 44100,
-  //       AudioChannels: 1,
-  //       AudioEncoding: 'mp4a',
-  //     };
-  //     await Sound.startRecorder(recordPath, audioSet, true);
-  //     recordingIntervalRef.current = setInterval(async () => {
-  //       if (isMutedRef.current) return;
-  //       try {
-  //         const audioURI = await Sound.stopRecorder();
-  //         const fileInfo = await RNFS.stat(audioURI);
-  //         if (fileInfo.size < 500) {  // too small = silence
-  //           await RNFS.unlink(audioURI).catch(() => {});
-  //           await Sound.startRecorder(recordPath, audioSet, true);
-  //           return;
-  //         }
-  //         const base64Audio = await RNFS.readFile(audioURI, 'base64');
-  //         socketRef.current.emit("audio_stream_chunk", {
-  //           audio_data: base64Audio,
-  //           username: username,
-  //           timestamp: Date.now(),
-  //         });
-  //         setStats(prev => ({ ...prev, sent: prev.sent + 1 }));
-  //         console.log(`Sent chunk (${base64Audio.length} bytes)`);
-  //         // Delete old file
-  //         await RNFS.unlink(audioURI).catch(() => {});
-  //         // ← NEW UNIQUE PATH FOR NEXT CHUNK
-  //         const nextPath = Platform.select({
-  //           ios: `recording_${Date.now()}.m4a`,
-  //           android: `${RNFS.CachesDirectoryPath}/recording_${Date.now()}.aac`,
-  //         });
-  //         await Sound.startRecorder(nextPath, audioSet, true);
-  //       } catch (err) {
-  //         if (err.message.includes('stop failed')) {
-  //           console.log("Silence chunk — skipped");
-  //           // Restart with new path
-  //           const nextPath = Platform.select({
-  //             ios: `recording_${Date.now()}.m4a`,
-  //             android: `${RNFS.CachesDirectoryPath}/recording_${Date.now()}.aac`,
-  //           });
-  //           await Sound.startRecorder(nextPath, audioSet, true);
-  //         } else {
-  //           console.error("Chunk error:", err);
-  //         }
-  //       }
-  //     }, 280);  
-  //   } catch (e) {
-  //     console.error("Start recording error:", e);
-  //   }
-  // };
-
-const startRecording = async () => {
-  if (!hasPermissions || isRecordingActive) return;
-  setIsRecorderReady(false);  // Reset flag
-
-  try {
-    isRecordingActive = true;
-
-    Sound.addRecordBackListener((e) => {
-      if (e.currentPosition > 50) {  // 50ms wait for ready
-        setIsRecorderReady(true);
+  const setupRecorder = async () => {
+    try {
+      if (!hasPermissions) {
+        console.log('⚠️ Permissions not granted');
+        return;
       }
-    });
 
-    if (!streamingSessionStartedRef.current) {
-      socketRef.current.emit("start_streaming", {});
-      streamingSessionStartedRef.current = true;
+      startStreamingRecording();
+    } catch (error) {
+      console.error('❌ Recorder setup failed:', error);
     }
+  };
 
-    // Start with delay for Android stability
-    setTimeout(async () => {
-      const recordPath = Platform.select({
-        ios: `rec_${Date.now()}.m4a`,
-        android: `${RNFS.CachesDirectoryPath}/rec_${Date.now()}.aac`,
-      });
-
-      const audioSet = {
-        AudioEncodingBitRate: 128000,
-        AudioSampleRate: 44100,
-        AudioChannels: 1,
-        AudioEncoding: 'mp4a',
-      };
-
-      await Sound.startRecorder(recordPath, audioSet, true);
-      console.log("Recorder started safely");
-
-      // Interval start sirf jab ready ho
-      recordingIntervalRef.current = setInterval(async () => {
-        if (isMutedRef.current || !isRecorderReady) return;
-
+  const startStreamingRecording = () => {
+    recordingIntervalRef.current = setInterval(async () => {
+      if (!isMutedRef.current && hasPermissions && !isRecordingActiveRef.current) {
         try {
-          const audioURI = await Sound.stopRecorder();
-
-          const fileStats = await RNFS.stat(audioURI);
-          if (fileStats.size > 500) {
-            const base64Audio = await RNFS.readFile(audioURI, 'base64');
-
-            socketRef.current.emit("audio_stream_chunk", {
-              audio_data: base64Audio,
-              username: username,
-              accent: currentAccent,
-              timestamp: Date.now(),
-            });
-
-            setStats((prev) => ({ ...prev, sent: prev.sent + 1 }));
-            console.log(`📤 Sent chunk (${base64Audio.length} bytes)`);
-          } else {
-            console.log("⚠️ Empty chunk skipped");
+          if (!streamingSessionStartedRef.current) {
+            socketRef.current.emit('start_streaming', {});
+            streamingSessionStartedRef.current = true;
+            console.log('▶️ Streaming session started');
           }
 
-          await RNFS.unlink(audioURI).catch(() => {});
+          isRecordingActiveRef.current = true;
 
-          // Restart with new path
-          const newPath = Platform.select({
-            ios: `rec_${Date.now()}.m4a`,
-            android: `${RNFS.CachesDirectoryPath}/rec_${Date.now()}.aac`,
-          });
-          await Sound.startRecorder(newPath, audioSet, true);
+          const audioPath = `${RNFS.CachesDirectoryPath}/audio_chunk_${Date.now()}.m4a`;
+          const recorder = await Sound.create({ path: audioPath });
+
+          await recorder.startRecording();
+
+          setTimeout(async () => {
+            try {
+              await recorder.stopRecording();
+              const base64Audio = await RNFS.readFile(audioPath, 'base64');
+
+              if (base64Audio && base64Audio.length > 1000) {
+                socketRef.current.emit('audio_stream_chunk', {
+                  audio_data: base64Audio,
+                  username: username,
+                  accent: currentAccent,
+                  timestamp: Date.now(),
+                });
+                setStats((prev) => ({ ...prev, sent: prev.sent + 1 }));
+                console.log(`📤 Sent chunk: ${base64Audio.length} bytes`);
+              }
+
+              await RNFS.unlink(audioPath).catch(() => {});
+              isRecordingActiveRef.current = false;
+            } catch (err) {
+              console.error('Recording error:', err);
+              isRecordingActiveRef.current = false;
+            }
+          }, 200);
 
         } catch (err) {
-          if (err.message.includes('stop failed') || err.message.includes('unavailable')) {
-            console.log("⚠️ Recorder crash (silence/race) — restarting");
-            // Force restart
-            const newPath = Platform.select({
-              ios: `rec_${Date.now()}.m4a`,
-              android: `${RNFS.CachesDirectoryPath}/rec_${Date.now()}.aac`,
-            });
-            await Sound.startRecorder(newPath, audioSet, true);
-          } else {
-            console.error("Unexpected chunk error:", err);
-          }
+          console.error('⚠️ Recording error:', err);
+          isRecordingActiveRef.current = false;
         }
-      }, 300);  // 300ms for extra stability
+      } else if (isMutedRef.current && streamingSessionStartedRef.current) {
+        socketRef.current.emit('stop_streaming');
+        streamingSessionStartedRef.current = false;
+        console.log('⏹️ Streaming session stopped');
+      }
+    }, 50);
+  };
 
-    }, 100);  // 100ms delay start ke liye
-
-  } catch (error) {
-    console.error("❌ Start recording error:", error);
-    isRecordingActive = false;
-  }
-};
-
-const stopRecording = async () => {
-  isRecordingActive = false;
-  setIsRecorderReady(false);
-
-  if (recordingIntervalRef.current) {
-    clearInterval(recordingIntervalRef.current);
-    recordingIntervalRef.current = null;
-  }
-
-  Sound.removeRecordBackListener();
-
-  try {
-    if (await Sound.isRecording()) {  // Check if actually recording
-      await Sound.stopRecorder();
+  const cleanup = () => {
+    if (recordingIntervalRef.current) {
+      clearInterval(recordingIntervalRef.current);
     }
-  } catch (error) {
-    if (error.message.includes('not started') || error.message.includes('unavailable')) {
-      console.log("⚠️ Stop ignored (not active) — safe");
-    } else {
-      console.error("❌ Unexpected stop error:", error);
+
+    if (recorderRef.current) {
+      try {
+        recorderRef.current.stopRecording();
+      } catch (e) {}
     }
-  }
 
-  if (streamingSessionStartedRef.current) {
-    socketRef.current.emit("stop_streaming");
-    streamingSessionStartedRef.current = false;
-    console.log("⏹️ Streaming stopped");
-  }
+    if (socketRef.current) {
+      socketRef.current.emit("leave_room", {
+        room_code: roomCode,
+        user_id: userData?.user_id
+      });
+      socketRef.current.off();
+      socketRef.current.disconnect();
+    }
 
-  console.log("🛑 Recording stopped safely");
-};
+    audioQueueRef.current = [];
+    isPlayingAudioRef.current = false;
+  };
 
   // Audio Queue System
   const queueAudio = (audioData) => {
@@ -536,67 +434,50 @@ const stopRecording = async () => {
 
   const playAudioChunk = async (audioData) => {
     try {
-      console.log(`🎵 Playing from: ${audioData.username}`);
-      // Save to temp file
-      const audioPath = `${RNFS.CachesDirectoryPath}/temp_play_${Date.now()}.aac`;
-      await RNFS.writeFile(audioPath, audioData.audio_data, "base64");
-      // Add listeners
-      Sound.addPlayBackListener((e) => {
-        console.log('Playback progress:', e.currentPosition);
-      });
-      Sound.addPlaybackEndListener(() => {
-        console.log("Playback finished");
-        Sound.removePlayBackListener();
-        Sound.removePlaybackEndListener();
-        RNFS.unlink(audioPath).catch(() => { });
-      });
-      // Start playback (singleton)
-      await Sound.startPlayer(audioPath);
-      // Wait for end (via listener)
+      console.log(`🎵 Playing audio from: ${audioData.username}`);
+
+      const tempPath = `${RNFS.CachesDirectoryPath}/temp_audio_${Date.now()}.m4a`;
+      await RNFS.writeFile(tempPath, audioData.audio_data, 'base64');
+
+      const player = await Sound.create({ path: tempPath });
+      await player.play();
+
       await new Promise((resolve) => {
-        setTimeout(() => resolve(), 5000);  // Fallback timeout, listener handles actual end
+        const checkInterval = setInterval(async () => {
+          const isPlaying = await player.isPlaying();
+          if (!isPlaying) {
+            clearInterval(checkInterval);
+            await RNFS.unlink(tempPath).catch(() => {});
+            resolve();
+          }
+        }, 100);
       });
+
       console.log("✅ Playback done");
     } catch (err) {
-      console.error("❌ Play error:", err);
-      Sound.removePlayBackListener();
-      Sound.removePlaybackEndListener();
-      throw err;
+      console.error("❌ Play audio error:", err);
     }
   };
 
   // Handlers
- const handleMicToggle = () => {
-  const newMutedState = !isListening;
-  setIsListening(newMutedState);
-  isMutedRef.current = newMutedState;
+  const handleMicToggle = () => {
+    const newMutedState = !isListening;
+    setIsListening(newMutedState);
+    isMutedRef.current = newMutedState;
 
-  console.log(`🎤 ${newMutedState ? "MUTED" : "UNMUTED"}`);
+    console.log(`🎤 ${newMutedState ? "MUTED" : "UNMUTED"}`);
 
-  if (newMutedState) {
-    stopRecording();
-  } else {
-    startRecording();
-    // Wait for ready before logging
-    setTimeout(() => {
-      if (isRecorderReady) console.log("✅ Ready to speak");
-    }, 500);
-  }
-
-  if (socketRef.current && socketRef.current.connected) {
-    socketRef.current.emit("toggle_mute", { muted: newMutedState });
-  }
-};
+    if (socketRef.current && socketRef.current.connected) {
+      socketRef.current.emit("toggle_mute", {
+        user_id: userData?.user_id,
+        muted: newMutedState
+      });
+    }
+  };
 
   const handleEndCall = () => {
     console.log("📞 Ending call...");
-
-    if (socketRef.current && socketRef.current.connected) {
-      socketRef.current.emit("leave_room", { room_code: roomCode });
-      socketRef.current.disconnect();
-    }
-
-    stopRecording();
+    cleanup();
     navigation.goBack();
   };
 
@@ -613,7 +494,10 @@ const stopRecording = async () => {
     console.log(`✋ Hand ${newHandState ? "RAISED" : "LOWERED"}`);
 
     if (socketRef.current && socketRef.current.connected) {
-      socketRef.current.emit("raise_hand", { raised: newHandState });
+      socketRef.current.emit("raise_hand", {
+        user_id: userData?.user_id,
+        raised: newHandState
+      });
     }
   };
 
@@ -622,7 +506,22 @@ const stopRecording = async () => {
     console.log(`🗣️ Accent changed: ${item.value}`);
 
     if (socketRef.current && socketRef.current.connected) {
-      socketRef.current.emit("change_accent", { accent: item.value });
+      socketRef.current.emit("change_accent", {
+        user_id: userData?.user_id,
+        accent: item.value
+      });
+    }
+  };
+
+  const handleGenderChange = (item) => {
+    setCurrentGender(item.value);
+    console.log(`👤 Gender changed: ${item.value}`);
+
+    if (socketRef.current && socketRef.current.connected) {
+      socketRef.current.emit("change_gender", {
+        user_id: userData?.user_id,
+        gender: item.value
+      });
     }
   };
 
@@ -644,20 +543,36 @@ const stopRecording = async () => {
         <View style={styles.container}>
           {/* Header */}
           <View style={styles.headerRow}>
-            <Dropdown
-              style={styles.dropdown}
-              data={ACCENT_OPTIONS}
-              labelField="label"
-              valueField="value"
-              placeholder="Select Accent"
-              value={currentAccent}
-              onChange={handleAccentChange}
-              placeholderStyle={styles.dropdownPlaceholder}
-              selectedTextStyle={styles.dropdownText}
-              renderRightIcon={() => (
-                <MaterialIcons name="arrow-drop-down" size={24} color="black" />
-              )}
-            />
+            <View style={styles.dropdownsContainer}>
+              <Dropdown
+                style={styles.dropdown}
+                data={ACCENT_OPTIONS}
+                labelField="label"
+                valueField="value"
+                placeholder="Select Accent"
+                value={currentAccent}
+                onChange={handleAccentChange}
+                placeholderStyle={styles.dropdownPlaceholder}
+                selectedTextStyle={styles.dropdownText}
+                renderRightIcon={() => (
+                  <MaterialIcons name="arrow-drop-down" size={24} color="black" />
+                )}
+              />
+              <Dropdown
+                style={styles.dropdown}
+                data={GENDER_OPTIONS}
+                labelField="label"
+                valueField="value"
+                placeholder="Select Gender"
+                value={currentGender}
+                onChange={handleGenderChange}
+                placeholderStyle={styles.dropdownPlaceholder}
+                selectedTextStyle={styles.dropdownText}
+                renderRightIcon={() => (
+                  <MaterialIcons name="arrow-drop-down" size={24} color="black" />
+                )}
+              />
+            </View>
             <Text style={styles.dateTimeText}>{formatDateTime()}</Text>
           </View>
 
@@ -775,7 +690,7 @@ const stopRecording = async () => {
               <Text style={styles.noParticipants}>Waiting for participants...</Text>
             ) : (
               participants.map((participant, index) => (
-                <View key={participant.sid || index} style={styles.participantCard}>
+                <View key={participant.user_id || participant.sid || index} style={styles.participantCard}>
                   <View style={styles.avatar}>
                     <Text style={styles.avatarText}>
                       {participant.username.charAt(0).toUpperCase()}
@@ -784,7 +699,7 @@ const stopRecording = async () => {
                   <View style={styles.participantInfo}>
                     <Text style={styles.participantName}>
                       {participant.username}
-                      {participant.sid === roomDetails?.initiator_id && " (Host)"}
+                      {(participant.user_id === roomDetails?.initiator_id || participant.sid === roomDetails?.initiator_id) && " (Host)"}
                       {participant.username === username && " (You)"}
                     </Text>
                     <View style={styles.badgeContainer}>
@@ -824,8 +739,14 @@ const style = (theme) =>
       alignItems: "center",
       marginBottom: 20,
     },
+    dropdownsContainer: {
+      flexDirection: "column",
+      gap: 10,
+      flex: 1,
+      marginRight: 10,
+    },
     dropdown: {
-      width: "45%",
+      width: "100%",
       height: 50,
       backgroundColor: "white",
       borderRadius: 10,

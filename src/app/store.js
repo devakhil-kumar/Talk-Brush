@@ -10,6 +10,7 @@ import chartReducer from '../app/features/ChartSlice';
 import analyticsReducer from '../app/features/AnalyticsSlice';
 import resetPasswordSlice from '../app/features/ResetPasswordSlice';
 import CreateRoomSLiceReducer from '../app/features/CreateRoomSlice';
+import roomReducer from '../app/features/roomSlice';
 
 const store = configureStore({
     reducer: {
@@ -23,7 +24,8 @@ const store = configureStore({
         chartData:chartReducer,
         analyticsData:analyticsReducer,
         forgetData:resetPasswordSlice,
-        RoomSlices:CreateRoomSLiceReducer
+        RoomSlices:CreateRoomSLiceReducer,
+        room:roomReducer
     }
 })
 

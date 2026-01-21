@@ -139,3 +139,11 @@ export const Create_Room = (RoomId) => {
 export const getCreateCode = () => {
   return axiosInstance.get('https://talkbrush.com/accent/create_room')
 }
+
+export const getRoomDetailsAPI = (roomCode) => {
+  return axiosInstance.get(`${API_ROUTES.GET_ROOM_DETAILS}${roomCode}/info`)
+}
+
+export const leaveRoomAPI = (roomCode) => {
+  return axiosInstance.post(API_ROUTES.LEAVE_ROOM, { room_code: roomCode })
+}
